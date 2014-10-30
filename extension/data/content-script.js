@@ -1,1 +1,1 @@
-alert(jQuery);
+console.log("jQuery: " + jQuery);

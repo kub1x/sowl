@@ -30,7 +30,7 @@ pack:
 	cfx xpi
 
 edit: 
-	vim lib
+	vim data/sidebar/sidebar.js
 
 install: 
 	#cygstart.exe $(FIREFOX_LNK) "C:\Users\kub1x\school\fel\diplomka\selectowl\ff-extension\$(XPI_NAME)"

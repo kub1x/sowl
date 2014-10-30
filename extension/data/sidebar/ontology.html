@@ -1,0 +1,107 @@
+<script>
+$(function() {
+
+  //$('#ontology_load_input').on('keyPress', function(event) {
+  //  /* can compare to KeyEvent.DOM_VK_RETURN */
+  //  if ( /* it is enter */ ) {
+  //    sowl.load(event.target.value);
+  //  }
+  //});
+
+  $('#ontology_load_area').on('dragover', function(event) {
+    // make the area dropable
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'copy';
+  });
+
+  $('#ontology_load_area').on('drop', function(event) {
+    event.preventDefault();
+    var files = event.dataTransfer.files;
+    for (var i = 0, file; file = files[i]; i++) {
+      console.log('sowl: handling file: ' + file + '\n' + event.dataTransfer.types[i] + '\n' + 'JSON: ' + JSON.stringify(file, null, 2));
+      loadRdfDocument(file);
+    }
+  });
+
+  function loadRdfDocument(file) {
+    var reader = new FileReader();
+  
+    // Closure to capture the file information.
+    reader.onload = (function(theFile) {
+      return function(e) {
+        // Render thumbnail.
+        
+        // TODO move to backend
+        var xmlDoc = $.parseXML(e.target.result);
+
+        // INIT sowl databank
+        if(sowl.databank == undefined || sowl.databank == null) {
+          sowl.rdf = $.rdf();
+          sowl.databank = sowl.rdf.databank;
+        }
+        
+        sowl.databank.load(xmlDoc);
+        
+        //var result = '';
+        //
+        //result += 'properties: \n';
+        //$.rdf({ databank: sowl.databank })
+        //  .prefix('rdf', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#')
+        //  .prefix('rdfs','http://www.w3.org/2000/01/rdf-schema#') 
+        //  .where('?target a rdf:Property')
+        //  //.where('?target a rdfs:Class')
+        //  .each(function () {
+        //    var tURI = this.target.value;
+        //    result += tURI + ',\n';
+        //  });
+    
+      };
+    };
+  
+    reader.readAsText(file);
+  };
+
+});
+</script>
+
+<style>
+.list_container {
+  height: 120px;
+  overflow-y: scroll;
+}
+</style>
+
+<div id="ontology" class="window">
+  <div id="ontology_load_area">
+    <!-- on drop
+         depending on type:
+          * load file
+          * or URL -->
+    Drop file or URL here...
+    <!-- load field -->
+    <!--
+    <label> Load ontology: 
+      <input id="ontology_load_input" type="text" title="Enter url or drop file/url. Press Enter" />
+    </label>
+    -->
+    <!-- on enter press -->
+  </div>
+
+  <!-- list all objects
+       edit on click -->
+  <!-- add button in the end -->
+  <div class="list_container">
+    <ul id="ontology_objects_list">
+    </ul>
+  </div>
+
+
+  <!-- list all properties
+       edit on click -->
+  <!-- add button in the end -->
+  <div class="list_container">
+    <ul id="ontology_properties_list">
+    </ul>
+  </div>
+
+</div>

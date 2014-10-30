@@ -14,14 +14,14 @@ var button = buttons.ActionButton({
   onClick: handleClick, 
 });
 
-require('sdk/page-mod').PageMod({
-  include: ["*"],
-  contentScriptFile: worker, 
-  attachTo: ["existing", "top"], 
-  onAttach: function onAttach(worker) {
-    console.log(worker.tab.title);
-  }
-});
+//require('sdk/page-mod').PageMod({
+//  include: ["*"],
+//  contentScriptFile: worker, 
+//  attachTo: ["existing", "top"], 
+//  onAttach: function onAttach(worker) {
+//    console.log(worker.tab.title);
+//  }
+//});
 
 function handleClick(state) {
   // Attach Worker for communication
@@ -35,11 +35,7 @@ var sidebar = ui.Sidebar({
   id: 'sowl-sidebar',
   title: 'sowl', 
   url: self.data.url("sidebar/sidebar.html"), 
-  onAttach: function(worker) {
-    worker.port.on('some-message', function() {
-      worker.port.emit('some-response', 'muj text');
-    });
-  }, 
+  onAttach: onSidebarAttach, 
 });
 
 
@@ -50,4 +46,14 @@ var worker = {
   ], 
 };
 
+
+function onSidebarAttach( worker ) {
+  worker.port.on('load-xml', function(data) {
+    worker.port.emit('load-xml-state', 'started');
+
+    //TODO DO SOMETHING
+
+    worker.port.emit('load-xml-state', 'finished');
+  });
+};
 
