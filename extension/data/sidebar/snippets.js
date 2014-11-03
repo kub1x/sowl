@@ -66,3 +66,32 @@ self.port.on('alert', function(message) {
   window.alert(message);
 });
 
+
+//HOWTO just printing all props
+function toPropsString(obj) {
+  var str = '[';
+  for ( p in obj ) {
+    //if (obj.hasOwnProperty(p)){
+      str += p + ': ' + obj[p] + ';\n'; 
+    //}
+  }
+  str += ']'; 
+  return str;
+}
+
+
+// HOWTO
+function getProps() {
+  var result = '';
+  result += 'properties: \n';
+  $.rdf({ databank: sowl.databank })
+    .prefix('rdf', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#')
+    .prefix('rdfs','http://www.w3.org/2000/01/rdf-schema#') 
+    .where('?target a rdf:Property')
+    //.where('?target a rdfs:Class')
+    .each(function () {
+      var tURI = this.target.value;
+      result += tURI + ',\n';
+    });
+};
+  

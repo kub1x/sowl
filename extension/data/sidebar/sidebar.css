@@ -5,3 +5,35 @@ body {
   padding: 5px;
   background: #aabbcc;
 }
+
+#menu {
+  margin: 4px;
+}
+
+#menu li {
+  border: dotted gray 1px;
+  padding: 2px;
+  margin-right: -1px;
+  margin-left: 0;
+}
+
+#menu li.current {
+  /*
+  font-weight: bold !important;
+  padding-left: 1px;
+   */
+  border-left: solid gray 1px;
+  border-right: solid gray 1px;
+  border-top: solid gray 1px;
+  border-bottom: solid gray 1px;
+  box-shadow: inset 0 0 0 1em #ddd;
+}
+
+#menu li:hover {
+  box-shadow: inset 0 0 0 1em #ddd;
+}
+
+#menu li a {
+  text-decoration: none;
+  color: black;
+}

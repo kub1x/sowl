@@ -31,9 +31,22 @@
 
 <script type="text/javascript">
 
+
 // Load
 $(function() {
+
+  function loadContent(filePath) {
+    $('#content').load(filePath); 
+  };
+  
+  function onMenuClick(event) {
+    event.preventDefault();
+    var filePath = $(event.target).children('a').attr('href');
+    loadContent(filePath);
+  };
+
   // Show ontology window...
+  $('#menu li').click(onMenuClick);
 });
 
 </script>
@@ -41,10 +54,10 @@ $(function() {
 </head>
 <body>
   <div>
-    <div id="menu">
-      <div><a href="#">scenario</a></div>
-      <div><a href="#">ontology</a></div>
-    </div>
+    <ul id="menu">
+      <li><a href="scenario.html">scenario</a></li>
+      <li><a href="ontology.html">ontology</a></li>
+    </ul>
     <div id="content"></div>
   </div>
 
@@ -52,13 +65,29 @@ $(function() {
 
   <div id="sandbox" style="background: grey;">
 
-    <!-- input -->
-    <script type="text/javascript">
-      $(function() {
-        // Testing file loading functionality
-        document.getElementById('files').addEventListener('change', handleFileSelect, false);
-      });
-    </script>
+
+<!-- input -->
+<script type="text/javascript">
+function handleFileSelect(evt) {
+  // NOTE the name "files" is specified as following:
+  // <input type="file" name="files[]" multiple />
+  var files = evt.target.files; // FileList object
+
+  var output = [];
+  for (var i = 0, f; f = files[i]; i++) {
+    output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+                f.size, ' bytes, last modified: ',
+                f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
+                '</li>');
+  }
+  document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+}
+
+$(function() {
+  // Testing file loading functionality
+  document.getElementById('files').addEventListener('change', handleFileSelect, false);
+});
+</script>
 
     <label>Load: <input type="file" id="files" name="files[]" multiple /> </label>
 
