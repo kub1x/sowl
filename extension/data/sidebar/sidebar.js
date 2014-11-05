@@ -1,5 +1,7 @@
 // sidebar.js //
 
+console.log('trace - sidebar.js - file begin');
+
 /**
  * Object storing all the bloody structures of sowl. 
  */

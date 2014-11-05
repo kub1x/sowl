@@ -1,20 +1,29 @@
 body {
-  width: 100%;
-  height: 100%;
+  /*width: 100%;
+  height: 100%;*/
   margin: 0;
   padding: 5px;
-  background: #aabbcc;
 }
 
 #menu {
   margin: 4px;
+  list-style-type: none;
 }
 
 #menu li {
-  border: dotted gray 1px;
+  display: block;
+  float: left;
+  /*
+  border-top: dotted gray 1px;
+  border-left: solid gray 1px;
+  border-right: solid gray 1px;
+  */
+  border-left: dotted gray 1px;
   padding: 2px;
+  padding-right: 15px;
   margin-right: -1px;
   margin-left: 0;
+  /*background: #aaa;*/
 }
 
 #menu li.current {
@@ -37,3 +46,13 @@ body {
   text-decoration: none;
   color: black;
 }
+
+#content {
+  background: #aabbcc;
+  width: 100%;
+  height: 100px;
+  padding-top: 10px;
+  clear: both;
+}
+
+

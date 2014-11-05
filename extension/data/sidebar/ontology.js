@@ -1,4 +1,5 @@
-// ontology.js //
+/** file: ontology.js */
+console.log('trace - ontology.js - begin');
 
 
 /**
