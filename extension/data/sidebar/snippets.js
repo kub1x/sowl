@@ -95,3 +95,43 @@ function getProps() {
     });
 };
   
+
+// HOWTO ajax loading content
+function loadContent(filePath) {
+  console.log('trace - sidebar.html - loading: ' + filePath);
+
+  // METHOD 1 - jQuery.load
+  $('#content').load(filePath);
+
+  // METHOD 2 - pure javascript
+  var xhr= new XMLHttpRequest();
+  xhr.open('GET', filePath, true);
+  xhr.onreadystatechange= function() {
+    if (this.readyState!==4) return;
+    if (this.status!==200) {
+      console.log('trace - sidebar.html - error with status: ' + this.status);
+      return; // or whatever error handling you want
+    }
+    document.getElementById('content').innerHTML= this.responseText;
+    console.log('trace - sidebar.html - loaded');
+  };
+  xhr.send();
+
+  // METHOD 3 - async ajax
+  $.ajax({
+    url: filePath,
+    context: document.body, 
+    beforeSent: function(data) {
+      $('#content').html('Loading...');
+    }, 
+    success: function(data) {
+      $('#content').html(data);
+    }, 
+    error: function( xhr, textStatus, errorThrown ) {
+      var msg = "Sorry but there was an error: " + xhr.status + " " + xhr.statusText;
+      $('#content').html( msg );
+      console.log(msg)
+    }, 
+  });
+};
+

@@ -25,76 +25,85 @@
 
 <!-- -->
 <script type="text/javascript" src="sidebar.js"></script>
+<script type="text/javascript" src="ontology.js"></script>
 
 <!-- -->
 <link rel="stylesheet" type="text/css" href="sidebar.css" />
 
 <script type="text/javascript">
 
-console.log("trace - sidebar.html - starting");
+function menuClick(menu, event) {
+  event.preventDefault();
+  hideAll();
+  show('#'+menu);
+};
 
-// Load
-$(function() {
-  console.log("trace - sidebar.html - document ready");
+function show(id) {
+  $(id).removeClass('hidden');
+};
 
-  function loadContent(filePath) {
-    console.log('trace - sidebar.html - loading: ' + filePath);
-
-    $('#content').load(filePath);
-
-    //var xhr= new XMLHttpRequest();
-    //xhr.open('GET', filePath, true);
-    //xhr.onreadystatechange= function() {
-    //  if (this.readyState!==4) return;
-    //  if (this.status!==200) {
-    //    console.log('trace - sidebar.html - error with status: ' + this.status);
-    //    return; // or whatever error handling you want
-    //  }
-    //  document.getElementById('content').innerHTML= this.responseText;
-    //  console.log('trace - sidebar.html - loaded');
-    //};
-    //xhr.send();
-
-    //$.ajax({
-    //  url: filePath,
-    //  context: document.body, 
-    //  beforeSent: function(data) {
-    //    $('#content').html('Loading...');
-    //  }, 
-    //  success: function(data) {
-    //    $('#content').html(data);
-    //  }, 
-    //  error: function( xhr, textStatus, errorThrown ) {
-    //    var msg = "Sorry but there was an error: " + xhr.status + " " + xhr.statusText;
-    //    $('#content').html( msg );
-    //    console.log(msg)
-    //  }, 
-    //});
-  };
-  
-  function onMenuClick(event) {
-    event.preventDefault();
-    //console.log('click target: ' + event.target);
-    //var filePath = $(event.target).children('a').attr('href');
-    //loadContent(filePath);
-    loadContent($(this).children('a').attr('href'));
-  };
-
-  // Show ontology window...
-  $('#menu li').click(onMenuClick);
-});
+function hideAll() {
+  $('#content').children().addClass('hidden');
+};
 
 </script>
 
+<style>
+.hidden {
+  display: none;
+}
+
+.list_container {
+  height: 120px;
+  overflow-y: scroll;
+}
+</style>
 
 </head>
 <body>
   <div>
-    <ul id="menu">
-      <li><a href="scenario.html">scenario</a></li>
-      <li><a href="ontology.html">ontology</a></li>
-    </ul>
-    <div id="content"></div>
+    <div id="menu">
+      <ul>
+        <li><a href="#" onclick="menuClick('scenario', event);">scenario</a></li>
+        <li><a href="#" onclick="menuClick('ontology', event);">ontology</a></li>
+      </ul>
+    </div>
+    <div id="content">
+      <!-- SCENARIO -->
+      <div id="scenario" class="hidden">
+        <h1>Scenario</h1>
+
+      </div>
+
+      <!-- ONTOLOGY -->
+      <div id="ontology" class="hidden">
+        <h1>Ontology</h1>
+      
+        <div id="ontology_load_area">
+      
+          Drop file or URL here...
+      
+        </div>
+      
+        <!-- list all objects
+             edit on click -->
+        <!-- add button in the end -->
+        <div class="list_container">
+          <ul id="ontology_objects_list">
+          </ul>
+        </div>
+      
+      
+        <!-- list all properties
+             edit on click -->
+        <!-- add button in the end -->
+        <div class="list_container">
+          <ul id="ontology_properties_list">
+          </ul>
+        </div>
+      
+      </div>
+    </div>
   </div>
 
 
@@ -134,5 +143,6 @@ drop here
 
   </div>
 -->
+
 </body>
 </html>
