@@ -32,18 +32,25 @@
 
 <script type="text/javascript">
 
-function menuClick(menu, event) {
+function menuClick(selected, event) {
   event.preventDefault();
   hideAll();
-  show('#'+menu);
+  show(selected);
 };
 
 function show(id) {
-  $(id).removeClass('hidden');
+  $('#content #'+id).removeClass('hidden');
+  $('#menu_'+id).addClass('current');
 };
 
 function hideAll() {
+  $('#menu').children().removeClass('current');
   $('#content').children().addClass('hidden');
+};
+
+function startSelection() {
+  //TODO this should start aardvark on current tab
+  addon.port.emit('start-selection');
 };
 
 </script>
@@ -53,9 +60,31 @@ function hideAll() {
   display: none;
 }
 
+#ontology_load_area {
+  color: gray; 
+
+  border: dashed gray 2px;
+  border-radius: 2px;
+
+  padding: 15px;
+
+  margin-bottom: 5px;
+}
+
 .list_container {
   height: 120px;
+  margin-bottom: 5px;
+
   overflow-y: scroll;
+  overflow-x: hidden;
+
+  position: relative;
+  white-space: nowrap;
+}
+
+.list_container ul {
+  position: absolute;
+  right: 0px;
 }
 </style>
 
@@ -63,22 +92,18 @@ function hideAll() {
 <body>
   <div>
     <div id="menu">
-      <ul>
-        <li><a href="#" onclick="menuClick('scenario', event);">scenario</a></li>
-        <li><a href="#" onclick="menuClick('ontology', event);">ontology</a></li>
-      </ul>
+      <div id="menu_scenario" class="menu_item">        <a href="#" onclick="menuClick('scenario', event);">scenario</a></div>
+      <div id="menu_ontology" class="menu_item current"><a href="#" onclick="menuClick('ontology', event);">ontology</a></div>
+      <div class="clear"></div>
     </div>
     <div id="content">
       <!-- SCENARIO -->
       <div id="scenario" class="hidden">
-        <h1>Scenario</h1>
+        <button id="start_selection" onclick="startSelection();" label="Start selection" />
 
       </div>
-
       <!-- ONTOLOGY -->
-      <div id="ontology" class="hidden">
-        <h1>Ontology</h1>
-      
+      <div id="ontology">
         <div id="ontology_load_area">
       
           Drop file or URL here...
@@ -105,44 +130,6 @@ function hideAll() {
       </div>
     </div>
   </div>
-
-
-
-<!--
-  <div id="sandbox" style="background: grey;">
-
-<script type="text/javascript">
-function handleFileSelect(evt) {
-  // NOTE the name "files" is specified as following:
-  // <input type="file" name="files[]" multiple />
-  var files = evt.target.files; // FileList object
-
-  var output = [];
-  for (var i = 0, f; f = files[i]; i++) {
-    output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
-                f.size, ' bytes, last modified: ',
-                f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
-                '</li>');
-  }
-  document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
-}
-
-$(function() {
-  // Testing file loading functionality
-  document.getElementById('files').addEventListener('change', handleFileSelect, false);
-});
-</script>
-
-    <label>Load: <input type="file" id="files" name="files[]" multiple /> </label>
-
-    <output id="list"></output>
-
-    <pre id="test">
-drop here
-    </pre>
-
-  </div>
--->
 
 </body>
 </html>

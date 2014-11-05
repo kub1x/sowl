@@ -14,15 +14,6 @@ var button = buttons.ActionButton({
   onClick: handleClick, 
 });
 
-//require('sdk/page-mod').PageMod({
-//  include: ["*"],
-//  contentScriptFile: worker, 
-//  attachTo: ["existing", "top"], 
-//  onAttach: function onAttach(worker) {
-//    console.log(worker.tab.title);
-//  }
-//});
-
 function handleClick(state) {
   // Attach Worker for communication
   tabs.activeTab.attach(worker);
@@ -42,18 +33,18 @@ var sidebar = ui.Sidebar({
 var worker = {
   contentScriptFile: [
     self.data.url("jquery.js"), 
+    //TODO add aardvar here and see if it works ;)
+    //self.data.url("aardvark.js"), 
+    //self.data.url("aardvark.sowl.js"), 
     self.data.url("content-script.js"), 
   ], 
 };
 
 
 function onSidebarAttach( worker ) {
-  worker.port.on('load-xml', function(data) {
-    worker.port.emit('load-xml-state', 'started');
-
-    //TODO DO SOMETHING
-
-    worker.port.emit('load-xml-state', 'finished');
-  });
+  //TODO how to start selection? ;)
+  //worker.port.on('start-selection', function(data) {
+    //TODO we should hold this worker with page it serves until the selection is stopped again. 
+  //});
 };
 
