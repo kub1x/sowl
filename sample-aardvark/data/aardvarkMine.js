@@ -7,7 +7,7 @@ self.port.on('start-aardvark', function() {
 
 function notifySelect(elem) {
   var msg = getBestSelector(elem);
-  self.port.emit('selected', elem);
+  self.port.emit('selected', msg);
 };
 
 function getBestSelector(elem) {
@@ -47,7 +47,8 @@ function getBestSelector(elem) {
 
               idFound = true;
           } else {
-              node += "[id=" + elem.id + "]";
+              //node += "[id=" + elem.id + "]";
+              node += "#" + elem.id;
           }
       }
 
@@ -57,6 +58,7 @@ function getBestSelector(elem) {
           var classes  = elem.className.split(" ");
 
           for (var i in classes) {
+            //TODO fix exclude to the right class!!!
               if (classes[i] != "selectowl-selection") {
                   if (!name) {
                       name = classes[i];
@@ -90,14 +92,14 @@ function getBestSelector(elem) {
       if (!isFound && !idFound) {
         var idx = $(elem).children(prev.tagName).index(prev);
         if (idx != -1) {
-          node += ":eq(" + idx + ")";
+          node += ':eq(' + idx + ')';
         }
         console.log('looking for element: ' + prev.tagName + ' within element: ' + elem.tagName + ' with result idx: ' + idx);
       }
 
       //
       // just do it!
-      selector = node + " " + selector;
+      selector = node + ' > ' + selector;
 
       // already equivavent?
       var $found = $(currDoc).find(selector);
@@ -110,6 +112,9 @@ function getBestSelector(elem) {
   //We might have added some whitespaces around
   selector = selector.trim();
 
-  return selector;
+  return {
+    name: name, 
+    selector: selector, 
+  };
 };
 
