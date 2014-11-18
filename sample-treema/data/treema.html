@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+
+  <script src="jquery/jquery-1.8.1.js"></script>
+  <script src="jquery/jquery-ui-1.10.3.custom.js"></script>
+  <script src="treema/tv4.js"></script>
+  <script src="treema/treema.js"></script>
+
+  <link href="jquery/jquery-ui-1.10.3.custom.css" rel="stylesheet">
+  <link href="treema/treema.css" rel="stylesheet">
+
+</head>
+<body>
+
+  <div id="addresses"></div>
+  
+  <script>
+    var contacts = [
+      { 'street-address': '10 Downing Street', 'country-name': 'UK', 'locality': 'London', 'name': 'Prime Minister' },
+      { 'street-address': '1600 Amphitheatre Pkwy', 'phone-number': '(650) 253-0000', 'name': 'Google'},
+      { 'street-address': '45 Rockefeller Plaza', 'region': 'NY', 'locality': 'New York', 'name': 'Rockefeller Center'},
+    ];
+    
+    var contact_book_schema = {
+      type: 'array',
+      items: {
+        "additionalProperties": false,
+        "type": "object",
+        "displayProperty": 'name',
+        "properties": {
+          "name": { type: "string", maxLength: 20 },
+          "street-address": { title: "Address 1", description: "Don't forget the number.", type: "string" },
+          "locality":{ "type": "string", title: "Locality" },
+          "region": { 'title': 'Region', type: 'string' },
+          "country-name": { "type": "string", title: "Country" },
+          "friend": { "type": "boolean", title: "Friend" },
+          "phone-number": { type: "string", maxLength: 20, minLength:4, title: 'Phone Number' }
+        }
+      }
+    };
+
+    //buildTreemaExample($('#addresses'), contact_book_schema, contacts);
+    var treema = $('#addresses').treema({schema: contact_book_schema, data: contacts});
+    treema.build();
+    
+  </script>
+</body>
+</html>
