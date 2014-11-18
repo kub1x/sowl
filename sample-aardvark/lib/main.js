@@ -18,14 +18,14 @@ var button = ActionButton({
 
     var worker = tabs.activeTab.attach({
       contentScriptFile: [
-        data.url('jquery-2.1.0.js'),
-        data.url('bookmarklet.js'),
-        data.url('aardvarkStrings.js'),
-        data.url('aardvarkUtils.js'),
-        data.url('aardvarkDBox.js'),
-        data.url('aardvarkCommands.js'),
-        data.url('aardvarkMain.js'), 
-        data.url('aardvarkMine.js'), 
+        data.url('jquery/jquery-2.1.0.js'),
+        data.url('aardvark/aardvark.init.js'),
+        data.url('aardvark/aardvark.strings.js'),
+        data.url('aardvark/aardvark.utils.js'),
+        data.url('aardvark/aardvark.dbox.js'),
+        data.url('aardvark/aardvark.commands.js'),
+        data.url('aardvark/aardvark.main.js'), 
+        data.url('aardvark/aardvark.sowl.js'), 
       ], 
     });
 
