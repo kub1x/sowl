@@ -24,15 +24,22 @@
 <script type="text/javascript" src="../rdfquery/jquery.rdf.turtle.js"></script>
 
 <!-- -->
+<script src="js/bootstrap.min.js"></script>
+<script src="js/docs.min.js"></script>
+
+<!-- -->
 <script type="text/javascript" src="sidebar.js"></script>
 <script type="text/javascript" src="ontology.js"></script>
 
 <!-- -->
-<link rel="stylesheet" type="text/css" href="sidebar.css" />
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/bootstrap-theme.min.css" rel="stylesheet">
+<link href="sidebar.css" rel="stylesheet" type="text/css">
 
 <script type="text/javascript">
 
 function menuClick(selected, event) {
+  console.log('trace - menuClick('+selected+', '+event+') - start');
   event.preventDefault();
   hideAll();
   show(selected);
@@ -53,50 +60,43 @@ function startSelection() {
   addon.port.emit('start-selection');
 };
 
+$(function() {
+  console.log('attaching click event');
+  $('nav a').click(function(event){
+    var selected = $(this).attr('data-menu-target');
+    console.log('clicked selected: ' + selected);
+    menuClick(selected, event.originalEvent);
+
+    var $this         = $(this)
+    var $parent       = $this.parent();
+    var relatedTarget = { relatedTarget: this }
+
+    if (!$parent.hasClass('open')) return
+
+    $parent.trigger(e = $.Event('hide.bs.dropdown', relatedTarget))
+
+    if (e.isDefaultPrevented()) return
+
+    $this.attr('aria-expanded', 'false')
+    $parent.removeClass('open').trigger('hidden.bs.dropdown', relatedTarget)
+  });
+});
+
 </script>
 
-<style>
-.hidden {
-  display: none;
-}
-
-#ontology_load_area {
-  color: gray; 
-
-  border: dashed gray 2px;
-  border-radius: 2px;
-
-  padding: 15px;
-
-  margin-bottom: 5px;
-}
-
-.list_container {
-  height: 120px;
-  margin-bottom: 5px;
-
-  overflow-y: scroll;
-  overflow-x: hidden;
-
-  position: relative;
-  white-space: nowrap;
-}
-
-.list_container ul {
-  position: absolute;
-  right: 0px;
-}
-</style>
-
 </head>
-<body>
+<body role="document">
   <div>
-    <div id="menu">
-      <div id="menu_scenario" class="menu_item">        <a href="#" onclick="menuClick('scenario', event);">scenario</a></div>
-      <div id="menu_ontology" class="menu_item current"><a href="#" onclick="menuClick('ontology', event);">ontology</a></div>
-      <div class="clear"></div>
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="blog-nav">
+          <a href="#" class="blog-nav-item" data-menu-target="scenario">scenario</a>
+          <a href="#" class="blog-nav-item" data-menu-target="ontology">ontology</a>
+        </nav>
+      </div>
     </div>
-    <div id="content">
+
+    <div id="content" class="container" role="main">
       <!-- SCENARIO -->
       <div id="scenario" class="hidden">
         <button id="start_selection" onclick="startSelection();" label="Start selection" />

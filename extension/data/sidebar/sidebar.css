@@ -1,6 +1,4 @@
 body {
-  margin: 0;
-  padding: 5px;
   background: #abc;
 }
 
@@ -49,4 +47,97 @@ body {
   clear: both;
 }
 
+.hidden {
+  display: none;
+}
 
+#ontology_load_area {
+  color: gray; 
+
+  border: dashed gray 2px;
+  border-radius: 2px;
+
+  padding: 15px;
+
+  margin-bottom: 5px;
+}
+
+.list_container {
+  height: 120px;
+  margin-bottom: 5px;
+
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  position: relative;
+  white-space: nowrap;
+}
+
+.list_container ul {
+  position: absolute;
+  right: 0px;
+}
+
+/*
+ * Globals
+ */
+
+body {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  color: #555;
+}
+
+h1, .h1,
+h2, .h2,
+h3, .h3,
+h4, .h4,
+h5, .h5,
+h6, .h6 {
+  margin-top: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: normal;
+  color: #333;
+}
+
+
+
+/*
+ * Masthead for nav
+ */
+.blog-masthead {
+  background-color: #428bca;
+  -webkit-box-shadow: inset 0 -2px 5px rgba(0,0,0,.1);
+          box-shadow: inset 0 -2px 5px rgba(0,0,0,.1);
+}
+
+/* Nav links */
+.blog-nav-item {
+  position: relative;
+  display: inline-block;
+  padding: 10px;
+  font-weight: 500;
+  color: #cdddeb;
+}
+.blog-nav-item:hover,
+.blog-nav-item:focus {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Active state gets a caret at the bottom */
+.blog-nav .active {
+  color: #fff;
+}
+.blog-nav .active:after {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  margin-left: -5px;
+  vertical-align: middle;
+  content: " ";
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid;
+  border-left: 5px solid transparent;
+}
