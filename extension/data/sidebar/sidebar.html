@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 
-<script type="text/javascript" src="../jquery.js"></script>
-<script type="text/javascript" src="../jquery-settings.js"></script>
+<script type="text/javascript" src="../jqyery/jquery-2.1.1.js"></script>
+<script type="text/javascript" src="../jquery/jquery-settings.js"></script>
 
 <!-- dependencies for rdfquery -->
 <script type="text/javascript" src="../rdfquery/jquery.json.js"></script>
@@ -28,6 +28,7 @@
 <script src="js/docs.min.js"></script>
 
 <!-- -->
+<script type="text/javascript" src="utils.js"></script>
 <script type="text/javascript" src="sidebar.js"></script>
 <script type="text/javascript" src="ontology.js"></script>
 
@@ -36,100 +37,57 @@
 <link href="css/bootstrap-theme.min.css" rel="stylesheet">
 <link href="sidebar.css" rel="stylesheet" type="text/css">
 
-<script type="text/javascript">
-
-function menuClick(selected, event) {
-  console.log('trace - menuClick('+selected+', '+event+') - start');
-  event.preventDefault();
-  hideAll();
-  show(selected);
-};
-
-function show(id) {
-  $('#content #'+id).removeClass('hidden');
-  $('#menu_'+id).addClass('current');
-};
-
-function hideAll() {
-  $('#menu').children().removeClass('current');
-  $('#content').children().addClass('hidden');
-};
-
-function startSelection() {
-  //TODO this should start aardvark on current tab
-  addon.port.emit('start-selection');
-};
-
-$(function() {
-  console.log('attaching click event');
-  $('nav a').click(function(event){
-    var selected = $(this).attr('data-menu-target');
-    console.log('clicked selected: ' + selected);
-    menuClick(selected, event.originalEvent);
-
-    var $this         = $(this)
-    var $parent       = $this.parent();
-    var relatedTarget = { relatedTarget: this }
-
-    if (!$parent.hasClass('open')) return
-
-    $parent.trigger(e = $.Event('hide.bs.dropdown', relatedTarget))
-
-    if (e.isDefaultPrevented()) return
-
-    $this.attr('aria-expanded', 'false')
-    $parent.removeClass('open').trigger('hidden.bs.dropdown', relatedTarget)
-  });
-});
-
-</script>
-
 </head>
 <body role="document">
-  <div>
-    <div class="blog-masthead">
-      <div class="container">
-        <nav class="blog-nav">
-          <a href="#" class="blog-nav-item" data-menu-target="scenario">scenario</a>
-          <a href="#" class="blog-nav-item" data-menu-target="ontology">ontology</a>
-        </nav>
-      </div>
-    </div>
 
-    <div id="content" class="container" role="main">
-      <!-- SCENARIO -->
-      <div id="scenario" class="hidden">
-        <button id="start_selection" onclick="startSelection();" label="Start selection" />
-
-      </div>
-      <!-- ONTOLOGY -->
-      <div id="ontology">
-        <div id="ontology_load_area">
-      
-          Drop file or URL here...
-      
-        </div>
-      
-        <!-- list all objects
-             edit on click -->
-        <!-- add button in the end -->
-        <div class="list_container">
-          <ul id="ontology_objects_list">
-          </ul>
-        </div>
-      
-      
-        <!-- list all properties
-             edit on click -->
-        <!-- add button in the end -->
-        <div class="list_container">
-          <ul id="ontology_properties_list">
-          </ul>
-        </div>
-      
-      </div>
+  <!-- MENU -->
+  <div class="blog-masthead">
+    <div class="container">
+      <nav class="blog-nav">
+        <a href="#" class="blog-nav-item" data-menu-target="scenario">scenario</a>
+        <a href="#" class="blog-nav-item" data-menu-target="ontology">ontology</a>
+      </nav>
     </div>
-  </div>
+  </div><!--/MENU-->
+
+  <!-- CONTENT -->
+  <div id="content" class="container" role="main">
+
+    <!-- SCENARIO -->
+    <div id="scenario" class="hidden">
+      <button id="start_selection" onclick="sowl.sidebar.startSelection();" label="Start selection" type="button" class="btn btn-lg btn-default">Start selection</button>
+    </div><!--/SCENARIO-->
+
+
+    <!-- ONTOLOGY -->
+    <div id="ontology">
+      <div id="ontology_load_area">
+    
+        Drop file or URL here...
+    
+      </div>
+    
+      <!-- list all objects
+           edit on click -->
+      <!-- add button in the end -->
+      <div class="list_container">
+        <ul id="ontology_objects_list">
+        </ul>
+      </div>
+    
+    
+      <!-- list all properties
+           edit on click -->
+      <!-- add button in the end -->
+      <div class="list_container">
+        <ul id="ontology_properties_list">
+        </ul>
+      </div>
+    
+    </div><!--/ONTOLOGY-->
+
+
+  </div><!--/CONTENT-->
 
 </body>
 </html>
