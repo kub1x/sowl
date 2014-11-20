@@ -12,6 +12,7 @@ if (this.keyCommands.length > 0)
 // 3: "extension" of ext only, "bookmarklet" for bm only, null for both
 var keyCommands = [
   ["select", this.select],
+  ["click", this.click],
   ["wider", this.wider],
   ["narrower", this.narrower],
   ["undo", this.undo, true],
@@ -21,7 +22,7 @@ var keyCommands = [
   ["isolate", this.isolateElement],
   ["black on white", this.blackOnWhite],
   ["deWidthify", this.deWidthify],
-  ["colorize", this.colorize],
+  //["colorize", this.colorize],
   ["view source", this.viewSource],
   ["javascript", this.makeJavascript],
   ["paste", this.domPath],
@@ -95,6 +96,10 @@ this.keyCommands.push (command);
 //------------------------------------------------------------
 select : function (elem) {
   notifySelect(elem);
+}, 
+
+click : function (elem) {
+  performClick(elem);
 }, 
 
 //------------------------------------------------------------
