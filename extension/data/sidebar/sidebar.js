@@ -15,6 +15,7 @@ sowl.sidebar = {
 
   menuClick: function menuClick(selected, event) {
     logger.trace("start", arguments);
+
     this.hideAll();
     this.show(selected);
   },
@@ -32,6 +33,7 @@ sowl.sidebar = {
 
   startSelection: function() {
     logger.trace("start", arguments);
+
     //TODO this should start aardvark on current tab
     //TODO move message name into resources
     addon.port.emit('sowl-start-selection');

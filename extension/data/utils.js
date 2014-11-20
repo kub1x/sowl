@@ -27,21 +27,14 @@ var logger = {
 
   DEBUG: true, 
 
-  trace: function(msg, args) {
+  trace: function(msg, args, fnName) {
     if(this.TRACE) {
       if(arguments.length < 2) {
         console.log("sowl - trace - {0}".format(msg));
 
       } else {
-
-        var fnName = (args == null || args.callee == null
-            ? "unknown"
-            : args.callee.name);
-
-        var argsStr = (args == null
-            ? ""
-            : [].join.call(args, ", "));
-
+        fnName = fnName || (args == null || args.callee == null || args.callee.name == "" ? "__unknown__" : args.callee.name);
+        var argsStr = (args == null ? "" : [].join.call(args, ", ")); 
         console.log("sowl - trace - {0}({1}) - {2}".format(fnName, argsStr, msg));
       }
     }

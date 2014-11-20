@@ -10,95 +10,106 @@ $(document).ready(function () {
   /**
    * Hook drag over to accept dropping. 
    */
-  $('#ontology_load_area').on('dragover', onDroppableDragOver);
-  $('#ontology_load_area').on('drop', onLoadDrop);
+  $('#ontology_load_area').on('dragover', sowl.ontology.onDroppableDragOver);
+  $('#ontology_load_area').on('drop', sowl.ontology.onLoadDrop);
 });
 
 
 /**
- * This handler allows dropping on an element. 
- */
-function onDroppableDragOver(event) {
-  //if ($.inArray('application/x-moz-file', event.dataTransfer.types)) {
-  event.preventDefault();
-  event.dataTransfer.dropEffect = 'copy';
-  //}
-};
-
-
-/**
  *
  */
-function onLoadDrop(event) {
-  //if ($.inArray('application/x-moz-file', event.dataTransfer.types)) {
-  event.preventDefault();
-  //var type = event.dataTransfer.types[0];
-  //var data = event.dataTransfer.getData(type);
-  //var file = event.dataTransfer.files[0];
-  var files = event.dataTransfer.files;
-  for (var i = 0, file; file = files[i]; i++) {
-    console.log('handling file: ' + file + '\n' + event.dataTransfer.types[i] + '\n' + 'JSON: ' + JSON.stringify(file, null, 2));
-    loadRdfDocument(file);
-  }
-  //}
-}
+sowl.ontology = {
 
-
-/**
- *
- */
-function loadRdfDocument(file) {
-  var reader = new FileReader();
-
-  // Closure to capture the file information.
-  reader.onload =  function(event) {
-    var xmlDoc = $.parseXML(event.target.result);
-
-    // INIT sowl databank
-    if ( sowl.databank == null) {
-      sowl.rdf = $.rdf();
-      sowl.databank = sowl.rdf.databank;
-      console.log('initiated databank: ' + sowl.databank);
+  /**
+   * This handler allows dropping on an element. 
+   */
+  onDroppableDragOver: function(event) {
+    // Allow drop on file types
+    if ($.inArray('application/x-moz-file', event.dataTransfer.types) != -1) {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = 'copy';
     }
-    
-    sowl.databank.load(xmlDoc);
-
-    console.log('loaded databank: ' + sowl.databank.dump());
-
-    showOntology();
-  };
+  },
   
+  
+  /**
+   *
+   */
+  onLoadDrop: function(event) {
+    logger.trace("start", arguments);
 
-  reader.readAsText(file);
+    event.preventDefault();
+
+    var files = event.dataTransfer.files;
+    for (var i = 0, file; file = files[i]; i++) {
+      logger.debug('handling file: ' + file + '\n' + event.dataTransfer.types[i] + '\n' + 'JSON: ' + JSON.stringify(file, null, 2));
+      sowl.ontology.loadRdfDocument(file);
+    }
+  }, 
+  
+  
+  /**
+   *
+   */
+  loadRdfDocument: function(file) {
+    logger.trace("start", arguments);
+  
+    var reader = new FileReader();
+  
+    reader.onload =  function onload(event) {
+      logger.trace("start", arguments);
+  
+      var xmlDoc = $.parseXML(event.target.result);
+  
+      // INIT sowl databank
+      if ( sowl.databank == null) {
+        sowl.rdf = $.rdf();
+        sowl.databank = sowl.rdf.databank;
+        logger.debug('initiated databank: ' + sowl.databank);
+      }
+      
+      sowl.databank.load(xmlDoc);
+  
+      logger.debug('loaded databank: ' + sowl.databank.dump());
+  
+      sowl.ontology.showOntology();
+    };
+    
+  
+    reader.readAsText(file);
+  },
+
+
+  /**
+   *
+   */
+  showOntology: function() {
+    logger.trace("start", arguments, 'showOntology');
+
+    $('#ontology_objects_list').empty();
+    $('#ontology_properties_list').empty();
+  
+    sowl.ontology.listWhere('?target a rdfs:Class', function() {
+      $('#ontology_objects_list').append('<li>'+this.target.value+'</li>');
+    });
+  
+    sowl.ontology.listWhere('?target a rdf:Property', function() {
+      $('#ontology_properties_list').append('<li>'+this.target.value+'</li>');
+    });
+  },
+  
+  
+  /**
+   *
+   */
+  listWhere: function(condition, addOne) {
+    logger.trace("start", arguments, 'listWhere');
+
+    $.rdf({ databank: sowl.databank })
+      .prefix('rdf', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#')
+      .prefix('rdfs','http://www.w3.org/2000/01/rdf-schema#') 
+      .where(condition)
+      .each(addOne);
+  },
+
 };
-
-
-/**
- *
- */
-function showOntology() {
-  $('#ontology_objects_list').empty();
-  $('#ontology_properties_list').empty();
-
-  listWhere('?target a rdfs:Class', function() {
-    $('#ontology_objects_list').append('<li>'+this.target.value+'</li>');
-  });
-
-  listWhere('?target a rdf:Property', function() {
-    $('#ontology_properties_list').append('<li>'+this.target.value+'</li>');
-  });
-
-};
-
-
-/**
- *
- */
-function listWhere(condition, addOne) {
-  $.rdf({ databank: sowl.databank })
-    .prefix('rdf', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#')
-    .prefix('rdfs','http://www.w3.org/2000/01/rdf-schema#') 
-    .where(condition)
-    .each(addOne);
-};
-
