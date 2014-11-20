@@ -48,3 +48,29 @@ function onSidebarAttach( worker ) {
   //});
 };
 
+
+// start aardvark
+
+
+function incectAardvark() {
+
+  var worker = tabs.activeTab.attach({
+    contentScriptFile: [
+      data.url('jquery/jquery-2.1.0.js'),
+      data.url('aardvark/aardvark.init.js'),
+      data.url('aardvark/aardvark.strings.js'),
+      data.url('aardvark/aardvark.utils.js'),
+      data.url('aardvark/aardvark.dbox.js'),
+      data.url('aardvark/aardvark.commands.js'),
+      data.url('aardvark/aardvark.main.js'), 
+      data.url('aardvark/aardvark.sowl.js'), 
+    ], 
+  });
+
+  worker.port.on('sowl-aardvark-selected', function(message) {
+    console.log('got message [selected]: ' + JSON.stringify(message));
+  });
+
+  worker.port.emit('sowl-aardvark-start');
+};
+
