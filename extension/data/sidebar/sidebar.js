@@ -34,9 +34,17 @@ sowl.sidebar = {
   startSelection: function() {
     logger.trace("start", arguments);
 
+    addon.port.on('sowl-selection-selected', function(message){
+      logger.debug('got message [sowl-selection-selected]:' + message);
+    });
+
+    addon.port.on('sowl-selection-clicked', function(message){
+      logger.debug('got message [sowl-selection-clicked]:' + message);
+    });
+
     //TODO this should start aardvark on current tab
     //TODO move message name into resources
-    addon.port.emit('sowl-start-selection');
+    addon.port.emit('sowl-selection-start');
   },
 
 };

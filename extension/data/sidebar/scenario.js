@@ -30,12 +30,13 @@ sowl.scenario = {
     }, 
   }, 
 
+  treema: null, 
+
   init: function() {
     logger.trace("start", arguments); 
 
-    var treema = $('#sowl-scenario-treema').treema({schema: sowl.scenario.schema, data: sowl.scenario.data});
-    treema.build();
-
+    sowl.treema = $('#sowl-scenario-treema').treema({schema: sowl.scenario.schema, data: sowl.scenario.data});
+    sowl.treema.build();
   }, 
 
 }; 

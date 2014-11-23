@@ -15,9 +15,6 @@ var button = buttons.ActionButton({
 });
 
 function handleClick(state) {
-  // Attach Worker for communication
-  tabs.activeTab.attach(worker);
-
   // Open sidebar to work with
   sidebar.show();
 }
@@ -29,48 +26,40 @@ var sidebar = ui.Sidebar({
   onAttach: onSidebarAttach, 
 });
 
+function onSidebarAttach( sidebar_worker ) {
+  sidebar_worker.port.on('sowl-selection-start', function(sidebar_message) {
+      console.log('got message [sowl-selection-start] from sidebar with data:: ' + JSON.stringify(sidebar_message));
 
-var worker = {
-  contentScriptFile: [
-    self.data.url("jquery.js"), 
-    //TODO add aardvar here and see if it works ;)
-    //self.data.url("aardvark.js"), 
-    //self.data.url("aardvark.sowl.js"), 
-    self.data.url("content-script.js"), 
-  ], 
-};
+    // Inject aardvark into current page
+    var tab_worker = tabs.activeTab.attach({
+      contentScriptFile: [
+        self.data.url('jquery/jquery-2.1.1.js'),
+        self.data.url('aardvark/aardvark.init.js'),
+        self.data.url('aardvark/aardvark.strings.js'),
+        self.data.url('aardvark/aardvark.utils.js'),
+        self.data.url('aardvark/aardvark.dbox.js'),
+        self.data.url('aardvark/aardvark.commands.js'),
+        self.data.url('aardvark/aardvark.main.js'), 
+        self.data.url('aardvark/aardvark.sowl.js'), 
+      ], 
+    });
 
+    // Hook it back to sidebar
+    tab_worker.port.on('sowl-aardvark-selected', function(tab_message) {
+      console.log('got message [sowl-aardvark-selected]: ' + JSON.stringify(tab_message));
+      console.log('sending message [sowl-selection-selected]: ' + JSON.stringify(tab_message) + ' to sidebar');
+      sidebar_worker.port.emit('sowl-selection-selected', tab_message);
+    });
 
-function onSidebarAttach( worker ) {
-  //TODO how to start selection? ;)
-  //worker.port.on('start-selection', function(data) {
-    //TODO we should hold this worker with page it serves until the selection is stopped again. 
-  //});
-};
+    tab_worker.port.on('sowl-aardvark-clicked', function(tab_message) {
+      console.log('got message [sowl-aardvark-clicked]: ' + JSON.stringify(tab_message));
+      console.log('sending message [sowl-selection-clicked]: ' + JSON.stringify(tab_message) + ' to sidebar');
+      sidebar_worker.port.emit('sowl-selection-clicked', tab_message);
+    });
 
-
-// start aardvark
-
-
-function incectAardvark() {
-
-  var worker = tabs.activeTab.attach({
-    contentScriptFile: [
-      data.url('jquery/jquery-2.1.0.js'),
-      data.url('aardvark/aardvark.init.js'),
-      data.url('aardvark/aardvark.strings.js'),
-      data.url('aardvark/aardvark.utils.js'),
-      data.url('aardvark/aardvark.dbox.js'),
-      data.url('aardvark/aardvark.commands.js'),
-      data.url('aardvark/aardvark.main.js'), 
-      data.url('aardvark/aardvark.sowl.js'), 
-    ], 
+    // Now start the aardvark
+    console.log('sending message [sowl-aardvark-start] to current tab');
+    tab_worker.port.emit('sowl-aardvark-start');
   });
-
-  worker.port.on('sowl-aardvark-selected', function(message) {
-    console.log('got message [selected]: ' + JSON.stringify(message));
-  });
-
-  worker.port.emit('sowl-aardvark-start');
 };
 
