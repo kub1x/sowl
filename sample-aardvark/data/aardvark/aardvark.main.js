@@ -321,6 +321,12 @@ mouseOver : function (evt) {
 if (!evt)
   evt = aardvark.window.event;
 
+//TODO verify this! 
+//Added by kub1x
+//I don't need the page to change dynamically under the cursor when aardvark is
+//on. 
+evt.preventDefault();
+
 if (!aardvark.mouseMoved)
   return;
 

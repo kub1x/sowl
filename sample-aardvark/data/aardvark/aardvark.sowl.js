@@ -53,7 +53,7 @@ function getBestSelector(elem) {
       return current;
     }, 
 
-    /*byId:*/ function(current, elem) {
+    function byId(current, elem) {
       if (elem.id == "") {
         return false;
       }
@@ -68,8 +68,17 @@ function getBestSelector(elem) {
       return current;
     }, 
 
-    /*byClass:*/ function(current, elem) {
-      if (elem.className != "") {
+    /**
+     * FIXME XXX
+     *
+     * This method hooks on dynamically added classes (ex: tr.line-s is a class
+     * on NPU.cz that specifies currenlty hovered table row), and it creates
+     * selector according to this kind of state =/ We have to avoid the dynamic
+     * behavior or "pause" it somehow, when aardvark is in place. 
+     *
+     */
+    function byClass(current, elem) {
+      if (elem.className == "") {
         return false;
       }
 
@@ -90,7 +99,7 @@ function getBestSelector(elem) {
       return current;
     }, 
 
-    /*byNthChild:*/ function(current, elem) {
+    function byNthChild(current, elem) {
       var node = elem.tagName.toLowerCase();
 
       // Lookup by idx
