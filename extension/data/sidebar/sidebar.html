@@ -1,116 +1,163 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8">
 
-<script type="text/javascript" src="../utils.js"></script>
+    <script type="text/javascript" src="../utils.js"></script>
 
-<script type="text/javascript" src="../jquery/jquery-2.1.1.js"></script>
-<script type="text/javascript" src="../jquery/jquery-settings.js"></script>
+    <script type="text/javascript" src="../jquery/jquery-2.1.1.js"></script>
+    <script type="text/javascript" src="../jquery/jquery-settings.js"></script>
 
-<!-- for treema -->
-<script type="text/javascript" src="../jquery/jquery-ui-1.10.3.custom.js"></script>
-<script type="text/javascript" src="../treema/tv4.js"></script>
-<script type="text/javascript" src="../treema/treema.js"></script>
+    <!-- for treema -->
+    <!--
+    <script type="text/javascript" src="../jquery/jquery-ui-1.10.3.custom.js"></script>
+    <script type="text/javascript" src="../treema/tv4.js"></script>
+    <script type="text/javascript" src="../treema/treema.js"></script>
+    -->
 
-<!-- dependencies for rdfquery -->
-<script type="text/javascript" src="../rdfquery/jquery.json.js"></script>
-<script type="text/javascript" src="../rdfquery/jquery.uri.js"></script>
-<script type="text/javascript" src="../rdfquery/jquery.xmlns.js"></script>
-<script type="text/javascript" src="../rdfquery/jquery.curie.js"></script>
-<script type="text/javascript" src="../rdfquery/jquery.datatype.js"></script>
+    <!-- dependencies for rdfquery -->
+    <script type="text/javascript" src="../rdfquery/jquery.json.js"></script>
+    <script type="text/javascript" src="../rdfquery/jquery.uri.js"></script>
+    <script type="text/javascript" src="../rdfquery/jquery.xmlns.js"></script>
+    <script type="text/javascript" src="../rdfquery/jquery.curie.js"></script>
+    <script type="text/javascript" src="../rdfquery/jquery.datatype.js"></script>
 
-<!-- rdfquery -->
-<script type="text/javascript" src="../rdfquery/jquery.rdf.js"></script>
-<script type="text/javascript" src="../rdfquery/jquery.rdfa.js"></script>
-<script type="text/javascript" src="../rdfquery/jquery.rules.js"></script>
+    <!-- rdfquery -->
+    <script type="text/javascript" src="../rdfquery/jquery.rdf.js"></script>
+    <script type="text/javascript" src="../rdfquery/jquery.rdfa.js"></script>
+    <script type="text/javascript" src="../rdfquery/jquery.rules.js"></script>
 
-<!-- parsers for export actions -->
-<script type="text/javascript" src="../rdfquery/jquery.rdf.json.js"></script>
-<script type="text/javascript" src="../rdfquery/jquery.rdf.xml.js"></script>
-<script type="text/javascript" src="../rdfquery/jquery.rdf.turtle.js"></script>
+    <!-- parsers for export actions -->
+    <script type="text/javascript" src="../rdfquery/jquery.rdf.json.js"></script>
+    <script type="text/javascript" src="../rdfquery/jquery.rdf.xml.js"></script>
+    <script type="text/javascript" src="../rdfquery/jquery.rdf.turtle.js"></script>
 
-<!-- bootstrap -->
-<script type="text/javascript" src="../bootstrap/bootstrap.min.js"></script>
-<script type="text/javascript" src="../bootstrap/docs.min.js"></script>
+    <!-- bootstrap -->
+    <script type="text/javascript" src="../bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../bootstrap/docs.min.js"></script>
 
-<!-- sowl -->
-<script type="text/javascript" src="sidebar.js"></script>
-<script type="text/javascript" src="ontology.js"></script>
-<script type="text/javascript" src="scenario.js"></script>
+    <!-- sowl -->
+    <script type="text/javascript" src="sidebar.js"></script>
+    <script type="text/javascript" src="ontology.js"></script>
+    <script type="text/javascript" src="scenario.js"></script>
 
-<!-- bootstrap css -->
-<link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.css">
-<link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap-theme.css">
+    <!-- bootstrap css -->
+    <link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap-theme.css">
 
-<!-- treema css -->
-<link rel="stylesheet" type="text/css" href="../jquery/jquery-ui-1.10.3.custom.css">
-<link rel="stylesheet" type="text/css" href="../treema/treema.css">
+    <!-- treema css -->
+    <link rel="stylesheet" type="text/css" href="../jquery/jquery-ui-1.10.3.custom.css">
+    <!--
+    <link rel="stylesheet" type="text/css" href="../treema/treema.css">
+    -->
 
-<!-- sidebar css --> 
-<link rel="stylesheet" type="text/css" href="sidebar.css">
+    <!-- sidebar css --> 
+    <link rel="stylesheet" type="text/css" href="sidebar.css">
 
 
-</head>
-<body role="document">
+  </head>
+  <body role="document">
 
-  <!-- MENU -->
-  <div class="blog-masthead">
-    <div class="container">
-      <nav class="blog-nav">
-        <a href="#" class="blog-nav-item" data-menu-target="scenario">scenario</a>
-        <a href="#" class="blog-nav-item" data-menu-target="ontology">ontology</a>
+    <!-- MENU -->
+    <div id="menu" class="container">
+      <nav class="menu-nav">
+        <a href="#" class="menu-nav-item" data-menu-target="scenario">scenario</a>
+        <a href="#" class="menu-nav-item" data-menu-target="ontology">ontology</a>
       </nav>
-    </div>
-  </div><!--/MENU-->
+    </div><!--/MENU-->
 
-  <!-- CONTENT -->
-  <div id="content" class="container" role="main">
+    <!-- CONTENT -->
+    <div id="content" class="container">
 
-    <!-- SCENARIO -->
-    <div id="scenario" class="hidden">
-      <button id="start_selection" onclick="sowl.sidebar.startSelection();" label="Start selection" type="button" class="btn btn-xs btn-default">Start selection</button>
+      <!-- SCENARIO -->
+      <div id="scenario" class="hidden">
 
-      <div id="sowl-scenario-treema"></div>
-  
-    </div><!--/SCENARIO-->
+        <a href="#" id="start_selection" onclick="sowl.sidebar.startSelection();" label="Start selection">Start selection</a>
 
+        <div id="sowl_scenario"></div>
 
-    <!-- ONTOLOGY -->
-    <div id="ontology">
-      <div id="ontology_load_area">
-    
-        Drop file or URL here...
-    
-      </div>
-    
-      <!-- list all objects
-           edit on click -->
-      <!-- add button in the end -->
-      <div class="list_container">
-        <ul id="ontology_objects_list">
-        </ul>
-      </div>
-    
-    
-      <!-- list all properties
-           edit on click -->
-      <!-- add button in the end -->
-      <div class="list_container">
-        <ul id="ontology_properties_list">
-        </ul>
-      </div>
-    
-    </div><!--/ONTOLOGY-->
+      </div><!--/SCENARIO-->
 
 
-  </div><!--/CONTENT-->
-</body>
+      <!-- ONTOLOGY -->
+      <div id="ontology">
+
+        <div id="ontology_droparea">
+          Drop file or URL here...
+        </div>
+
+        <br />
+
+        <div id="ontology_list">
+          <div class="ontology_list_item">
+            <table>
+              <tr><td>uri</td><td><span class="uri">http://foaf.org/foaf/1.0/firstName</span></td></tr>
+              <tr><td>type</td><td><span class="uri">rdf:Property</span></td></tr>
+              <tr><td>domain</td><td><span class="uri">http://foaf.org/foaf/1.0/Person</span></td></tr>
+              <tr><td>data type</td><td><span class="uri">xsl:string</span></td></tr>
+            </table>
+            <hr />
+          </div>
+          <div class="ontology_list_item">
+            <table>
+              <tr><td>uri</td><td><span class="uri">http://foaf.org/foaf/1.0/firstName</span></td></tr>
+              <tr><td>type</td><td><span class="uri">rdf:Property</span></td></tr>
+              <tr><td>domain</td><td><span class="uri">http://foaf.org/foaf/1.0/Person</span></td></tr>
+              <tr><td>data type</td><td><span class="uri">xsl:string</span></td></tr>
+            </table>
+            <hr />
+          </div>
+          <div class="ontology_list_item">
+            <table>
+              <tr><td>uri</td><td><span class="uri">http://foaf.org/foaf/1.0/firstName</span></td></tr>
+              <tr><td>type</td><td><span class="uri">rdf:Property</span></td></tr>
+              <tr><td>domain</td><td><span class="uri">http://foaf.org/foaf/1.0/Person</span></td></tr>
+              <tr><td>data type</td><td><span class="uri">xsl:string</span></td></tr>
+            </table>
+            <hr />
+          </div>
+          <div class="ontology_list_item">
+            <table>
+              <tr><td>uri</td><td><span class="uri">http://foaf.org/foaf/1.0/firstName</span></td></tr>
+              <tr><td>type</td><td><span class="uri">rdf:Property</span></td></tr>
+              <tr><td>domain</td><td><span class="uri">http://foaf.org/foaf/1.0/Person</span></td></tr>
+              <tr><td>data type</td><td><span class="uri">xsl:string</span></td></tr>
+            </table>
+            <hr />
+          </div>
+          <div class="ontology_list_item">
+            <table>
+              <tr><td>uri</td><td><span class="uri">http://foaf.org/foaf/1.0/firstName</span></td></tr>
+              <tr><td>type</td><td><span class="uri">rdf:Property</span></td></tr>
+              <tr><td>domain</td><td><span class="uri">http://foaf.org/foaf/1.0/Person</span></td></tr>
+              <tr><td>data type</td><td><span class="uri">xsl:string</span></td></tr>
+            </table>
+            <hr />
+          </div>
+          <div class="ontology_list_item">
+            <table>
+              <tr><td>uri</td><td><span class="uri">http://foaf.org/foaf/1.0/firstName</span></td></tr>
+              <tr><td>type</td><td><span class="uri">rdf:Property</span></td></tr>
+              <tr><td>domain</td><td><span class="uri">http://foaf.org/foaf/1.0/Person</span></td></tr>
+              <tr><td>data type</td><td><span class="uri">xsl:string</span></td></tr>
+            </table>
+            <hr />
+          </div>
+          <div class="ontology_list_item">
+            <table>
+              <tr><td>uri</td><td><span class="uri">http://foaf.org/foaf/1.0/firstName</span></td></tr>
+              <tr><td>type</td><td><span class="uri">rdf:Property</span></td></tr>
+              <tr><td>domain</td><td><span class="uri">http://foaf.org/foaf/1.0/Person</span></td></tr>
+              <tr><td>data type</td><td><span class="uri">xsl:string</span></td></tr>
+            </table>
+            <hr />
+          </div>
+        </div>
+
+      </div><!--/ONTOLOGY-->
+
+    </div><!--/CONTENT-->
+
+  </body>
 </html>
 
-
-
-
-
-</head>
-<body>

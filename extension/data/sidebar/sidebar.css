@@ -1,46 +1,8 @@
-body {
-  background: #abc;
-}
-
-#menu {
-  padding: 0;    
-  margin: 0;
-  margin-bottom: 10px;
-  list-style-type: none;
-}
-
-#menu .menu_item {
-  background: #aaa;
-  display: block;
-  float: left;
-
-  border: solid gray 1px;
-
-  margin-right: -1px;
-
-  padding: 2px;
-}
-
-#menu .menu_item.current {
-  box-shadow: inset 0 0 0 1em #ddd;
-  z-index: 10;
-}
-
-#menu .menu_item:hover {
-  /*border-color: #ddd;*/
-  box-shadow: inset 0 0 0 1em #ddd;
-  z-index: 10;
-}
-
-#menu .menu_item a {
-  text-decoration: none;
-  color: black;
-}
-
 #content {
   width: 100%;
+  height: 100%;
   min-height: 100px;
-  padding: 0;
+  padding: 5px;
 }
 
 .clear {
@@ -51,32 +13,35 @@ body {
   display: none;
 }
 
-#ontology_load_area {
-  color: gray; 
-
-  border: dashed gray 2px;
+#ontology_droparea {
+  color: #dadada; 
+  border: dashed #dadada 2px;
   border-radius: 2px;
-
   padding: 15px;
-
+  margin: 0;
   margin-bottom: 5px;
 }
 
-.list_container {
-  height: 120px;
+#ontology_droparea:hover {
+  color: gray; 
+}
+
+#ontology_list {
   margin-bottom: 5px;
 
-  overflow-y: scroll;
   overflow-x: hidden;
 
   position: relative;
   white-space: nowrap;
 }
 
-.list_container ul {
+.ontology_list_item {
+}
+
+/*.list_container ul {
   position: absolute;
   right: 0px;
-}
+}*/
 
 /*
  * Globals
@@ -104,31 +69,32 @@ h6, .h6 {
 /*
  * Masthead for nav
  */
-.blog-masthead {
-  background-color: #428bca;
+#menu {
+  background-color: #333;
   -webkit-box-shadow: inset 0 -2px 5px rgba(0,0,0,.1);
           box-shadow: inset 0 -2px 5px rgba(0,0,0,.1);
 }
 
 /* Nav links */
-.blog-nav-item {
+.menu-nav-item {
   position: relative;
   display: inline-block;
-  padding: 10px;
+  padding: 5px;
   font-weight: 500;
-  color: #cdddeb;
+  color: #dadada;
 }
-.blog-nav-item:hover,
-.blog-nav-item:focus {
-  color: #fff;
+.menu-nav-item:hover,
+.menu-nav-item:focus {
+  color: #dadada;
+  background-color: #008cba;
   text-decoration: none;
 }
 
 /* Active state gets a caret at the bottom */
-.blog-nav .active {
+.menu-nav .active {
   color: #fff;
 }
-.blog-nav .active:after {
+.menu-nav .active:after {
   position: absolute;
   bottom: 0;
   left: 50%;

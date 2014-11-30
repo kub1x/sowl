@@ -23,7 +23,7 @@ sowl.sidebar = {
   show: function(id) {
     //TODO move ID's into resources (somehow..?)
     $('#content #'+id).removeClass('hidden');
-    $('#menu_'+id).addClass('current');
+    $('#menu [data-menu-target='+id+']').addClass('current');
   },
 
   hideAll: function() {
@@ -51,10 +51,9 @@ sowl.sidebar = {
 
 // Load
 $(function() {
-  logger.trace('attaching click event');
+  logger.trace('attaching menu click event');
   $('nav a').click(function(event){
     event.preventDefault();
-    //TODO move attribut name into resources
     var selected = $(this).attr('data-menu-target');
     logger.trace('clicked selected: ' + selected);
     sowl.sidebar.menuClick(selected, event.originalEvent);
