@@ -30,16 +30,24 @@ sowl.scenario = {
     }, 
   }, 
 
-  treema: null, 
+  //treema: null, 
 
   init: function() {
     logger.trace("start", arguments); 
 
-    sowl.treema = $('#sowl-scenario-treema').treema({schema: sowl.scenario.schema, data: sowl.scenario.data});
-    sowl.treema.build();
+    //sowl.treema = $('#sowl-scenario-treema').treema({schema: sowl.scenario.schema, data: sowl.scenario.data});
+    //sowl.treema.build();
   }, 
 
 }; 
+
+
+var Template = function(name) {
+  this.name = name;
+  this.steps = [];
+};
+
+var 
 
 
 // Load

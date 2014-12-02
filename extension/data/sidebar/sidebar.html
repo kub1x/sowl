@@ -44,10 +44,11 @@
     <!-- bootstrap css -->
     <link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap-theme.css">
+    <link rel="stylesheet" type="text/css" href="../bootstrap/font-awesome.css">
 
     <!-- treema css -->
-    <link rel="stylesheet" type="text/css" href="../jquery/jquery-ui-1.10.3.custom.css">
     <!--
+    <link rel="stylesheet" type="text/css" href="../jquery/jquery-ui-1.10.3.custom.css">
     <link rel="stylesheet" type="text/css" href="../treema/treema.css">
     -->
 
@@ -70,9 +71,35 @@
     <div id="content" class="container">
 
       <!-- SCENARIO -->
-      <div id="scenario" class="hidden">
+      <div id="scenario">
 
         <a href="#" id="start_selection" onclick="sowl.sidebar.startSelection();" label="Start selection">Start selection</a>
+
+        <div class="panel panel-default">
+          <!-- Default panel contents -->
+          <div class="panel-heading">
+            <!--h3 class="panel-title glyphicon glyphicon-edit"><i class="fa fa-edit"></i> Scenarion settings</h3-->
+            <h3 class="panel-title">Scenarion settings</h3>
+          </div>
+        
+          <!-- Table -->
+          <table class="table panel-body">
+            <tr>
+              <th>name</th>
+              <td><input id="scenario-name" type="text" class="onlyline" placeholder="name" /></td>
+            </tr>
+            <tr>
+              <th>init URL</th>
+              <td><input id="scenario-url" type="text" class="onlyline" placeholder="url" /></td>
+            </tr>
+            <tr>
+              <!-- TODO dropdown select here -->
+              <th>init template</th>
+              <td><input id="scenario-template" type="text" class="onlyline" placeholder="initial template"
+                value="init" /></td>
+            </tr>
+          </table>
+        </div>
 
         <div id="sowl_scenario"></div>
 
@@ -80,7 +107,7 @@
 
 
       <!-- ONTOLOGY -->
-      <div id="ontology">
+      <div id="ontology" class="hidden">
 
         <div id="ontology_droparea">
           Drop file or URL here...
@@ -88,70 +115,15 @@
 
         <br />
 
+        <div class="input-group input-group-sm">
+          <span class="input-group-addon">filter:</span>
+          <input id="ontology-filter" type="text" class="form-control" placeholder="uri">
+        </div>
+
         <div id="ontology_list">
-          <div class="ontology_list_item">
-            <table>
-              <tr><td>uri</td><td><span class="uri">http://foaf.org/foaf/1.0/firstName</span></td></tr>
-              <tr><td>type</td><td><span class="uri">rdf:Property</span></td></tr>
-              <tr><td>domain</td><td><span class="uri">http://foaf.org/foaf/1.0/Person</span></td></tr>
-              <tr><td>data type</td><td><span class="uri">xsl:string</span></td></tr>
-            </table>
-            <hr />
-          </div>
-          <div class="ontology_list_item">
-            <table>
-              <tr><td>uri</td><td><span class="uri">http://foaf.org/foaf/1.0/firstName</span></td></tr>
-              <tr><td>type</td><td><span class="uri">rdf:Property</span></td></tr>
-              <tr><td>domain</td><td><span class="uri">http://foaf.org/foaf/1.0/Person</span></td></tr>
-              <tr><td>data type</td><td><span class="uri">xsl:string</span></td></tr>
-            </table>
-            <hr />
-          </div>
-          <div class="ontology_list_item">
-            <table>
-              <tr><td>uri</td><td><span class="uri">http://foaf.org/foaf/1.0/firstName</span></td></tr>
-              <tr><td>type</td><td><span class="uri">rdf:Property</span></td></tr>
-              <tr><td>domain</td><td><span class="uri">http://foaf.org/foaf/1.0/Person</span></td></tr>
-              <tr><td>data type</td><td><span class="uri">xsl:string</span></td></tr>
-            </table>
-            <hr />
-          </div>
-          <div class="ontology_list_item">
-            <table>
-              <tr><td>uri</td><td><span class="uri">http://foaf.org/foaf/1.0/firstName</span></td></tr>
-              <tr><td>type</td><td><span class="uri">rdf:Property</span></td></tr>
-              <tr><td>domain</td><td><span class="uri">http://foaf.org/foaf/1.0/Person</span></td></tr>
-              <tr><td>data type</td><td><span class="uri">xsl:string</span></td></tr>
-            </table>
-            <hr />
-          </div>
-          <div class="ontology_list_item">
-            <table>
-              <tr><td>uri</td><td><span class="uri">http://foaf.org/foaf/1.0/firstName</span></td></tr>
-              <tr><td>type</td><td><span class="uri">rdf:Property</span></td></tr>
-              <tr><td>domain</td><td><span class="uri">http://foaf.org/foaf/1.0/Person</span></td></tr>
-              <tr><td>data type</td><td><span class="uri">xsl:string</span></td></tr>
-            </table>
-            <hr />
-          </div>
-          <div class="ontology_list_item">
-            <table>
-              <tr><td>uri</td><td><span class="uri">http://foaf.org/foaf/1.0/firstName</span></td></tr>
-              <tr><td>type</td><td><span class="uri">rdf:Property</span></td></tr>
-              <tr><td>domain</td><td><span class="uri">http://foaf.org/foaf/1.0/Person</span></td></tr>
-              <tr><td>data type</td><td><span class="uri">xsl:string</span></td></tr>
-            </table>
-            <hr />
-          </div>
-          <div class="ontology_list_item">
-            <table>
-              <tr><td>uri</td><td><span class="uri">http://foaf.org/foaf/1.0/firstName</span></td></tr>
-              <tr><td>type</td><td><span class="uri">rdf:Property</span></td></tr>
-              <tr><td>domain</td><td><span class="uri">http://foaf.org/foaf/1.0/Person</span></td></tr>
-              <tr><td>data type</td><td><span class="uri">xsl:string</span></td></tr>
-            </table>
-            <hr />
-          </div>
+          <!--
+          <div class="item"> <span class="uri">http://foaf.org/foaf/1.0/firstName</span> </div>
+          -->
         </div>
 
       </div><!--/ONTOLOGY-->

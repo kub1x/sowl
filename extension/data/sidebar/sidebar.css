@@ -27,21 +27,49 @@
 }
 
 #ontology_list {
+  font-size: 0.8em;
+  font-family: monospace;
+  
   margin-bottom: 5px;
 
   overflow-x: hidden;
 
   position: relative;
   white-space: nowrap;
+
+  border-bottom: solid #dadada 1px;
 }
 
-.ontology_list_item {
+#ontology_list .item {
+  border-top: solid #dadada 1px;
+  padding: 5px;
 }
 
 /*.list_container ul {
   position: absolute;
   right: 0px;
 }*/
+
+.panel-heading {
+  -moz-user-select: none;
+}
+
+.panel.collapsed .panel-body {
+  display: none;
+}
+
+input.onlyline {
+  color: black;
+  border: 0;
+  border-bottom: 1px solid gray;
+  border-radius: 0; 
+  background: -moz-linear-gradient(bottom, #dadada, white, white, white, white, white);
+}
+
+input.onlyline:focus, input.onlyline:hover {
+  background: -moz-linear-gradient(bottom, #97D8FF, white, white, white, white, white);
+}
+
 
 /*
  * Globals

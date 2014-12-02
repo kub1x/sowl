@@ -52,11 +52,44 @@ sowl.sidebar = {
 // Load
 $(function() {
   logger.trace('attaching menu click event');
+
+  // Menu click
   $('nav a').click(function(event){
     event.preventDefault();
     var selected = $(this).attr('data-menu-target');
     logger.trace('clicked selected: ' + selected);
     sowl.sidebar.menuClick(selected, event.originalEvent);
+    $(this).blur();
+  });
+
+  // Filtering on ontology
+  $('#ontology-filter').keyup(function(event){
+    var val = $(this).val().toLowerCase();
+
+    // reset on zero value
+    if (val === '') {
+      $('#ontology_list').children('.item').removeClass('hidden');
+      return;
+    }
+
+    $('#ontology_list').children('.item').each(function(index, element){
+      var $elem = $(element);
+      var text = $elem.find('.uri').text().toLowerCase();
+      if (text.indexOf(val) > -1) {
+        $elem.removeClass('hidden');
+      } else {
+        $elem.addClass('hidden');
+      }
+    });
+
+
+  });
+
+  // Panel hiding
+  $('.panel-heading').click(function(event){
+    console.log('clicked heading');
+    var $panel = $(this).parent();
+    $panel.toggleClass('collapsed');
   });
 });
 

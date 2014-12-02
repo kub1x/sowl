@@ -10,8 +10,8 @@ $(document).ready(function () {
   /**
    * Hook drag over to accept dropping. 
    */
-  $('#ontology_load_area').on('dragover', sowl.ontology.onDroppableDragOver);
-  $('#ontology_load_area').on('drop', sowl.ontology.onLoadDrop);
+  $('#ontology_droparea').on('dragover', sowl.ontology.onDroppableDragOver);
+  $('#ontology_droparea').on('drop', sowl.ontology.onLoadDrop);
 });
 
 
@@ -86,16 +86,27 @@ sowl.ontology = {
   showOntology: function() {
     logger.trace("start", arguments, 'showOntology');
 
-    $('#ontology_objects_list').empty();
-    $('#ontology_properties_list').empty();
+    $('#ontology_list').empty();
   
-    sowl.ontology.listWhere('?target a rdfs:Class', function() {
-      $('#ontology_objects_list').append('<li>'+this.target.value+'</li>');
-    });
+    //sowl.ontology.listWhere('?target a ?type', function() {
+    //  //show it somehow
+    //});
+    $.rdf({ databank: sowl.databank })
+      .prefix('rdf', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#')
+      .prefix('rdfs','http://www.w3.org/2000/01/rdf-schema#') 
+      .prefix('foaf','http://xmlns.com/foaf/0.1/')
+      .prefix('owl', 'http://www.w3.org/2002/07/owl#')
+      .where('?target a ?type')
+      .optional('?target rdfs:domain ?domain')
+      .optional('?target rdfs:range  ?range')
+      .each(function() {
+        $('#ontology_list').append('<div class="item"><span class="uri">'   + this.target.value + '</span>'
+                                                     + (this.type   === undefined ? '' : ('<br />' + 'type: '  + this.type.value))
+                                                     + (this.domain === undefined ? '' : ('<br />' + 'domain: '+ this.domain.value))
+                                                     + (this.range  === undefined ? '' : ('<br />' + 'range: ' + this.range.value))
+                                 + '</div>');
+      });
   
-    sowl.ontology.listWhere('?target a rdf:Property', function() {
-      $('#ontology_properties_list').append('<li>'+this.target.value+'</li>');
-    });
   },
   
   
