@@ -14,6 +14,52 @@ $(document).ready(function () {
   $('#ontology_droparea').on('drop', sowl.ontology.onLoadDrop);
 });
 
+//-----------------------------------------------------------------------------
+
+var Resource = function(uri) {
+  logger.trace("constructor", arguments);
+  this.uri = uri;
+};
+
+Resource.prototype.setUri = function setUri(uri) {
+  logger.trace("start", arguments);
+  this.uri = uri;
+};
+
+Resource.prototype.getUri = function getUri() {
+  logger.trace("start", arguments);
+  return this.uri;
+};
+
+Resource.prototype.addType = function addType(uri) {
+  logger.trace("start", arguments);
+  if(!this.types) {
+    this.types = [];
+  }
+  this.types.push(uri);
+};
+
+Resource.prototype.setDomain = function setDomain(uri) {
+  logger.trace("start", arguments);
+  this.domain = uri;
+};
+
+Resource.prototype.getDomain = function getDomain() {
+  logger.trace("start", arguments);
+  return this.domain;
+};
+
+Resource.prototype.setRange = function setRange(uri) {
+  logger.trace("start", arguments);
+  this.range = uri;
+};
+
+Resource.prototype.getRange = function getRange() {
+  logger.trace("start", arguments);
+  return this.range;
+};
+
+//-----------------------------------------------------------------------------
 
 /**
  *
@@ -21,9 +67,46 @@ $(document).ready(function () {
 sowl.ontology = {
 
   /**
+   * List of all loaded and/or created resources...
+   */
+  resources: {}, 
+
+  /**
+   *
+   */
+  putResource: function addResource(uri, resource) {
+    logger.trace("start", arguments);
+    this.resources[uri] = resource;
+  }, 
+
+  /**
+   *
+   */
+  getResource: function getResource(uri) {
+    logger.trace("start", arguments);
+    return this.resources[uri]; 
+  }, 
+
+  /**
+   *
+   */
+  getOrCreateResource: function getOrCreateResource(uri) {
+    logger.trace("start", arguments);
+
+    var resource = this.getResource(uri);
+    if(!resource) {
+      resource = new Resource(uri);
+      this.putResource(uri, resource);
+    }
+    return resource;
+  },
+
+  /**
    * This handler allows dropping on an element. 
    */
-  onDroppableDragOver: function(event) {
+  onDroppableDragOver: function onDroppableDragOver(event) {
+    //logger.trace("handle", arguments);
+
     // Allow drop on file types
     if ($.inArray('application/x-moz-file', event.dataTransfer.types) != -1) {
       event.preventDefault();
@@ -31,12 +114,11 @@ sowl.ontology = {
     }
   },
   
-  
   /**
    *
    */
-  onLoadDrop: function(event) {
-    logger.trace("start", arguments);
+  onLoadDrop: function onLoadDrop(event) {
+    logger.trace("handle", arguments);
 
     event.preventDefault();
 
@@ -47,11 +129,10 @@ sowl.ontology = {
     }
   }, 
   
-  
   /**
    *
    */
-  loadRdfDocument: function(file) {
+  loadRdfDocument: function loadRdfDocument(file) {
     logger.trace("start", arguments);
   
     var reader = new FileReader();
@@ -79,42 +160,51 @@ sowl.ontology = {
     reader.readAsText(file);
   },
 
-
   /**
    *
    */
-  showOntology: function() {
-    logger.trace("start", arguments, 'showOntology');
+  showOntology: function showOntology() {
+    logger.trace("start", arguments);
 
-    $('#ontology_list').empty();
+    //$('#ontology_list').empty();
   
     //sowl.ontology.listWhere('?target a ?type', function() {
     //  //show it somehow
     //});
+    
     $.rdf({ databank: sowl.databank })
       .prefix('rdf', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#')
       .prefix('rdfs','http://www.w3.org/2000/01/rdf-schema#') 
-      .prefix('foaf','http://xmlns.com/foaf/0.1/')
-      .prefix('owl', 'http://www.w3.org/2002/07/owl#')
+      //.prefix('foaf','http://xmlns.com/foaf/0.1/')
+      //.prefix('owl', 'http://www.w3.org/2002/07/owl#')
       .where('?target a ?type')
       .optional('?target rdfs:domain ?domain')
       .optional('?target rdfs:range  ?range')
       .each(function() {
-        $('#ontology_list').append('<div class="item"><span class="uri">'   + this.target.value + '</span>'
-                                                     + (this.type   === undefined ? '' : ('<br />' + 'type: '  + this.type.value))
-                                                     + (this.domain === undefined ? '' : ('<br />' + 'domain: '+ this.domain.value))
-                                                     + (this.range  === undefined ? '' : ('<br />' + 'range: ' + this.range.value))
-                                 + '</div>');
+        var resource = sowl.ontology.getOrCreateResource(this.target.value);
+        if(this.type   !== undefined) { resource.addType(this.type.value); }
+        if(this.domain !== undefined) { resource.setDomain(this.domain.value); }
+        if(this.range  !== undefined) { resource.setRange(this.range.value); }
       });
+
+    for ( key in this.resources ) {
+      logger.debug("resource: " + key + ", " + JSON.stringify(this.resources[key], null, 2));
+      $('#ontology_list').append('<div class="item bs-callout"><span class="uri">' + key + '</span></div>');
+    }
+
+      //  $('#ontology_list').append('<div class="item bs-callout"><span class="uri">'   + this.target.value + '</span>'
+      //                                               + (this.type   === undefined ? '' : ('<br />' + 'type: '  + this.type.value))
+      //                                               + (this.domain === undefined ? '' : ('<br />' + 'domain: '+ this.domain.value))
+      //                                               + (this.range  === undefined ? '' : ('<br />' + 'range: ' + this.range.value))
+      //                           + '</div>');
   
   },
-  
   
   /**
    *
    */
-  listWhere: function(condition, addOne) {
-    logger.trace("start", arguments, 'listWhere');
+  listWhere: function listWhere(condition, addOne) {
+    logger.trace("start", arguments);
 
     $.rdf({ databank: sowl.databank })
       .prefix('rdf', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#')

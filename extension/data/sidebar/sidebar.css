@@ -43,6 +43,17 @@
 #ontology_list .item {
   border-top: solid #dadada 1px;
   padding: 5px;
+  margin: 2px;
+  /*font-size: 105%;*/
+}
+
+#ontology_list .uri::before {
+  /*content: "\203B";*/
+  content: " -> ";
+}
+
+#ontology_list .uri {
+  font-weight: bold;
 }
 
 /*.list_container ul {

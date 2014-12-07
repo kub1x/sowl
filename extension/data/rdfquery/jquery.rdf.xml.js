@@ -303,11 +303,13 @@
             p.prefix !== 'xml') {
           if (p.namespaceURI !== rdfNs) {
             property = $.rdf.resource('<' + p.namespaceURI + getLocalName(p) + '>');
-            object = $.rdf.literal(literalOpts.lang ? p.nodeValue : '"' + p.nodeValue.replace(/"/g, '\\"') + '"', literalOpts);
+            //object = $.rdf.literal(literalOpts.lang ? p.nodeValue : '"' + p.nodeValue.replace(/"/g, '\\"') + '"', literalOpts);
+            object = $.rdf.literal(literalOpts.lang ? p.value : '"' + p.value.replace(/"/g, '\\"') + '"', literalOpts);
             triples.push($.rdf.triple(subject, property, object));
           } else if (getLocalName(p) === 'type') {
             property = $.rdf.type;
-            object = $.rdf.resource('<' + p.nodeValue + '>', { base: base });
+            //object = $.rdf.resource('<' + p.nodeValue + '>', { base: base });
+            object = $.rdf.resource('<' + p.value + '>', { base: base });
             triples.push($.rdf.triple(subject, property, object));
           }
         }

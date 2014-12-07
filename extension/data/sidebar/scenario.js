@@ -1,56 +1,94 @@
+// scenario.js //
+
 logger.trace("scenario.js - start");
 
-sowl.scenario = {
-  data : [], 
-    
-  schema: {
-    type: "array", 
-    items: {
-      additionalProperties: false, 
-      displayProperty: "name",
-      type: "object", 
-      properties: {
-        "name": {
-          type: "string", 
-        }, 
-        "cmd": {
-          type: "string", 
-          enum: ["do-click", "value-of", "onto-elem", ], 
-        }, 
-        "type-of": {
-          type: "string", 
-        }, 
-        "property": {
-          type: "string", 
-        }, 
-        "selector": {
-          type: "string", 
-        }, 
-      }, 
-    }, 
-  }, 
+//-----------------------------------------------------------------------------
 
-  //treema: null, 
+/**
+ * Napespace for scenario handling. 
+ */
+sowl.scenario = {
 
   init: function() {
-    logger.trace("start", arguments); 
+    logger.trace("called", arguments);
 
-    //sowl.treema = $('#sowl-scenario-treema').treema({schema: sowl.scenario.schema, data: sowl.scenario.data});
-    //sowl.treema.build();
-  }, 
+    var scenario = new Scenario();
+    scenario.init = sowl.init;
+    sowl.scenario = scenario;
+    logger.debug("sowl.scenario: " + sowl.scenario);
+  },
+
+};
+
+//-----------------------------------------------------------------------------
+
+// Load on 
+$(sowl.scenario.init);
+
+//-----------------------------------------------------------------------------
+
+var Scenario = function Scenario(){
+  logger.trace("created", arguments);
+
+  this.base = ""; 
+
+  this.templates = { };
 
 }; 
 
+Scenario.prototype.createTemplate = function createTemplate(name) {
+  logger.trace("called", arguments);
+  var template = new Template(name);
+  this.templates[name] = template;
+  return template;
+};
 
-var Template = function(name) {
+Scenario.prototype.getTemplate = function getTemplate(name) {
+  logger.trace("called", arguments);
+  return this.templates[name];
+};
+
+Scenario.prototype.removeTemplate = function removeTemplate(name) {
+  logger.trace("called", arguments);
+  delete this.templates[name];
+};
+
+
+//-----------------------------------------------------------------------------
+
+var Template = function Template(name) {
+  logger.trace("created", arguments);
   this.name = name;
   this.steps = [];
 };
 
-var 
+//-----------------------------------------------------------------------------
 
+var Step = function Step(cmd) {
+  logger.trace("created", arguments);
+  this.cmd = cmd;
+};
 
-// Load
-$(function() {
-  sowl.scenario.init();
-});
+Step.prototype.getSubsteps = function getSubsteps() {
+  logger.trace("called", arguments);
+  if(!this.steps) {
+    this.steps = [];
+  }
+  return this.steps;
+};
+
+Step.prototype.prependSubstep = function prependSubstep(step) {
+  logger.trace("called", arguments);
+  this.getSubsteps().unshift(step);
+};
+
+Step.prototype.appendSubstep = function appendSubstep(step) {
+  logger.trace("called", arguments);
+  this.getSubsteps().add(step);
+};
+
+Step.prototype.insertSubstep = function insertSubstep(index, step) {
+  logger.trace("called", arguments);
+  this.getSubsteps().splice(index, 0, step);
+};
+
