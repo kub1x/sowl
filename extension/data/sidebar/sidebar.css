@@ -44,13 +44,19 @@
   border-top: solid #dadada 1px;
   padding: 5px;
   margin: 2px;
+  overflow: hidden;
   /*font-size: 105%;*/
+
+  /* might want it non selectable to be easily draggable ;) */
+  -moz-user-select: none;
+  cursor: move;
 }
 
+/*
 #ontology_list .uri::before {
-  /*content: "\203B";*/
   content: " -> ";
 }
+ */
 
 #ontology_list .uri {
   font-weight: bold;

@@ -49,6 +49,39 @@ sowl.sidebar = {
     //TODO XXX !!!
   }, 
 
+  
+  /**
+   * Accepting a map {String: uri -> Resource: resource}. 
+   * Resource object is defined in ontology.js with following structure: 
+   * {
+   *  uri: jQuery.uri, 
+   *  types: [ jQuery.uri ], 
+   *  domain: jQuery.uri, 
+   *  range: jQuery.uri, 
+   * }
+   *
+   */
+  showOntology: function showOntology(resources) {
+
+    $('#ontology_list').empty();
+
+    var elems = [];
+    for ( uri in resources ) {
+      var $elem = $('<div class="item bs-callout" draggable="true"><span class="uri">{0}</span></div>'.format(uri));
+
+      //TODO do we need this stored here? 
+      // Set the resource as property of the DOM node for later usage durign drag/drop etc...
+      $elem.prop('resource', resources[uri]);
+
+      // Set the URI not only as content (see higher) but aswell as the data-uri attribute (down here). 
+      $elem.data('uri', uri);
+
+      elems.push($elem);
+    }
+
+    $('#ontology_list').append(elems);
+  }, 
+
 };
 
 sowl.handlers = {
@@ -96,6 +129,7 @@ sowl.handlers = {
     $panel.toggleClass('collapsed');
   }, 
 
+  //TODO XXX finish this dialog ;)
   ontologyListItemDblclick: function ontologyListItemDblclick(event) {
     bootbox.dialog({
       title: "This is a form in a modal.",
@@ -132,6 +166,65 @@ sowl.handlers = {
     }); 
   }, 
 
+  /**
+   * This handler allows dropping on an element. 
+   */
+  onDroppableDragOver: function onDroppableDragOver(event) {
+    //logger.trace("handle", arguments);
+
+    // Allow drop on file types
+    if ($.inArray('application/x-moz-file', event.dataTransfer.types) != -1) {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = 'copy';
+    }
+  },
+  
+  /**
+   * Handles droping on ontology drop/load area. 
+   */
+  onLoadDrop: function onLoadDrop(event) {
+    logger.trace("handle", arguments);
+
+    event.preventDefault();
+
+    var files = event.dataTransfer.files;
+    for (var i = 0, file; file = files[i]; i++) {
+      logger.debug('handling file: ' + file + '\n' + event.dataTransfer.types[i] + '\n' + 'JSON: ' + JSON.stringify(file, null, 2));
+      sowl.ontology.loadRdfDocument(file, sowl.sidebar.showOntology);
+    }
+  }, 
+  
+  ontologyListItem_dragstart: function ontologyListItem_dragstart(event) {
+    // this == event.target
+    this.style.opacity = '0.4';
+
+    event.dataTransfer.effectAllowed = 'sowl-drop-uri';
+    // Setting JSON encoded resource definition as 
+    event.dataTransfer.setData('sowl/resource-uri', $(this).data('uri'));
+
+    //TODO START AARDVARK
+    //TODO allow drop on document
+  }, 
+
+  ontologyListItem_dragend: function ontologyListItem_dragend(event) {
+    this.style.opacity = '1';
+  }, 
+
+  //TODO temporary.. delme
+  ontologyListItem_dragover: function ontologyListItem_dragover(event) {
+    event.preventDefault(); // allows us to drop
+    //this.className = 'over';
+    event.dataTransfer.dropEffect = 'sowl-drop-uri';
+    return false;
+  }, 
+
+  //TODO temporary.. delme
+  ontologyListItem_drop: function ontologyListItem_drop(event) {
+    event.stopPropagation(); // stops the browser from redirecting...why???
+    console.log(event.dataTransfer.getData('sowl/resource-uri'));
+  }, 
+
+
 };
 
 // Load
@@ -144,8 +237,17 @@ $(function() {
   // Filtering on ontology
   $('#ontology-filter').keyup(sowl.handlers.ontologyFilterKeyup);
 
+  // Hook drag over to accept dropping. 
+  $('#ontology_droparea').on('dragover', sowl.handlers.onDroppableDragOver);
+  $('#ontology_droparea').on('drop',     sowl.handlers.onLoadDrop);
+
+  $('#ontology_list').on('dragstart', '.item', sowl.handlers.ontologyListItem_dragstart);
+  $('#ontology_list').on('dragend',   '.item', sowl.handlers.ontologyListItem_dragend);
+  $('#ontology_list').on('dragover',  '.item', sowl.handlers.ontologyListItem_dragover);
+  $('#ontology_list').on('drop',      '.item', sowl.handlers.ontologyListItem_drop);
+
   // Doubleclick on ontology
-  $(document).on("dblclick", "#ontology_list .item", sowl.handlers.ontologyListItemDblclick);
+  $('#ontology_list').on('dblclick', '.item', sowl.handlers.ontologyListItemDblclick);
 
   // Panel hiding
   $('.panel-heading').click(sowl.handlers.panelHeadingClick);
@@ -153,7 +255,7 @@ $(function() {
   // Init scenario
   sowl.scenario.init();
   sowl.sidebar.currentTemplate = sowl.scenario.createTemplate('init');
-  sowl.sidebar.populateTemplatesList();
+  //sowl.sidebar.poulateTemplatesList();
   //TODO XXX !!!
 
 });

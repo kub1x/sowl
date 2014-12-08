@@ -18,6 +18,8 @@ sowl.scenario = {
     logger.debug("sowl.scenario: " + sowl.scenario);
   },
 
+
+
 };
 
 //-----------------------------------------------------------------------------
@@ -52,7 +54,6 @@ Scenario.prototype.removeTemplate = function removeTemplate(name) {
   logger.trace("called", arguments);
   delete this.templates[name];
 };
-
 
 //-----------------------------------------------------------------------------
 
