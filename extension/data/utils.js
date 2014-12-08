@@ -1,23 +1,32 @@
-// First, checks if it isn't implemented yet.
 if (!String.prototype.format) {
+  /**
+   * usage "{0} world!".format("Hello");
+   */
   String.prototype.format = function() {
     var args = arguments;
     return this.replace(/{(\d+)}/g, function(match, number) { 
-      return typeof args[number] != 'undefined'
-        ? args[number]
-        : match
-      ;
+      return typeof args[number] != 'undefined' ? args[number] : match ;
     });
   };
 }; 
 
-String.prototype.endsWith = function (suffix) {
-  return (this.substr(this.length - suffix.length) === suffix);
-}; 
+if (!String.prototype.endsWith) {
+  /**
+   * Return true if string ends with suffix. 
+   */
+  String.prototype.endsWith = function (suffix) {
+    return (this.substr(this.length - suffix.length) === suffix);
+  }; 
+};
 
-String.prototype.startsWith = function(prefix) {
-  return (this.substr(0, prefix.length) === prefix);
-}; 
+if (!String.prototype.startsWith) {
+  /**
+   * Return true if string starts with prefix. 
+   */
+  String.prototype.startsWith = function(prefix) {
+    return (this.substr(0, prefix.length) === prefix);
+  }; 
+};
 
 //==================================================================================
 
