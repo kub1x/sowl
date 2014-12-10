@@ -1,0 +1,119 @@
+<div class="container">
+  <div class="header">
+    <div class="topic">
+      Scenario: <span class="name">npu</span>
+    </div>
+    <div class="settings">
+      <form>
+        <div class="setting">
+          <label for="name">name</label>
+          <input name="name" type="text" class="onlyline" placeholder="scenario name" /><br />
+        </div>
+
+        <div class="setting">
+          <label for="url">web url</label>
+          <input name="url" type="text" class="onlyline" placeholder="initial url" /><br />
+        </div>
+
+        <div class="setting">
+          <label for="init">init</label>
+          <input name="init" type="text" class="onlyline" placeholder="initial template"
+               value="init" /><br />
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="editor-container">
+
+    <div class="templates">
+      <select class="template-list">
+        <option value="init">init</option>
+        <option value="detail">detail</option>
+      </select>
+      <button name="new-template">New</button>
+    </div>
+
+    <div class="editor">
+      <div class="steps">
+        <div class="step">
+          <h4 class="step-name create">foaf:Person</h4>
+          <code class="selector">tr</code>
+
+          <div class="steps">
+            <div class="step">
+              <h4 class="step-name assign">foaf:firstName</h4>
+              <code class="selector">td:nth-child(0)</code>
+            </div>
+
+            <div class="step current">
+              <h4 class="step-name assign">foaf:familyName</h4>
+              <code class="selector">td:nth-child(1)</code>
+            </div>
+
+            <div class="step">
+              <h4 class="step-name assign">foaf:phone</h4>
+              <code class="selector">td:nth-child(2)</code>
+            </div>
+
+            <div class="step highlighted">
+              <h4 class="step-name narrow"></h4>
+              <code class="selector">td:nth-child(3)</code>
+
+              <div class="steps">
+                <div class="step">
+                  <h4 class="step-name call-template">detail</h4>
+                  <code class="selector">./a/@href</code>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div><!-- steps -->
+
+        <div class="step">
+          <h4 class="step-name">Step</h4>
+        </div>
+
+        <div class="step">
+          <h4 class="step-name">Step</h4>
+        </div>
+
+        <div class="step">
+          <h4 class="step-name">Step</h4>
+        </div>
+
+        <div class="step">
+          <h4 class="step-name">Step</h4>
+        </div>
+
+        <div class="step">
+          <h4 class="step-name">Step</h4>
+        </div>
+
+        <div class="step">
+          <h4 class="step-name">Step</h4>
+        </div>
+
+        <div class="step">
+          <h4 class="step-name">Step</h4>
+        </div>
+
+        <div class="step">
+          <h4 class="step-name">Step</h4>
+        </div>
+
+        <div class="step">
+          <h4 class="step-name">Step</h4>
+        </div>
+
+        <div class="step">
+          <h4 class="step-name">Step</h4>
+        </div>
+
+      </div><!-- steps -->
+    </div><!-- editor -->
+  </div><!-- editor-container -->
+
+</div>

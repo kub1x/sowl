@@ -33,9 +33,11 @@
     <script type="text/javascript" src="../rdfquery/jquery.rdf.turtle.js"></script>
 
     <!-- bootstrap -->
+    <!--
     <script type="text/javascript" src="../bootstrap/bootstrap.min.js"></script>
     <script type="text/javascript" src="../bootstrap/docs.min.js"></script>
     <script type="text/javascript" src="../bootstrap/bootbox.js"></script>
+    -->
 
     <!-- sowl -->
     <script type="text/javascript" src="sidebar.js"></script>
@@ -43,10 +45,12 @@
     <script type="text/javascript" src="scenario.js"></script>
 
     <!-- bootstrap css -->
+    <!--
     <link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap-theme.css">
     <link rel="stylesheet" type="text/css" href="../bootstrap/font-awesome.css">
     <link rel="stylesheet" type="text/css" href="../bootstrap/docs.min.css">
+    -->
 
     <!-- treema css -->
     <!--
@@ -56,7 +60,7 @@
 
     <!-- sidebar css --> 
     <link rel="stylesheet" type="text/css" href="sidebar.css">
-
+    <link rel="stylesheet" type="text/css" href="../sowl/scenario.css">
 
   </head>
   <body>
@@ -64,32 +68,86 @@
 
       <!-- SCENARIO -->
       <div id="scenario">
-
-        <!--
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">Scenarion settings</h3>
+        <div class="container">
+          <div class="header">
+            <div class="topic">
+              Scenario: <span class="name">npu</span>
+            </div>
+            <div class="settings">
+              <form>
+                <div class="setting">
+                  <label for="name">name</label>
+                  <input name="name" type="text" class="onlyline" placeholder="scenario name" /><br />
+                </div>
+        
+                <div class="setting">
+                  <label for="url">web url</label>
+                  <input name="url" type="text" class="onlyline" placeholder="initial url" /><br />
+                </div>
+        
+                <div class="setting">
+                  <label for="init">init</label>
+                  <input name="init" type="text" class="onlyline" placeholder="initial template"
+                       value="init" /><br />
+                </div>
+              </form>
+            </div>
           </div>
         
-          <table class="table panel-body">
-            <tr>
-              <th>name</th>
-              <td><input id="scenario-name" type="text" class="onlyline" placeholder="name" /></td>
-            </tr>
-            <tr>
-              <th>init URL</th>
-              <td><input id="scenario-url" type="text" class="onlyline" placeholder="url" /></td>
-            </tr>
-            <tr>
-              <th>init template</th>
-              <td><input id="scenario-template" type="text" class="onlyline" placeholder="initial template"
-                value="init" /></td>
-            </tr>
-          </table>
+          <div class="editor-container">
+        
+            <div class="templates">
+              <select class="template-list">
+                <option value="init">init</option>
+                <option value="detail">detail</option>
+              </select>
+              <button name="new-template">New</button>
+            </div>
+        
+            <div class="editor">
+              <div class="steps">
+                <div class="step">
+                  <h4 class="step-name create">foaf:Person</h4>
+                  <code class="selector">tr</code>
+        
+                  <div class="steps">
+                    <div class="step">
+                      <h4 class="step-name assign">foaf:firstName</h4>
+                      <code class="selector">td:nth-child(0)</code>
+                    </div>
+        
+                    <div class="step current">
+                      <h4 class="step-name assign">foaf:familyName</h4>
+                      <code class="selector">td:nth-child(1)</code>
+                    </div>
+        
+                    <div class="step">
+                      <h4 class="step-name assign">foaf:phone</h4>
+                      <code class="selector">td:nth-child(2)</code>
+                    </div>
+        
+                    <div class="step highlighted">
+                      <h4 class="step-name narrow"></h4>
+                      <code class="selector">td:nth-child(3)</code>
+        
+                      <div class="steps">
+                        <div class="step">
+                          <h4 class="step-name call-template">detail</h4>
+                          <code class="selector">./a/@href</code>
+                        </div>
+        
+                      </div>
+                    </div>
+        
+                  </div>
+                </div><!-- steps -->
+        
+              </div><!-- steps -->
+            </div><!-- editor -->
+          </div><!-- editor-container -->
+        
         </div>
-        -->
 
-        &nbsp;
 
       </div><!--/SCENARIO-->
 
@@ -98,11 +156,11 @@
       <div id="ontology" class="dragover">
 
         <div id="ontology_filter">
-          <span>filter:</span>
-          <input id="ontology-filter" type="text" placeholder="uri">
+          <input id="ontology-filter" type="text" placeholder="uri" />
         </div>
 
         <div id="ontology_list">
+          <!-- here comes the resource list -->
         </div>
 
         <div id="ontology_droparea">

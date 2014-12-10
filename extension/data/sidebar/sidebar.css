@@ -1,46 +1,35 @@
-.clear {
-  clear: both;
-}
-
-.hidden {
-  display: none;
-}
-
-/* -------------------------------------------------------------------------- */
-/* -------------------------------------------------------------------------- */
-
-html, body {
-  height: 100%;
-}
-
-#content {
-  width: 100%;
-  height: 100%;
-  max-height: 100%;
-  /*display: table;*/
-  padding: 5px;
-}
+.clear { clear: both; }
+.hidden { display: none; }
+html, body { height: 100%; }
+#content { width: 100%; height: 100%; }
 
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
 #scenario {
-  /*display: table-row;*/
-  background: #80dd80;
-  width: 100%;
-  height: 50%;
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  border: 0;
+  height: 49%;
 }
 
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
 #ontology {
-  /*display: table-row;*/
-  position: relative;
-  height: 50%;
-  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  border: 0;
+  height: 49%;
 }
+
+/* -------------------------------------------------------------------------- */
 
 #ontology.dragover #ontology_droparea {
   display: block;
@@ -48,55 +37,49 @@ html, body {
 
 #ontology_droparea {
   display: none;
-
   color: gray;
   background: white;
-
   border: dashed #dadada 2px;
   border-radius: 5px;
-
   margin: 0;
-
   padding-top: 50px;
-
   text-align: center;
   vertical-align: middle;
-
   opacity: 0.8;
-
   position: absolute;
-
-  height: 100%;
-  width: 100%;
-
   top: 0;
   left: 0;
   bottom: 0;
   right: 0;
-
   z-index: 100;
 }
 
+/* -------------------------------------------------------------------------- */
+
 #ontology_filter {
-  height: 10%;
-  display: table;
+  height: 10%; 
+  position: absolute;
+  padding: 5px;
+  top: 0;
+}
+
+#ontology_filter:before {
+  content: 'Filter: ';
+  font-weight: bold;
+  font-size: 80%;
+  color: #225;
 }
 
 #ontology_list {
   font-size: 0.8em;
   font-family: monospace;
-
   height: 90%;
-  
-  margin-bottom: 5px;
-
+  width: 100%;
   overflow-x: hidden;
   overflow-y: scroll;
-
-  position: relative;
+  position: absolute;
+  bottom: 0;
   white-space: nowrap;
-
-  border-bottom: solid #dadada 1px;
 }
 
 #ontology_list .item {
@@ -104,114 +87,11 @@ html, body {
   padding: 5px;
   margin: 2px;
   overflow: hidden;
-  /*font-size: 105%;*/
-
-  /* might want it non selectable to be easily draggable ;) */
   -moz-user-select: none;
   cursor: move;
 }
-
-/*
-#ontology_list .uri::before {
-  content: " -> ";
-}
- */
 
 #ontology_list .uri {
   font-weight: bold;
 }
 
-/* -------------------------------------------------------------------------- */
-/* -------------------------------------------------------------------------- */
-
-
-/*.list_container ul {
-  position: absolute;
-  right: 0px;
-}*/
-
-.panel-heading {
-  -moz-user-select: none;
-}
-
-.panel.collapsed .panel-body {
-  display: none;
-}
-
-input.onlyline {
-  color: black;
-  border: 0;
-  border-bottom: 1px solid gray;
-  border-radius: 0; 
-  background: -moz-linear-gradient(bottom, #dadada, white, white, white, white, white);
-}
-
-input.onlyline:focus, input.onlyline:hover {
-  background: -moz-linear-gradient(bottom, #97D8FF, white, white, white, white, white);
-}
-
-
-/*
- * Globals
- */
-
-body {
-  font-family: Georgia, "Times New Roman", Times, serif;
-  color: #555;
-}
-
-h1, .h1,
-h2, .h2,
-h3, .h3,
-h4, .h4,
-h5, .h5,
-h6, .h6 {
-  margin-top: 0;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: normal;
-  color: #333;
-}
-
-
-
-/*
- * Masthead for nav
- */
-#menu {
-  background-color: #333;
-  -webkit-box-shadow: inset 0 -2px 5px rgba(0,0,0,.1);
-          box-shadow: inset 0 -2px 5px rgba(0,0,0,.1);
-}
-
-/* Nav links */
-.menu-nav-item {
-  position: relative;
-  display: inline-block;
-  padding: 5px;
-  font-weight: 500;
-  color: #dadada;
-}
-.menu-nav-item:hover,
-.menu-nav-item:focus {
-  color: #dadada;
-  background-color: #008cba;
-  text-decoration: none;
-}
-
-/* Active state gets a caret at the bottom */
-.menu-nav .active {
-  color: #fff;
-}
-.menu-nav .active:after {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  width: 0;
-  height: 0;
-  margin-left: -5px;
-  vertical-align: middle;
-  content: " ";
-  border-right: 5px solid transparent;
-  border-bottom: 5px solid;
-  border-left: 5px solid transparent;
-}

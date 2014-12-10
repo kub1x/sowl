@@ -235,7 +235,7 @@ $(function() {
 
   // Hook drag over to accept dropping. 
   $('#ontology').on('dragover', function(){ $(this).addClass('dragover'); });
-  $('#ontology').on('dragleave', function(){ $(this).removelass('dragover'); });
+  $('#ontology').on('dragleave', function(){ $(this).removeClass('dragover'); });
 
   $('#ontology_droparea').on('dragover', sowl.handlers.onDroppableDragOver);
   $('#ontology_droparea').on('drop',     sowl.handlers.onLoadDrop);
