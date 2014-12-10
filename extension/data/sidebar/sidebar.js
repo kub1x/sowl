@@ -132,34 +132,28 @@ sowl.handlers = {
   //TODO XXX finish this dialog ;)
   ontologyListItemDblclick: function ontologyListItemDblclick(event) {
     bootbox.dialog({
-      title: "This is a form in a modal.",
-      message: '<div class="row"> ' +
-        '<div class="col-md-12"> ' +
-        '<form class="form-horizontal"> ' +
-        '<div class="form-group"> ' +
-        '<label class="col-md-4 control-label" for="name">Name</label> ' +
-        '<div class="col-md-4"> ' +
-        '<input id="name" name="name" type="text" placeholder="Your name" class="form-control input-md"> ' +
-        '<span class="help-block">Here goes your name</span> </div> ' +
-        '</div> ' +
-        '<div class="form-group"> ' +
-        '<label class="col-md-4 control-label" for="awesomeness">How awesome is this?</label> ' +
-        '<div class="col-md-4"> <div class="radio"> <label for="awesomeness-0"> ' +
-        '<input type="radio" name="awesomeness" id="awesomeness-0" value="Really awesome" checked="checked"> ' +
-        'Really awesome </label> ' +
-        '</div><div class="radio"> <label for="awesomeness-1"> ' +
-        '<input type="radio" name="awesomeness" id="awesomeness-1" value="Super awesome"> Super awesome </label> ' +
-        '</div> ' +
-        '</div> </div>' +
-        '</form> </div> </div>',
+      title: 'See resource',
+      message:
+        '<div class="row"> ' +
+        '  <div class="col-md-12"> ' +
+        '    <form class="form-horizontal"> ' +
+        '      <div class="form-group"> ' +
+        '        <label class="col-md-4 control-label" for="name">Name</label> ' +
+        '        <div class="col-md-4"> ' +
+        '          <input id="name" name="name" type="text" placeholder="Your name" class="form-control input-md"> ' +
+        '          <span class="help-block">Here goes your name</span> ' +
+        '        </div> ' +
+        '      </div> ' +
+        '    </form> ' +
+        '  </div> ' +
+        '</div> ',
       buttons: {
         success: {
-          label: "Save",
-          className: "btn-success",
+          label: 'Save',
+          className: 'btn-success',
           callback: function () {
             var name = $('#name').val();
-            var answer = $("input[name='awesomeness']:checked").val()
-              Example.show("Hello " + name + ". You've chosen <b>" + answer + "</b>");
+            var answer = $('input[name="awesomeness"]:checked').val()
           }
         }
       }
@@ -186,6 +180,8 @@ sowl.handlers = {
     logger.trace("handle", arguments);
 
     event.preventDefault();
+
+    $('#ontology').removeClass('dragover');
 
     var files = event.dataTransfer.files;
     for (var i = 0, file; file = files[i]; i++) {
@@ -238,6 +234,9 @@ $(function() {
   $('#ontology-filter').keyup(sowl.handlers.ontologyFilterKeyup);
 
   // Hook drag over to accept dropping. 
+  $('#ontology').on('dragover', function(){ $(this).addClass('dragover'); });
+  $('#ontology').on('dragleave', function(){ $(this).removelass('dragover'); });
+
   $('#ontology_droparea').on('dragover', sowl.handlers.onDroppableDragOver);
   $('#ontology_droparea').on('drop',     sowl.handlers.onLoadDrop);
 

@@ -59,32 +59,18 @@
 
 
   </head>
-  <body role="document">
-
-    <!-- MENU -->
-    <div id="menu" class="container">
-      <nav class="menu-nav">
-        <a href="#" class="menu-nav-item" data-menu-target="scenario">scenario</a>
-        <a href="#" class="menu-nav-item" data-menu-target="ontology">ontology</a>
-      </nav>
-    </div><!--/MENU-->
-
-    <!-- CONTENT -->
-    <div id="content" class="container">
+  <body>
+    <div id="content">
 
       <!-- SCENARIO -->
       <div id="scenario">
 
-        <a href="#" id="start_selection" onclick="sowl.sidebar.startSelection();" label="Start selection">Start selection</a>
-
+        <!--
         <div class="panel panel-default">
-          <!-- Default panel contents -->
           <div class="panel-heading">
-            <!--h3 class="panel-title glyphicon glyphicon-edit"><i class="fa fa-edit"></i> Scenarion settings</h3-->
             <h3 class="panel-title">Scenarion settings</h3>
           </div>
         
-          <!-- Table -->
           <table class="table panel-body">
             <tr>
               <th>name</th>
@@ -95,42 +81,38 @@
               <td><input id="scenario-url" type="text" class="onlyline" placeholder="url" /></td>
             </tr>
             <tr>
-              <!-- TODO dropdown select here -->
               <th>init template</th>
               <td><input id="scenario-template" type="text" class="onlyline" placeholder="initial template"
                 value="init" /></td>
             </tr>
           </table>
         </div>
+        -->
 
-        <div id="sowl_scenario"></div>
+        &nbsp;
 
       </div><!--/SCENARIO-->
 
 
       <!-- ONTOLOGY -->
-      <div id="ontology" class="hidden">
+      <div id="ontology" class="dragover">
 
-        <div id="ontology_droparea">
-          Drop file or URL here...
-        </div>
-
-        <br />
-
-        <div class="input-group input-group-sm">
-          <span class="input-group-addon">filter:</span>
-          <input id="ontology-filter" type="text" class="form-control" placeholder="uri">
+        <div id="ontology_filter">
+          <span>filter:</span>
+          <input id="ontology-filter" type="text" placeholder="uri">
         </div>
 
         <div id="ontology_list">
-          <!--
-          <div class="item"> <span class="uri">http://foaf.org/foaf/1.0/firstName</span> </div>
-          -->
+        </div>
+
+        <div id="ontology_droparea">
+          <p>
+            Drop ontology file here...
+          </p>
         </div>
 
       </div><!--/ONTOLOGY-->
-
-    </div><!--/CONTENT-->
+    </div><!-- /CONTENT -->
 
   </body>
 </html>

@@ -13,7 +13,7 @@ sowl.scenario = {
     logger.trace("called", arguments);
 
     var scenario = new Scenario();
-    scenario.init = sowl.init;
+    scenario.init = sowl.scenario.init;
     sowl.scenario = scenario;
     logger.debug("sowl.scenario: " + sowl.scenario);
   },
