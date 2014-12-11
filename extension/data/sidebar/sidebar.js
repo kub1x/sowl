@@ -9,6 +9,7 @@ var sowl = {
   rdf: null, 
   databank: null, 
   scenario: null, 
+  resources: {}, 
 };
 
 sowl.sidebar = {
@@ -63,15 +64,16 @@ sowl.sidebar = {
    */
   showOntology: function showOntology(resources) {
 
+    sowl.resources = resources;
+
     $('#ontology_list').empty();
 
     var elems = [];
     for ( uri in resources ) {
-      var $elem = $('<div class="item bs-callout" draggable="true"><span class="uri">{0}</span></div>'.format(uri));
+      var $elem = $('<div class="item" draggable="true"><span class="uri">{0}</span></div>'.format(uri));
 
-      //TODO do we need this stored here? 
       // Set the resource as property of the DOM node for later usage durign drag/drop etc...
-      $elem.prop('resource', resources[uri]);
+      //$elem.prop('resource', resources[uri]);
 
       // Set the URI not only as content (see higher) but aswell as the data-uri attribute (down here). 
       $elem.data('uri', uri);
@@ -82,6 +84,64 @@ sowl.sidebar = {
     $('#ontology_list').append(elems);
   }, 
 
+  /**
+   * Expecting element in form:
+   * <code>
+   * <div class="item" draggable="true">
+   *   <span class="uri" data-uri="the://uri.to/be#edited">the://uri.to/be#edited</span>
+   * </div>
+   * </code>
+   */
+  createResourceEditor: function($elem) {
+    var uri = $elem.data('uri'),
+        resource = sowl.resources['uri'],
+        $text, $ok, $cancel;
+
+    //TODO refactor, make methods for adding and deleting resources..? 
+
+    function ok() {
+      // TODO theroretically no need to unbind..?
+      var new_uri = $text.val();
+      if(new_uri === '') {
+        delete sowl.resources[uri];
+        $elem.remove();
+      } else {
+        delete sowl.resources[uri];
+        sowl.resources[new_uri] = jQuery.uri(new_uri);
+        $elem.data('uri', new_uri);
+        $elem.html('<span class="uri">{0}</span></div>'.format(new_uri));
+      }
+      // TODO theroretically no need to redraw ;) Unless we want to re-sort the whole thing. 
+    };
+
+    function cancel() {
+      // Delete if still empty
+      if(typeof url === 'undefined' || url === "") {
+        $elem.remove();
+      } else {
+        $elem.html('<span class="uri">{0}</span></div>'.format(uri));
+      }
+    };
+
+
+    // Create input[type=text]
+    $text = $('<input name="uri" type="text" />');
+    $text.val(uri);
+    //TODO on Ctrl+Enter -> Submit
+    //TODO on Ctrl+Esc -> Cancel
+
+    // Create the OK button
+    $ok = $('<button class="ok">OK</button>');
+    $ok.click(ok);
+
+    // Create the Cancel button
+    $cancel = $('<button class="cancel">Cancel</button>');
+    $cancel.click(cancel);
+
+    $elem.html([$text, $ok, $cancel]);
+
+    //var $elem = $('<div class="item" draggable="true"><span class="uri">{0}</span></div>'.format(uri));
+  }, 
 };
 
 sowl.handlers = {
@@ -129,35 +189,10 @@ sowl.handlers = {
     $panel.toggleClass('collapsed');
   }, 
 
-  //TODO XXX finish this dialog ;)
+
   ontologyListItemDblclick: function ontologyListItemDblclick(event) {
-    bootbox.dialog({
-      title: 'See resource',
-      message:
-        '<div class="row"> ' +
-        '  <div class="col-md-12"> ' +
-        '    <form class="form-horizontal"> ' +
-        '      <div class="form-group"> ' +
-        '        <label class="col-md-4 control-label" for="name">Name</label> ' +
-        '        <div class="col-md-4"> ' +
-        '          <input id="name" name="name" type="text" placeholder="Your name" class="form-control input-md"> ' +
-        '          <span class="help-block">Here goes your name</span> ' +
-        '        </div> ' +
-        '      </div> ' +
-        '    </form> ' +
-        '  </div> ' +
-        '</div> ',
-      buttons: {
-        success: {
-          label: 'Save',
-          className: 'btn-success',
-          callback: function () {
-            var name = $('#name').val();
-            var answer = $('input[name="awesomeness"]:checked').val()
-          }
-        }
-      }
-    }); 
+    //TODO cancel any previously opened editors? 
+    sowl.sidebar.createResourceEditor($(this)); 
   }, 
 
   /**
@@ -221,6 +256,12 @@ sowl.handlers = {
   }, 
 
 
+  ontologyAdd_click: function ontologyAdd_click(event) {
+    var $elem = $('<div class="item" draggable="true"></div>');
+    sowl.sidebar.createResourceEditor($elem);
+    $('#ontology_list').prepend($elem);
+  },
+
 };
 
 // Load
@@ -247,6 +288,7 @@ $(function() {
 
   // Doubleclick on ontology
   $('#ontology_list').on('dblclick', '.item', sowl.handlers.ontologyListItemDblclick);
+  $('#ontology-add').click(sowl.handlers.ontologyAdd_click);
 
   // Panel hiding
   $('.panel-heading').click(sowl.handlers.panelHeadingClick);
