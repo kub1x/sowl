@@ -105,44 +105,48 @@
             </div>
         
             <div class="editor">
-              <div class="steps">
-                <div class="step">
-                  <h4 class="step-name create">foaf:Person</h4>
-                  <code class="selector">tr</code>
+              <div class="step">
+                <h4 class="step-name template">init</h4>
+
+                <div class="steps">
+                  <div class="step">
+                    <h4 class="step-name create">foaf:Person</h4>
+                    <code class="selector">tr</code>
         
-                  <div class="steps">
-                    <div class="step">
-                      <h4 class="step-name assign">foaf:firstName</h4>
-                      <code class="selector">td:nth-child(0)</code>
-                    </div>
-        
-                    <div class="step current">
-                      <h4 class="step-name assign">foaf:familyName</h4>
-                      <code class="selector">td:nth-child(1)</code>
-                    </div>
-        
-                    <div class="step">
-                      <h4 class="step-name assign">foaf:phone</h4>
-                      <code class="selector">td:nth-child(2)</code>
-                    </div>
-        
-                    <div class="step highlighted">
-                      <h4 class="step-name narrow"></h4>
-                      <code class="selector">td:nth-child(3)</code>
-        
-                      <div class="steps">
-                        <div class="step">
-                          <h4 class="step-name call-template">detail</h4>
-                          <code class="selector">./a/@href</code>
-                        </div>
-        
+                    <div class="steps">
+                      <div class="step">
+                        <h4 class="step-name assign">foaf:firstName</h4>
+                        <code class="selector">td:nth-child(0)</code>
                       </div>
-                    </div>
         
-                  </div>
+                      <div class="step current">
+                        <h4 class="step-name assign">foaf:familyName</h4>
+                        <code class="selector">td:nth-child(1)</code>
+                      </div>
+        
+                      <div class="step">
+                        <h4 class="step-name assign">foaf:phone</h4>
+                        <code class="selector">td:nth-child(2)</code>
+                      </div>
+        
+                      <div class="step highlighted">
+                        <h4 class="step-name narrow"></h4>
+                        <code class="selector">td:nth-child(3)</code>
+        
+                        <div class="steps">
+                          <div class="step">
+                            <h4 class="step-name call-template">detail</h4>
+                            <code class="selector">./a/@href</code>
+                          </div>
+        
+                        </div><!-- steps -->
+                      </div>
+        
+                    </div><!-- steps -->
+                  </div><!-- step -->
+        
                 </div><!-- steps -->
-        
-              </div><!-- steps -->
+              </div><!-- step -->
             </div><!-- editor -->
           </div><!-- editor-container -->
         
@@ -153,14 +157,25 @@
 
 
       <!-- ONTOLOGY -->
-      <div id="ontology" class="dragover">
+      <div id="ontology">
 
         <div id="ontology_filter">
           <input id="ontology-filter" type="text" placeholder="uri" />
+          <button id="ontology-add">Add</button>
         </div>
 
         <div id="ontology_list">
           <!-- here comes the resource list -->
+          <div class="item bs-callout" draggable="true">
+            <span class="uri">http://purl.org/dc/elements/1.1/description</span>
+          </div>
+          <div class="item bs-callout" draggable="true">
+            <input type="text" value="http://purl.org/dc/elements/1.1/description" />
+            <button>OK</button><button>Cancel</button><br />
+          </div>
+          <div class="item bs-callout" draggable="true">
+            <span class="uri">http://purl.org/dc/elements/1.1/description</span>
+          </div>
         </div>
 
         <div id="ontology_droparea">
