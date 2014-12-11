@@ -100,7 +100,7 @@ html, body {
     border-left: 4px solid rgba(100, 100, 100, 0.1);
     border-top: 1px solid rgba(100, 100, 100, 0.1);
     margin: 0;
-    margin-left: 5px;
+    margin-left: 2px;
     margin-bottom: 2px;
     padding: 2px 0px 2px 4px;
 }
@@ -108,7 +108,6 @@ html, body {
     color: #225;
     font-size: 80%;
     margin: 0;
-    margin-bottom: -8px;
 }
 .step p:last-child {
     margin-bottom: 0;
@@ -118,6 +117,9 @@ html, body {
 }
 .step + .step {
     margin-top: 2px;
+}
+.step-name.template:before {
+    content: "template ";
 }
 .step-name.create:before {
     content: "create ";
