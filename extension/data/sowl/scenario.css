@@ -4,6 +4,20 @@ html, body {
     padding: 0;
     width: 100%;
 }
+
+input[type="text"], select, button {
+  margin: 0;
+  padding: 3px;
+  height: 28px;
+  border-radius: 0;
+  border: 1px solid gray;
+  background: white;
+}
+
+input[type="text"] {
+  height: 20px;
+}
+
 .container {
     height: 100%;
     position: relative;
@@ -70,23 +84,16 @@ html, body {
     width: 25%;
     margin: 0;
 }
+
 .templates select {
-  margin: 0;
-  padding: 3px;
-  height: 30px;
   width: 50%;
-  border-radius: 0;
-  border: 1px solid gray;
 }
+
 .templates button {
-  margin: 0;
-  padding: 3px;
-  height: 30px;
-  background: white;
-  border: 1px solid gray;
   border-radius: 0px 3px 3px 0px;
   width: 15%;
 }
+
 .editor {
     background: none repeat scroll 0 0 white;
     height: 90%;
@@ -118,20 +125,20 @@ html, body {
 .step + .step {
     margin-top: 2px;
 }
-.step-name.template:before {
+.step.template .step-name:before {
     content: "template ";
 }
-.step-name.create:before {
+.step.create .step-name:before {
     content: "create ";
 }
-.step-name.assign:before {
+.step.assign .step-name:before {
     content: "assign ";
 }
-.step-name.narrow:before {
+.step.narrow .step-name:before {
     content: "narrow ";
 }
-.step-name.call-template:before {
-    content: "call-template ";
+.step.call-template .step-name:before {
+    content: "call template: ";
 }
 .step.current {
     background: none repeat scroll 0 0 rgba(100, 50, 100, 0.2);

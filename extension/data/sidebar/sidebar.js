@@ -19,18 +19,27 @@ sowl.sidebar = {
   currentStep: null, 
 
 
-  show: function(id) {
-    //TODO move ID's into resources (somehow..?)
-    $('#content #'+id).removeClass('hidden');
-    $('#menu [data-menu-target='+id+']').addClass('current');
-  },
+  ///**
+  // *
+  // */
+  //show: function show(id) {
+  //  //TODO move ID's into resources (somehow..?)
+  //  $('#content #'+id).removeClass('hidden');
+  //  $('#menu [data-menu-target='+id+']').addClass('current');
+  //},
 
-  hideAll: function() {
-    $('#menu').children().removeClass('current');
-    $('#content').children().addClass('hidden');
-  },
+  ///**
+  // *
+  // */
+  //hideAll: function hideAll() {
+  //  $('#menu').children().removeClass('current');
+  //  $('#content').children().addClass('hidden');
+  //},
 
-  startSelection: function() {
+  /**
+   *
+   */
+  startSelection: function startSelection() {
     logger.trace("start", arguments);
 
     addon.port.on('sowl-selection-selected', function(message){
@@ -46,7 +55,10 @@ sowl.sidebar = {
     addon.port.emit('sowl-selection-start');
   },
 
-  populateTemplatesList: function() {
+  /**
+   *
+   */
+  populateTemplatesList: function populateTemplatesList() {
     //TODO XXX !!!
   }, 
 
@@ -92,7 +104,7 @@ sowl.sidebar = {
    * </div>
    * </code>
    */
-  createResourceEditor: function($elem) {
+  createResourceEditor: function createResourceEditor($elem) {
     var uri = $elem.data('uri'),
         resource = sowl.resources['uri'],
         $text, $ok, $cancel;
@@ -100,6 +112,7 @@ sowl.sidebar = {
     //TODO refactor, make methods for adding and deleting resources..? 
 
     function ok() {
+      console.log('ok on uri: {0}'.format(uri));
       // TODO theroretically no need to unbind..?
       var new_uri = $text.val();
       if(new_uri === '') {
@@ -107,6 +120,14 @@ sowl.sidebar = {
         $elem.remove();
       } else {
         delete sowl.resources[uri];
+        //TODO XXX this is not pure uri object!!
+        //         this is SPARTA!! eee.. this: 
+        //{
+        // uri: jQuery.uri, 
+        // types: [ jQuery.uri ], 
+        // domain: jQuery.uri, 
+        // range: jQuery.uri, 
+        //}
         sowl.resources[new_uri] = jQuery.uri(new_uri);
         $elem.data('uri', new_uri);
         $elem.html('<span class="uri">{0}</span></div>'.format(new_uri));
@@ -115,8 +136,9 @@ sowl.sidebar = {
     };
 
     function cancel() {
+      console.log('cancel on uri: {0}'.format(uri));
       // Delete if still empty
-      if(typeof url === 'undefined' || url === "") {
+      if(typeof uri === 'undefined' || uri === '') {
         $elem.remove();
       } else {
         $elem.html('<span class="uri">{0}</span></div>'.format(uri));
@@ -127,6 +149,8 @@ sowl.sidebar = {
     // Create input[type=text]
     $text = $('<input name="uri" type="text" />');
     $text.val(uri);
+    $text.bind('keydown.ctrl_enter', ok);
+    $text.bind('keydown.esc', cancel);
     //TODO on Ctrl+Enter -> Submit
     //TODO on Ctrl+Esc -> Cancel
 
@@ -142,25 +166,31 @@ sowl.sidebar = {
 
     //var $elem = $('<div class="item" draggable="true"><span class="uri">{0}</span></div>'.format(uri));
   }, 
+
 };
 
+/**
+ *
+ */
 sowl.handlers = {
 
-  menuClick: function menuClick(event){
-    //logger.trace('triggered', arguments);
+  ///**
+  // *
+  // */
+  //menuClick: function menuClick(event){
+  //  //logger.trace('triggered', arguments);
+  //  event.preventDefault();
+  //  var $this = $(this);
+  //  var selected = $this.attr('data-menu-target');
+  //  logger.trace('clicked selected: ' + selected);
+  //  sowl.sidebar.hideAll();
+  //  sowl.sidebar.show(selected);
+  //  $this.blur();
+  //}, 
 
-    event.preventDefault();
-    var $this = $(this);
-
-    var selected = $this.attr('data-menu-target');
-    logger.trace('clicked selected: ' + selected);
-
-    sowl.sidebar.hideAll();
-    sowl.sidebar.show(selected);
-
-    $this.blur();
-  }, 
-
+  /**
+   *
+   */
   ontologyFilterKeyup: function ontologyFilterKeyup(event){
     //logger.trace('triggered', arguments);
 
@@ -183,16 +213,33 @@ sowl.handlers = {
     });
   }, 
 
+  /**
+   *
+   */
   panelHeadingClick: function panelHeadingClick(event){
     //console.trace('clicked heading');
     var $panel = $(this).closest('.panel');
     $panel.toggleClass('collapsed');
   }, 
 
-
-  ontologyListItemDblclick: function ontologyListItemDblclick(event) {
+  /**
+   *
+   */
+  ontologyListItem_dblclick: function ontologyListItem_dblclick(event) {
     //TODO cancel any previously opened editors? 
     sowl.sidebar.createResourceEditor($(this)); 
+  }, 
+
+  /**
+   *
+   */
+  ontologyListItem_click: function ontologyListItem_click(event) {
+    event.preventDefault();
+
+    $('#ontology_list .item').removeClass('selected');
+    $(this).addClass('selected');
+
+    return false;
   }, 
 
   /**
@@ -225,6 +272,9 @@ sowl.handlers = {
     }
   }, 
   
+  /**
+   *
+   */
   ontologyListItem_dragstart: function ontologyListItem_dragstart(event) {
     // this == event.target
     this.style.opacity = '0.4';
@@ -237,11 +287,16 @@ sowl.handlers = {
     //TODO allow drop on document
   }, 
 
+  /**
+   *
+   */
   ontologyListItem_dragend: function ontologyListItem_dragend(event) {
     this.style.opacity = '1';
   }, 
 
-  //TODO temporary.. delme
+  /**
+   *
+   */
   ontologyListItem_dragover: function ontologyListItem_dragover(event) {
     event.preventDefault(); // allows us to drop
     //this.className = 'over';
@@ -249,13 +304,17 @@ sowl.handlers = {
     return false;
   }, 
 
-  //TODO temporary.. delme
+  /**
+   *
+   */
   ontologyListItem_drop: function ontologyListItem_drop(event) {
     event.stopPropagation(); // stops the browser from redirecting...why???
     console.log(event.dataTransfer.getData('sowl/resource-uri'));
   }, 
 
-
+  /**
+   *
+   */
   ontologyAdd_click: function ontologyAdd_click(event) {
     var $elem = $('<div class="item" draggable="true"></div>');
     sowl.sidebar.createResourceEditor($elem);
@@ -269,7 +328,7 @@ $(function() {
   logger.trace('attaching menu click event');
 
   // Menu click
-  $('nav a').click(sowl.handlers.menuClick);
+  //$('nav a').click(sowl.handlers.menuClick);
 
   // Filtering on ontology
   $('#ontology-filter').keyup(sowl.handlers.ontologyFilterKeyup);
@@ -287,15 +346,17 @@ $(function() {
   $('#ontology_list').on('drop',      '.item', sowl.handlers.ontologyListItem_drop);
 
   // Doubleclick on ontology
-  $('#ontology_list').on('dblclick', '.item', sowl.handlers.ontologyListItemDblclick);
+  $('#ontology_list').on('dblclick', '.item', sowl.handlers.ontologyListItem_dblclick);
+  $('#ontology_list').on('click', '.item', sowl.handlers.ontologyListItem_click);
   $('#ontology-add').click(sowl.handlers.ontologyAdd_click);
 
   // Panel hiding
   $('.panel-heading').click(sowl.handlers.panelHeadingClick);
 
   // Init scenario
-  sowl.scenario.init();
-  sowl.sidebar.currentTemplate = sowl.scenario.createTemplate('init');
+  $('#scenario').scenario();
+  //sowl.scenario.init();
+  //sowl.sidebar.currentTemplate = sowl.scenario.createTemplate('init');
   //sowl.sidebar.poulateTemplatesList();
   //TODO XXX !!!
 

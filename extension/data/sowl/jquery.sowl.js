@@ -12,9 +12,9 @@
   //
   // Private ------------------------------------------------------------------
   
-  var something = null;
+  //var something = null;
 
-  function someFun() {};
+  //function someFun() {};
 
 
   //
@@ -24,7 +24,7 @@
    * Create jQuery.sowl object. 
    */
   $.sowl = function sowl() {
-    $.sowl.fn.init();
+    return new $.sowl.fn.init();
   };
 
 
@@ -67,10 +67,10 @@
   //
   // Static -------------------------------------------------------------------
 
-  $.sowl.parent = $.sowl.$ = $;
+  //$.sowl.parent = $.sowl.$ = $;
 
-  $.sowl.defaults = {
-  };
+  //$.sowl.defaults = {
+  //};
 
 
 })(jQuery);

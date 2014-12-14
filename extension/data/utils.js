@@ -42,8 +42,19 @@ var logger = {
         console.log("sowl - trace - {0}".format(msg));
 
       } else {
-        fnName = fnName || (args == null || args.callee == null || args.callee.name == "" ? "__unknown__" : args.callee.name);
-        var argsStr = (args == null ? "" : [].join.call(args, ", ")); 
+        fnName = fnName || (args.callee == null || args.callee.name == "" ? "__unknown__" : args.callee.name);
+
+        args = args || [];
+        args = [].map.call(args, function(elem){
+          if (elem instanceof Function) { return "function " + elem.name; }
+          if (elem instanceof Object) {
+            try {
+              return JSON.stringify(elem, null, 2);
+            } catch (e) { /* fallback to toString() */ }
+          }
+          return elem.toString();
+        });
+        var argsStr = (args.length === 0 ? "" : [].join.call(args, ", ")); 
         console.log("sowl - trace - {0}({1}) - {2}".format(fnName, argsStr, msg));
       }
     }
