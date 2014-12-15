@@ -82,6 +82,8 @@ jQuery.sowl = (function($, _s){
 
   };
 
+  _s.template.fn.init.prototype = _s.template.fn;
+
   //---------------------------------------------------------------------------
   
   return _s;

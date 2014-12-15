@@ -1,0 +1,16 @@
+<html>
+  <head>
+    <meta encoding="UTF-8">
+    <script type="text/javascript" src="../utils.js"></script>
+    <script type="text/javascript" src="../jquery/jquery-2.1.1.js"></script>
+    <script type="text/javascript" src="sowl.scenario.js"></script>
+    <script>
+var s = jQuery.sowl.scenario('test scenario');
+var tname = 'first template';
+s.createTemplate(tname);
+console.log(s.getTemplate(tname).getName());
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
