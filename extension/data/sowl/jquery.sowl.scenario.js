@@ -1,22 +1,5 @@
 (function($){
 
-  $.scenario = function(elem){
-    return new $.scenario.fn.init(elem);
-  };
-
-
-  $.scenario.fn = $.scenario.prototype = {
-
-    init: function init(elem) {
-      this.$elem = $(elem);
-    }, 
-
-  };
-
-  $.scenario.fn.init.prototype = $.scenario.fn;
-  
-  //---------------------------------------------------------------------------
- 
   var htmlTemplate = [
     '<div class="container">', 
     '  <div class="header">', 
@@ -94,3 +77,4 @@
   };
 
 })(jQuery);
+
