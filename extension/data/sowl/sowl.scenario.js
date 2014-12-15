@@ -1,31 +1,45 @@
-jQuery.sowl = (function(_s){
-  if (!_s) _s = {};
+jQuery.sowl = (function($, _s){
+
+  // Init namespace, if needed. 
+  _s = _s || {};
 
   _s.scenario = function scenario() {
+    logger.trace('called', arguments);
     return new _s.scenario.fn.init();
   };
 
   _s.scenario.fn = _s.scenario.prototype = {
 
-
+    /**
+     * Scenarion consturctor. 
+     */
     init: function init() {
       logger.trace('created[scenario]', arguments);
-      this.templates = [];
     }, 
 
-    createTemplate = function createTemplate(name) {
+    getTemplates: function getTemplates() {
+      logger.trace('called', arguments);
+      return this.templates = this.templates || [];
+    }, 
+
+    createTemplate: function createTemplate(name) {
       logger.trace('called', arguments);
       var template = _s.template(name);
-      this.templates[name] = template;
+      this.putTemplate(name, template);
       return template;
     },
+
+    putTemplate: function putTemplate(name, template) {
+      logger.trace('called', arguments);
+      this.getTemplates()[name] = template;
+    }, 
     
-    getTemplate = function getTemplate(name) {
+    getTemplate: function getTemplate(name) {
       logger.trace('called', arguments);
       return this.templates[name];
     },
     
-    removeTemplate = function removeTemplate(name) {
+    removeTemplate: function removeTemplate(name) {
       logger.trace('called', arguments);
       delete this.templates[name];
     },
@@ -37,27 +51,39 @@ jQuery.sowl = (function(_s){
   //---------------------------------------------------------------------------
   
   _s.template = function template(name) {
-    logger.trace('created[sowl.template]', arguments);
+    logger.trace('called', arguments);
     return new _s.template.fn.init(name);
   }; 
 
   _s.template.fn = _s.template.prototype = {
 
     /**
-     *
+     * Template constructor. 
      */
     init: function init(name) {
-      logger.trace('called', arguments);
+      logger.trace('created[sowl.template]', arguments);
       this.name = name;
-      //TODO create root step!!
     },
+
+    getName: function getName() {
+      logger.trace('called', arguments);
+      return this.name;
+    }, 
+
+    /**
+     * WARNING: name serves as the identificator for the template on
+     * many places. Changing it may result in inconsistencies. 
+     */
+    setName: function setName(name) {
+      logger.trace('called', arguments);
+      logger.warn('Name serves as the identificator for the template on many places. Changing it may result in inconsistencies. ');
+      this.name = name;
+    }, 
 
   };
 
   //---------------------------------------------------------------------------
-
-
-
   
   return _s;
-})(jQuery.sowl);
+
+})(jQuery, jQuery.sowl);
