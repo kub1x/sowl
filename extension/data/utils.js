@@ -46,11 +46,12 @@ var logger = {
 
         args = args || [];
         args = [].map.call(args, function(elem){
+          if (elem === undefined) { return 'undefined'; }
           if (elem instanceof Function) { return "function " + elem.name; }
           if (elem instanceof Object) {
             try {
               return JSON.stringify(elem, null, 2);
-            } catch (e) { /* fallback to toString() */ }
+            } catch (e) { /* fallback to toString() - on cyclic reference */ }
           }
           return elem.toString();
         });
