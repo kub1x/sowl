@@ -3,12 +3,12 @@
     <meta encoding="UTF-8">
     <script type="text/javascript" src="../utils.js"></script>
     <script type="text/javascript" src="../jquery/jquery-2.1.1.js"></script>
-    <script type="text/javascript" src="sowl.step.js"></script>
+    <script type="text/javascript" src="../sowl/sowl.scenario.js"></script>
     <script>
-var s = jQuery.sowl.step($.sowl.CMD_ONTOELEM);
-s.setSelect('asdf');
-console.log('string produced by generated, dynamically called interface: {0}'.format(s.getSelect()));
-
+var s = jQuery.sowl.scenario('test scenario');
+var tname = 'first template';
+s.createTemplate(tname);
+console.log(s.getTemplate(tname).getName());
     </script>
   </head>
   <body>
