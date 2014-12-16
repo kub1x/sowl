@@ -1,13 +1,13 @@
 (function($){
 
-  var htmlTemplate = [
+  var scenarioTemplate = [
     '<div class="container">', 
     '  <div class="header">', 
     '    <div class="topic">', 
     '      Scenario: <span class="name">npu</span>', 
     '    </div>', 
     '    <div class="settings">', 
-    // scenarioSettingsTemplate
+    // scenarioSettingsTemplate goes here
     '    </div>', 
     '  </div>', 
     '  <div class="editor-container">', 
@@ -55,16 +55,28 @@
     '      <button name="new-template">New</button>', 
   ].join('\n');
 
+
+  function fillWithTemplate(elem, templateHtml) {
+    var $elem = $(elem), 
+        $template = $(templateHtml);
+    $elem.empty().append($template);
+    return $elem;
+  };
+
   
   $.fn.scenario = function(options) {
     $this = $(this);
 
-    console.log('loading scenario template');
-    var $scenario = $(htmlTemplate);
-    $this.empty().append($scenario);
+    //TODO this populating just isn't too nice...
 
-    var $settings = $(scenarioSettingsTemplate);
-    $scenario.find('.settings').empty().append($settings);
+    console.log('loading scenario template');
+    var $scenario = fillWithTemplate(this, scenarioTemplate);
+    //var $scenario = $(scenarioTemplate);
+    //$this.empty().append($scenario);
+
+    var $settings = fillWithTemplate($('.settings', $scenario), scenarioSettingsTemplate);
+    //var $settings = $(scenarioSettingsTemplate);
+    //$scenario.find('.settings').empty().append($settings);
 
     var $templates = $(templatesListEditTemplate);
     //TODO populate templates from $.scenario.templates.get();

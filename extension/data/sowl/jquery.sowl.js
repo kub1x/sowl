@@ -6,72 +6,30 @@
  * @version 1.0
  * @requires jquery.js
  */
-(function($) {
+jQuery.sowl = (function($, _s) {
+
+  _s = _s || {};
+
+  $.extend(_s, {
+  });
+
+  //TODO Create API for hooking events
+  // .bind(event_name, handler) {
+  //  var registered = this.getHandlers(event_name);
+  //  if($.inArray(handler, registered) != -1) {
+  //    return; 
+  //  }
+  //  registered.push(handler);
+  // }
+  // .trigger(event_name, data) {
+  //  var registered = this.getHandlers(event_name);
+  //  for( var i in registered ) {
+  //    setTimeout(0, registered[i](data));
+  //  }
+  // }
+  //NOTE consider using standard DOM event on sidebar and webpage
+  // see http://www.sitepoint.com/javascript-custom-events/
 
 
-  //
-  // Private ------------------------------------------------------------------
-  
-  //var something = null;
-
-  //function someFun() {};
-
-
-  //
-  // Constructor/basic object -------------------------------------------------
-
-  /**
-   * Create jQuery.sowl object. 
-   */
-  $.sowl = function sowl() {
-    return new $.sowl.fn.init();
-  };
-
-
-  //
-  // Public -------------------------------------------------------------------
-
-  /**
-   * jQuery.sowl capabilities. 
-   */
-  $.sowl.fn = $.sowl.prototype = {
-
-    /**
-     *
-     */
-    init: function init() {
-    },
-
-    //TODO Create API for hooking events
-    // .bind(event_name, handler) {
-    //  var registered = this.getHandlers(event_name);
-    //  if($.inArray(handler, registered) != -1) {
-    //    return; 
-    //  }
-    //  registered.push(handler);
-    // }
-    // .trigger(event_name, data) {
-    //  var registered = this.getHandlers(event_name);
-    //  for( var i in registered ) {
-    //    setTimeout(0, registered[i](data));
-    //  }
-    // }
-    //NOTE consider using standard DOM event on sidebar and webpage
-    // see http://www.sitepoint.com/javascript-custom-events/
-
-  };
-
-  $.sowl.fn.init.prototype = $.sowl.fn;
-
-
-  //
-  // Static -------------------------------------------------------------------
-
-  //$.sowl.parent = $.sowl.$ = $;
-
-  //$.sowl.defaults = {
-  //};
-
-
-})(jQuery);
+})(jQuery, jQuery.sowl);
 
