@@ -1,12 +1,14 @@
 /**
- * @fileOverview Base jQuery module for sowl
+ * @fileOverview Base jQuery module for sowl.resource
  * @author <a href="mailto:j.podlaha@gmail.com">Jakub kub1x Podlaha</a>
  * @copyright (c) 2014, Jakub kub1x Podlaha
  * @license MIT license (MIT-LICENSE.txt)
  * @version 1.0
  * @requires jquery.js
  */
-(function($) {
+jQuery.sowl = (function($, _s) {
+
+  _s = _s || {};
 
   //
   // Private ------------------------------------------------------------------
@@ -50,9 +52,9 @@
   /**
    * Create jQuery.sowl object. 
    */
-  $.sowl.resource = function resource (uri, type, domain, range) {
+  _s.resource = function resource (uri, type, domain, range) {
     logger.trace('called', arguments);
-    return new $.sowl.resource.fn.init(uri, type, domain, range);
+    return new _s.resource.fn.init(uri, type, domain, range);
   };
 
 
@@ -62,13 +64,13 @@
   /**
    * jQuery.sowl capabilities. 
    */
-  $.sowl.resource.fn = $.sowl.resource.prototype = {
+  _s.resource.fn = _s.resource.prototype = {
 
     /**
-     *
+     * The resource constructor. 
      */
     init: function init(uri, type, domain, range) {
-      logger.trace('created[$.sowl.resource]', arguments);
+      logger.trace('created[sowl.resource]', arguments);
       this.setUri(uri);
       this.addType(type);
       this.setDomain(domain);
@@ -140,7 +142,11 @@
 
   };
 
-  $.sowl.resource.fn.init.prototype = $.sowl.resource.fn;
+  _s.resource.fn.init.prototype = _s.resource.fn;
 
-})(jQuery);
+  //---------------------------------------------------------------------------
+
+  return _s;
+
+})(jQuery, jQuery.sowl);
 

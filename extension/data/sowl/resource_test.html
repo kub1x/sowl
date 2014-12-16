@@ -1,0 +1,17 @@
+<html>
+  <head>
+    <meta encoding="UTF-8">
+    <script type="text/javascript" src="../utils.js"></script>
+    <script type="text/javascript" src="../jquery/jquery-2.1.1.js"></script>
+    <script type="text/javascript" src="../rdfquery/jquery.uri.js"></script>
+    <script type="text/javascript" src="sowl.resource.js"></script>
+    <script>
+var r = jQuery.sowl.resource('neco/nekde#nejak');
+r.addType('some/type');
+r.addType('some/other/type');
+console.log('them types: ' + r.getTypes().join(' '));
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
