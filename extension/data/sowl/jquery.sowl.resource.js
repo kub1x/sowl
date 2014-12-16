@@ -21,6 +21,7 @@
 
   /**
    * Convert jQuery.uri into string. 
+   * NOTE jQuery.uri.toString() returns the contained URI as string.
    */
   function unurify(str) {
     if(str instanceof jQuery.uri) { return str.toString(); }
@@ -29,25 +30,19 @@
 
   var PROPERTY_TYPES = [
     'http://www.w3.org/1999/02/22-rdf-syntax-ns#Property',
-
     'http://www.w3.org/2002/07/owl#ObjectProperty', 
     'http://www.w3.org/2002/07/owl#DatatypeProperty', 
     'http://www.w3.org/2002/07/owl#AnnotationProperty', 
-
-    'http://www.w3.org/2002/07/owl#InverseFunctionalProperty', 
+    //'http://www.w3.org/2002/07/owl#InverseFunctionalProperty', 
   ];
   
   /**
    * Determine if type is Property type. 
-   *
-   * NOTE jQuery.uri.toString() returns the contained URI as string.
-   *
    * @return true if URI passed defines a property type. 
    */
   function isPropertyTypeUri(uri) {
     return ($.inArray(unurify(uri), PROPERTY_TYPES) != -1); 
   }
-
 
   //
   // Constructor/basic object -------------------------------------------------
@@ -56,6 +51,7 @@
    * Create jQuery.sowl object. 
    */
   $.sowl.resource = function resource (uri, type, domain, range) {
+    logger.trace('called', arguments);
     return new $.sowl.resource.fn.init(uri, type, domain, range);
   };
 
@@ -72,6 +68,7 @@
      *
      */
     init: function init(uri, type, domain, range) {
+      logger.trace('created[$.sowl.resource]', arguments);
       this.setUri(uri);
       this.addType(type);
       this.setDomain(domain);
@@ -80,30 +77,37 @@
     },
 
     getUri: function getUri(){
+      logger.trace('called', arguments);
       return urify(this.uri);
     }, 
 
     setUri: function setUri(uri) {
+      logger.trace('called', arguments);
       this.uri = unurify(uri);
     }, 
 
     getDomain: function getDomain() {
+      logger.trace('called', arguments);
       return urify(this.domain);
     }, 
 
     setDomain: function setDomain(domain) {
+      logger.trace('called', arguments);
       this.domain = unurify(domain);
     }, 
 
     getRange: function getRange() {
+      logger.trace('called', arguments);
       return urify(this.range);
     }, 
 
     setRange: function setRange(range) {
+      logger.trace('called', arguments);
       this.range = unurify(range);
     }, 
 
     isProperty: function isProperty() {
+      logger.trace('called', arguments);
       for (var i in this.types) {
         if(isPropertyTypeUri(this.types[i])){
           return true;
@@ -113,43 +117,30 @@
     }, 
 
     isType: function isType(type) {
+      logger.trace('called', arguments);
       return ($.inArray(unurify(type), this.types) != -1);
     }, 
 
+    getTypes: function getTypes() {
+      logger.trace('called', arguments);
+      return this.types = this.types || [];
+    }, 
+
     addType: function addType(type) {
+      logger.trace('called', arguments);
+
       // For array add one by one...
       if (type instanceof Array) {
-        for (var i in type) {
-          this.addType(type[i]);
-        }
+        type.forEach(this.addType, this);
       }
 
-      // Assure we do have the array
-      if(!this.types) {
-        this.types = [];
-      }
-
-      this.types.push(unurify(type));
+      this.getTypes().push(unurify(type));
     }, 
 
 
   };
 
   $.sowl.resource.fn.init.prototype = $.sowl.resource.fn;
-
-
-  //
-  // Static -------------------------------------------------------------------
-
-  //$.sowl.resource.parent = $.sowl;
-
-  //$.sowl.resource.defaults = {
-  //  uri: null, 
-  //  domain: null, 
-  //  range: null, 
-  //  types: [], 
-  //};
-
 
 })(jQuery);
 
