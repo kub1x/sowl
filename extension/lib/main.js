@@ -41,8 +41,15 @@ function onSidebarAttach( sidebar_worker ) {
         self.data.url('aardvark/aardvark.commands.js'),
         self.data.url('aardvark/aardvark.main.js'), 
         self.data.url('aardvark/aardvark.sowl.js'), 
+        self.data.url('aardvark/aardvark.port.js'), 
       ], 
     });
+
+    var messages = [
+      'sowl-selection-start', 
+      'sowl-selection-selected', 
+      'sowl-selection-clicked', 
+    ];
 
     // Hook it back to sidebar
     tab_worker.port.on('sowl-aardvark-selected', function(tab_message) {

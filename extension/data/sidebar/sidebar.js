@@ -1,5 +1,3 @@
-// sidebar.js //
-
 logger.trace('sidebar.js - file begin');
 
 /**

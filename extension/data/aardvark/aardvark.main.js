@@ -413,6 +413,23 @@ return false;
 },
 
 //-------------------------------------------------
+dragOver : function (evt) {
+  evt = evt || aardvark.window.event;
+  evt.preventDefault();
+  evt.dataTransfer.dropEffect = 'move';
+  return false;
+}, 
+
+//-------------------------------------------------
+drop : function (evt) {
+  evt = evt || aardvark.window.event;
+  // prevent redirecting
+  evt.preventDefault();
+  //TODO do something
+  return false;
+}, 
+
+//-------------------------------------------------
 // this is the main entry point when starting aardvark
 start : function () {
 this.loadCommands();
