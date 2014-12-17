@@ -240,9 +240,13 @@ sowl.handlers = {
     // this == event.target
     this.style.opacity = '0.4';
 
-    event.dataTransfer.effectAllowed = 'sowl-drop-uri';
+    var img = document.createElement('img');
+    img.src = '../icons/rdf_blue.png';
+
+    event.dataTransfer.effectAllowed = 'linkMove';
     // Setting JSON encoded resource definition as 
     event.dataTransfer.setData('sowl/resource-uri', $(this).data('uri'));
+    event.dataTransfer.setDragImage(img, -5, -5);
 
     //TODO START AARDVARK
     //TODO allow drop on document
@@ -320,6 +324,9 @@ $(function() {
   //sowl.sidebar.currentTemplate = sowl.scenario.createTemplate('init');
   //sowl.sidebar.poulateTemplatesList();
   //TODO XXX !!!
+
+  $.sowl.port.bindAll();
+  $.sowl.port.startSelection();
 
 });
 

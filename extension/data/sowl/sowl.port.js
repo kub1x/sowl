@@ -10,16 +10,21 @@
   _s.port = {
 
     startSelection: function startSelection() {
-      //logger.trace("start", arguments);
+      logger.trace("start", arguments);
       logger.debug('sending message [sowl-selection-start]');
       addon.port.emit('sowl-selection-start');
     }, 
 
+    bindAll: function bindAll() {
+      logger.trace('start', arguments);
+      addon.port.on('sowl-selection-selected', handlers.onSelectionStarted);
+      addon.port.on('sowl-selection-clicked', handlers.onSelectionClicked);
+      addon.port.on('sowl-selection-dropped', handlers.onSelectionDropped);
+    }, 
+
   };
 
-
-
-  var handlers {
+  var handlers = {
 
     onSelectionStarted : function onSelectionSelected(message){
       logger.debug('got message [sowl-selection-selected]:' + message);
@@ -27,17 +32,12 @@
     
     onSelectionSelected : function onSelectionClicked(message){
       logger.debug('got message [sowl-selection-clicked]:' + message);
-    }
+    }, 
+
+    onSelectionDropped : function onSelectionDropped(message){
+      logger.debug('got message [sowl-selection-dropped]:' + message);
+    }, 
 
   };
-
-
-  _s.bindAll = function bindAll() {
-
-    addon.port.on('sowl-selection-selected', handlers.onSelectionStarted);
-
-    addon.port.on('sowl-selection-clicked', handlers.onSelectionClicked);
-
-  }; 
 
 })(jQuery, jQuery.sowl);

@@ -83,7 +83,8 @@
     $scenario.find('.templates').empty().append($templates);
 
 
-    var $scenario = new $.scenario($this);
+    //TODO XXX !!! create scenario object
+    //var $scenario = $.scenario($this);
     $this.prop('scenario', $scenario);
     return $scenario;
   };
