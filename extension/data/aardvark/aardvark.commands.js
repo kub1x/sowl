@@ -123,7 +123,7 @@ if (elem && elem.parentNode) {
   else {
     this.widerStack = [elem, newElem];
     }
-  this.selectedElem = newElem;
+  this.setSelectedElem(newElem);
   this.showBoxAndLabel (newElem, 
       this.makeElementLabelString (newElem));
   this.didWider = true;
@@ -139,7 +139,7 @@ if (elem) {
     this.widerStack[this.widerStack.length-1] == elem) {
     this.widerStack.pop();
     newElem = this.widerStack[this.widerStack.length-1];
-    this.selectedElem = newElem;
+    this.setSelectedElem(newElem);
     this.showBoxAndLabel (newElem, 
         this.makeElementLabelString (newElem));
     this.didWider = true;
@@ -168,7 +168,7 @@ else {
 
 this.removeBoxFromBody ();
 
-delete (this.selectedElem);
+delete (this.setSelectedElem(null));
 if (this.widerStack)
   delete (this.widerStack);
 return true;

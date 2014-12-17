@@ -68,6 +68,22 @@ d.style.backgroundColor = "#cfc";
 d.style.zIndex = "5008";
 this.doc.body.appendChild (d);
 this.keyboxElem = d;
+
+//ADDED by kub1x
+//d = this.doc.createElement ("DIV");
+//d.isAardvark = true;
+//d.isOverlay = true;
+//d.draggable = true; //TODO check
+//s = d.style;
+//s.zIndex = "5028";
+//s.userSelect = "none";
+//s.backgroundColor = "#cfc";
+////s.backgroundColor = "rgba(100, 50, 100, 0.2)";
+//s.display = "none";
+//s.overflow = "hidden";
+//s.position = "absolute";
+//this.doc.body.appendChild (d);
+//this.overlayElem = d;
 },
 
 //-------------------------------------------------
@@ -93,6 +109,12 @@ this.borderElems[2].style.display = "";
 this.moveElem (this.borderElems[3], pos.x+elem.offsetWidth-2, y);
 this.borderElems[3].style.height = elem.offsetHeight + "px";
 this.borderElems[3].style.display = "";
+
+//this.moveElem (this.overlayElem, pos.x, y);
+//this.overlayElem.style.height = elem.offsetHeight + "px";
+//this.overlayElem.style.width = elem.offsetWidth + "px";
+//this.overlayElem.style.display = '';
+//this.overlayElem.style.visibility = 'visible';
 
 y += elem.offsetHeight + 2;
 
@@ -148,12 +170,14 @@ if (this.borderElems != null) {
 //-------------------------------------------------
 // remove the red box and tag
 clearBox : function () {
-this.selectedElem = null;
+this.setSelectedElem(null);
 if (this.borderElems != null) {
   for (var i=0; i<4; i++)
     this.borderElems[i].style.display = "none";
   this.labelElem.style.display = "none";
   this.labelElem.style.visibility = "hidden";
+  //this.overlayElem.style.display = "none";
+  //this.overlayElem.style.visibility = "hidden";
   }
 },
 
@@ -344,6 +368,8 @@ if (elem.isAardvark) {
     aardvark.hideKeybox();
   else if (elem.isLabel)
     aardvark.clearBox();
+  else if (elem.isOverlay) //TODO check
+    aardvark.clearBox();
   else
     aardvark.isOnAardvarkElem = true;
   return;
@@ -356,7 +382,7 @@ if (elem.isAardvark) {
 if (aardvark.isOnAardvarkElem && aardvark.didWider) {
   var e = elem, foundIt = false;
   while ((e = e.parentNode) != null) {
-    if (e == aardvark.selectedElem) {
+    if (e == aardvark.getSelectedElem()) {
       foundIt = true;
       break;
       }
@@ -369,10 +395,10 @@ if (aardvark.isOnAardvarkElem && aardvark.didWider) {
 aardvark.isOnAardvarkElem = false;
 aardvark.didWider = false;
   
-if (elem == aardvark.selectedElem)
+if (elem == aardvark.getSelectedElem())
   return;
 aardvark.widerStack = null;
-aardvark.selectedElem = elem;
+aardvark.setSelectedElem(elem);
 aardvark.showBoxAndLabel (elem, aardvark.makeElementLabelString (elem));
 aardvark.mouseMoved = false;
 },
@@ -398,8 +424,8 @@ if (command) {
       aardvark.showKeybox (command);
     }
   else {
-    if (aardvark.selectedElem && 
-        (command.func.call (aardvark, aardvark.selectedElem) == true))
+    if (aardvark.getSelectedElem() && 
+        (command.func.call (aardvark, aardvark.getSelectedElem()) == true))
       aardvark.showKeybox (command);
     }
   }
@@ -411,12 +437,35 @@ else
   evt.returnValue = false; 
 return false;
 },
+//-------------------------------------------------
+dragStart : function (evt) {
+  evt = evt || aardvark.window.event;
+
+  var elem = evt.target;
+  elem.style.opacity = '0.4';
+
+  var sel = aardvark.getBestSelector(elem);
+  var img = aardvark.doc.createElement('img');
+  img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAexJREFUeNqkUz1rFUEUPWseq4UvYhOfoCIWiYKKgmIjVqZM40ehCcHWRvwP/oOIlYU+tRBEsLLQzg9URAsD8QMb9RGxCJL4ILuzM/d67sy+jYJRIQN33+zbueece+6dTFWxltWyx5Pvx3P+TDNOiWjlnYbKCVwp8IyiEFSe78sy5ErNq1LuaNDuxZOvq1YNNMW4JEBHA6CiEL4I9z7YXhE8I9h/CqreR+EFc26tqwGMvSOVoqoEJRnLZTIWIe0LY+c3qjFl3uvWoDrZlEC2H5GFBxxBnEsHXZ1gid7AuTclyCJp3x5RAQ8Ez4+lS6y7Np3F6QNP0c5HkclGnDl6DxOHr6TklSUNwADdUX6ODnaPTGH2yw18XZhDv7+Ix7Mz2DFyBGPbxwfszYoAJrUsCMJa93bOo/RLePWxyw4owQVvPz/A+95DHNt/ARvy4ZSpv7TRAMxdMyu5zLJqQ73/+5zUCkIdgmfvLmN9q42DO6eb5LFt4zEevZlB4ZZSZvYbgLUo+bCw2MPLD9dxaPQctmzeEyWb9E/fXsQy/jiJZB7iZEUQ68bzuWsxBuvq/YlV1bdSG8OwCqJhNnnRoOyf16C9UoLTLodnPtb8f8k9G+NGAW2/Sec56TjBZDcYklVk28W7y7gdvVzrdf4pwAAhwFIo9hEs7wAAAABJRU5ErkJggg==';
+
+  //TODO delme
+  console.log('drag started on: ' + sel);
+
+  evt.dataTransfer.effectAllowed = 'link';
+  evt.dataTransfer.setData('sowl/target-selector', sel);
+  evt.dataTransfer.setDragImage(img, -5, -5);
+}, 
+
+//-------------------------------------------------
+dragEnd : function (evt) {
+  evt.target.style.opacity = '1';
+}, 
 
 //-------------------------------------------------
 dragOver : function (evt) {
   evt = evt || aardvark.window.event;
   evt.preventDefault();
-  evt.dataTransfer.dropEffect = 'move';
+  evt.dataTransfer.dropEffect = 'link';
   return false;
 }, 
 
@@ -424,8 +473,12 @@ dragOver : function (evt) {
 drop : function (evt) {
   evt = evt || aardvark.window.event;
   // prevent redirecting
+  evt.stopPropagation();
   evt.preventDefault();
-  //TODO do something
+  //TODO we might drop step too...
+  //     check if type contains 'sowl/resource-uri'
+  var uri = evt.dataTransfer.getData('sowl/resource-uri'); 
+  aardvark.notifyDrop(uri, evt.target);
   return false;
 }, 
 
@@ -449,7 +502,7 @@ if (this.doc.aardvarkRunning) {
   }
 else {
   this.makeElems (); 
-  this.selectedElem = null;
+  this.setSelectedElem(null);
   
   // need this to be page specific (for extension)...if you 
   // change the page, aardvark will not be running
@@ -460,12 +513,20 @@ else {
     this.doc.attachEvent ("onmousemove", this.mouseMove);
     this.doc.attachEvent ("onmouseup", this.mouseUp);
     this.doc.attachEvent ("onkeypress", this.keyDown);
+    this.doc.attachEvent ("ondragover", this.dragOver);
+    this.doc.attachEvent ("ondrop", this.drop);
+    this.doc.attachEvent ("ondragstart", this.dragStart);
+    this.doc.attachEvent ("ondragend", this.dragEnd);
     }
   else {
     this.doc.addEventListener ("mouseover", this.mouseOver, false);
     this.doc.addEventListener ("mouseup", this.mouseUp, false);
     this.doc.addEventListener ("mousemove", this.mouseMove, false);
     this.doc.addEventListener ("keypress", this.keyDown, false);
+    this.doc.addEventListener ("dragover", this.dragOver, false);
+    this.doc.addEventListener ("drop", this.drop, false);
+    this.doc.addEventListener ("dragstart", this.dragStart, false);
+    this.doc.addEventListener ("dragend", this.dragEnd, false);
     }
 
   // show tip if its been more than an hour
