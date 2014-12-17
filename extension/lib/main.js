@@ -38,6 +38,7 @@ function onSidebarAttach( sidebar_worker ) {
         self.data.url('aardvark/aardvark.strings.js'),
         self.data.url('aardvark/aardvark.utils.js'),
         self.data.url('aardvark/aardvark.dbox.js'),
+        self.data.url('aardvark/aardvark.selectedElem.js'),
         self.data.url('aardvark/aardvark.commands.js'),
         self.data.url('aardvark/aardvark.main.js'), 
         self.data.url('aardvark/aardvark.sowl.js'), 
@@ -62,6 +63,12 @@ function onSidebarAttach( sidebar_worker ) {
       console.log('got message [sowl-aardvark-clicked]: ' + JSON.stringify(tab_message));
       console.log('sending message [sowl-selection-clicked]: ' + JSON.stringify(tab_message) + ' to sidebar');
       sidebar_worker.port.emit('sowl-selection-clicked', tab_message);
+    });
+
+    tab_worker.port.on('sowl-aardvark-dropped', function(tab_message) {
+      console.log('got [sowl-aardvark-dropped]: ' + JSON.stringify(tab_message));
+      console.log('sending [sowl-selection-dropped]: ' + JSON.stringify(tab_message) + ' to sidebar');
+      sidebar_worker.port.emit('sowl-selection-dropped', tab_message);
     });
 
     // Now start the aardvark
