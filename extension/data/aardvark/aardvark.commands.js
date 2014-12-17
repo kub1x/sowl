@@ -94,7 +94,7 @@ this.keyCommands.push (command);
 
 //------------------------------------------------------------
 select : function (elem) {
-  notifySelect(elem);
+  this.notifySelect(elem);
 }, 
 
 //------------------------------------------------------------

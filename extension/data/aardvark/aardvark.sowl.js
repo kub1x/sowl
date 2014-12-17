@@ -1,6 +1,8 @@
 (function(_a) {
-
   console.log('loading aardvark: ' + _a);
+
+  //
+  // Closured -----------------------------------------------------------------
   
   /**
    * Ověří, zdali testované ID je v rámci dokumentu unikátní.
@@ -31,18 +33,33 @@
       return selected.length == 1;
   }
   
-  function _a.notifySelect(elem) {
-    var msg = getBestSelector(elem);
+  //
+  // Extended aardvark --------------------------------------------------------
+  
+  _a.notifySelect = function notifySelect(elem) {
+    var msg = _a.getBestSelector(elem);
     console.log('sending [sowl-aardvark-selected]: ' + msg + ' to addon script');
     self.port.emit('sowl-aardvark-selected', msg);
   };
   
-  function _a.performClick(elem) {
-    var msg = getBestSelector(elem);
+  _a.performClick = function performClick(elem) {
+    var msg = _a.getBestSelector(elem);
     console.log('sending [sowl-aardvark-clicked]: ' + msg + ' to addon script');
     self.port.emit('sowl-aardvark-clicked', msg);
     $(elem).click();
   };
+
+  _a.notifyDrop = function notifyDrop(uri, elem) {
+    var msg = "dropped resource: " + uri + ", on elem: " + _a.getBestSelector(elem);
+    console.log('sending [sowl-aardvark-dropped]: ' + msg + ' to addon script');
+    self.port.emit('sowl-aardvark-dropped', msg);
+  }; 
+
+  //_a.notifyDrag = function notifyDrag(elem) {
+  //  var msg = "dragged elem: " + _a.getBestSelector(elem);
+  //  console.log('sending [sowl-aardvark-dragged]: ' + msg + ' to addon script');
+  //  self.port.emit('sowl-aardvark-dragged', msg);
+  //};
   
   /**
    * getBestSelector algorithm. 
@@ -62,8 +79,7 @@
    *
    * @return string of JSOUP selector
    */
-  
-  function _a.getBestSelector(elem) {
+  _a.getBestSelector = function getBestSelector(elem) {
   
     /**
      * List of supported methods to obtain node selector. 
