@@ -18,43 +18,6 @@ sowl.sidebar = {
   currentTemplate: null, 
   currentStep: null, 
 
-
-  ///**
-  // *
-  // */
-  //show: function show(id) {
-  //  //TODO move ID's into resources (somehow..?)
-  //  $('#content #'+id).removeClass('hidden');
-  //  $('#menu [data-menu-target='+id+']').addClass('current');
-  //},
-
-  ///**
-  // *
-  // */
-  //hideAll: function hideAll() {
-  //  $('#menu').children().removeClass('current');
-  //  $('#content').children().addClass('hidden');
-  //},
-
-  /**
-   *
-   */
-  startSelection: function startSelection() {
-    logger.trace("start", arguments);
-
-    addon.port.on('sowl-selection-selected', function(message){
-      logger.debug('got message [sowl-selection-selected]:' + message);
-    });
-
-    addon.port.on('sowl-selection-clicked', function(message){
-      logger.debug('got message [sowl-selection-clicked]:' + message);
-    });
-
-    //TODO this should start aardvark on current tab
-    //TODO move message name into resources
-    addon.port.emit('sowl-selection-start');
-  },
-
   /**
    *
    */
