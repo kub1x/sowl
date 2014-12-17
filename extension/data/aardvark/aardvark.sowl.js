@@ -46,9 +46,9 @@ function getBestSelector(elem) {
    */
   var methods = [
 
-    function byNothing(current, elem) {
-      return current;
-    }, 
+    //function byNothing(current, elem) {
+    //  return current;
+    //}, 
 
     function byTagName(current, elem) {
       var nodeName = elem.tagName.toLowerCase();
@@ -71,36 +71,36 @@ function getBestSelector(elem) {
       return current;
     }, 
 
-    /**
-     * FIXME XXX
-     *
-     * This method hooks on dynamically added classes (ex: tr.line-s is a class
-     * on NPU.cz that specifies currenlty hovered table row), and it creates
-     * selector according to this kind of state =/ We have to avoid the dynamic
-     * behavior or "pause" it somehow, when aardvark is in place. 
-     *
-     */
-    function byClass(current, elem) {
-      if (elem.className == "") {
-        return false;
-      }
-
-      var node = elem.tagName.toLowerCase();
-      var result = node;
-
-      //TODO sort classes by uniqueness, maybe?
-      var classes  = elem.className.split(" ");
-      for (var i in classes) {
-        //TODO fix exclude to the right class!!!
-        //TODO selection class name -> resource (instead of hardcoded)
-        if (classes[i] != "sowl-aardvark-selection") {
-          result += "." + classes[i];
-        }
-      }
-
-      current.unshift(result);
-      return current;
-    }, 
+    ///**
+    // * FIXME XXX
+    // *
+    // * This method hooks on dynamically added classes (ex: tr.line-s is a class
+    // * on NPU.cz that specifies currenlty hovered table row), and it creates
+    // * selector according to this kind of state =/ We have to avoid the dynamic
+    // * behavior or "pause" it somehow, when aardvark is in place. 
+    // *
+    // */
+    //function byClass(current, elem) {
+    //  if (elem.className == "") {
+    //    return false;
+    //  }
+    //
+    //  var node = elem.tagName.toLowerCase();
+    //  var result = node;
+    //
+    //  //TODO sort classes by uniqueness, maybe?
+    //  var classes  = elem.className.split(" ");
+    //  for (var i in classes) {
+    //    //TODO fix exclude to the right class!!!
+    //    //TODO selection class name -> resource (instead of hardcoded)
+    //    if (classes[i] != "sowl-aardvark-selection") {
+    //      result += "." + classes[i];
+    //    }
+    //  }
+    //
+    //  current.unshift(result);
+    //  return current;
+    //}, 
 
     function byNthChild(current, elem) {
       var node = elem.tagName.toLowerCase();
