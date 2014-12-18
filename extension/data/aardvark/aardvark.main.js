@@ -261,26 +261,27 @@ aardvark.loadObject ({
       if (this.alwaysValidElements[elem.tagName])
         return elem;
       else if (this.validIfBlockElements[elem.tagName]) {
-        if (this.doc.defaultView) {
-          if (this.doc.defaultView.getComputedStyle
-              (elem, null).getPropertyValue("display") == 'block')
-            return elem;
-        }
-        else if (elem.currentStyle){
-          if (elem.currentStyle["display"] == 'block')
-            return elem;   
-        }
+        return elem;
+        //if (this.doc.defaultView) {
+        //  if (this.doc.defaultView.getComputedStyle(elem, null).getPropertyValue("display") == 'block')
+        //    return elem;
+        //}
+        //else if (elem.currentStyle){
+        //  if (elem.currentStyle["display"] == 'block')
+        //    return elem;   
+        //}
       }
       else if (this.validIfNotInlineElements[elem.tagName]){
-        if (this.doc.defaultView) {
-          if (this.doc.defaultView.getComputedStyle
-              (elem, null).getPropertyValue("display") != 'inline')
-            return elem;
-        }
-        else if (elem.currentStyle) {
-          if (elem.currentStyle["display"] != 'inline')
-            return elem;   
-        }
+        return elem;
+        //if (this.doc.defaultView) {
+        //  if (this.doc.defaultView.getComputedStyle
+        //      (elem, null).getPropertyValue("display") != 'inline')
+        //    return elem;
+        //}
+        //else if (elem.currentStyle) {
+        //  if (elem.currentStyle["display"] != 'inline')
+        //    return elem;   
+        //}
       }
       elem = elem.parentNode;
     }
