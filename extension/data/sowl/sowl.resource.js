@@ -70,7 +70,7 @@ jQuery.sowl = (function($, _s) {
      * The resource constructor. 
      */
     init: function init(uri, type, domain, range) {
-      logger.trace('created[sowl.resource]', arguments);
+      //logger.trace('created[sowl.resource]', arguments);
       this.setUri(uri);
       this.addType(type);
       this.setDomain(domain);
@@ -79,37 +79,37 @@ jQuery.sowl = (function($, _s) {
     },
 
     getUri: function getUri(){
-      logger.trace('called', arguments);
+      //logger.trace('called', arguments);
       return urify(this.uri);
     }, 
 
     setUri: function setUri(uri) {
-      logger.trace('called', arguments);
+      //logger.trace('called', arguments);
       this.uri = unurify(uri);
     }, 
 
     getDomain: function getDomain() {
-      logger.trace('called', arguments);
+      //logger.trace('called', arguments);
       return urify(this.domain);
     }, 
 
     setDomain: function setDomain(domain) {
-      logger.trace('called', arguments);
+      //logger.trace('called', arguments);
       this.domain = unurify(domain);
     }, 
 
     getRange: function getRange() {
-      logger.trace('called', arguments);
+      //logger.trace('called', arguments);
       return urify(this.range);
     }, 
 
     setRange: function setRange(range) {
-      logger.trace('called', arguments);
+      //logger.trace('called', arguments);
       this.range = unurify(range);
     }, 
 
     isProperty: function isProperty() {
-      logger.trace('called', arguments);
+      //logger.trace('called', arguments);
       for (var i in this.types) {
         if(isPropertyTypeUri(this.types[i])){
           return true;
@@ -119,17 +119,17 @@ jQuery.sowl = (function($, _s) {
     }, 
 
     isType: function isType(type) {
-      logger.trace('called', arguments);
+      //logger.trace('called', arguments);
       return ($.inArray(unurify(type), this.types) != -1);
     }, 
 
     getTypes: function getTypes() {
-      logger.trace('called', arguments);
+      //logger.trace('called', arguments);
       return this.types = this.types || [];
     }, 
 
     addType: function addType(type) {
-      logger.trace('called', arguments);
+      //logger.trace('called', arguments);
 
       // For array add one by one...
       if (type instanceof Array) {
