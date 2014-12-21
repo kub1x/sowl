@@ -1,14 +1,44 @@
+if (!Object.prototype.resolve) {
+  /**
+   * usage { a: { b: ['neco'] } }.resolve("a.b.0"); // returns 'neco'
+   * TODO handle ""s and ''s to allow period (the '.' char) in names. 
+   * TODO handle []s to allow internal [] notation like o.resolve('a.b[0]') maybe. 
+   */
+  Object.prototype.resolve = function(path) {
+    var p = path.split('.'), 
+        o = this, l = p.length, i;
+    try {
+      for (i=0; i<l; ++i) {
+        o = o[p[i]];
+      }; 
+      return o;
+    } catch (e) {
+      return undefined;
+    }
+  };
+};
+
 if (!String.prototype.format) {
   /**
-   * usage "{0} world!".format("Hello");
+   * NOTE This method determines the "type" of matching according to first parameter
+   *      if you do .format(["a"], "b"), only the array in the first attribute will be 
+   *      used, the rest will be ignored. 
+   *
+   * usage "{0} world! {1}".format("Hello", "Howdy?");   // prints "Hello world! Howdy?"
+   * usage "{0} world! {1}".format(["Hello", "Howdy?"]); // prints "Hello world! Howdy?" too
+   * usage "{first} world! {second}".format({first: "Hello", second: "Howdy?}); // prints the same
    */
-  String.prototype.format = function() {
-    var args = arguments;
-    return this.replace(/{(\d+)}/g, function(match, number) { 
-      return typeof args[number] != 'undefined' ? args[number] : match ;
+  String.prototype.format = function(first) {
+    var args = (first instanceof Array ? first :
+               (first instanceof Object ? first :
+                arguments));
+    return this.replace(/{([^\}]+)}/g, function(match, path) { 
+      var res = Object.prototype.resolve.call(args, path);
+      return typeof res != 'undefined' ? res : match ;
     });
   };
 }; 
+
 
 if (!String.prototype.endsWith) {
   /**
