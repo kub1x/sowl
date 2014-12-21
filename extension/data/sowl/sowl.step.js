@@ -23,6 +23,13 @@ jQuery.sowl = (function($, _s){
       this.cmd = cmd;
     },
 
+    /**
+     * Getter for the command defining our step. 
+     */
+    getCmd: function getCmd() {
+      return this.cmd;
+    }, 
+
   };
 
   _s.step.fn.init.prototype = _s.step.fn;
