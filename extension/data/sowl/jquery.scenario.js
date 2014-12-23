@@ -88,11 +88,65 @@
     return $elem;
   };
 
-  function addStep(step, templateName, $steps) {
-    //TODO instead of scenario use the "steps" container already
-    //var $template = $('.editor .template[name="{0}"]'.format(templateName))
-    loadHtml($steps, html.step, step, true);
+  function addStepBefore(step) {
+    var $step = $(step);
+    if ($step.hasClass('template')) {
+      return;
+    }
+    var $newstep = $(html.step.format({cmd: '', name: 'unnamed'})); 
+    $step.before($newstep);
+    $newstep.focus();
   };
+
+  function addStepAfter(step) {
+    var $step = $(step);
+    if ($step.hasClass('template')) {
+      return;
+    }
+    var $newstep = $(html.step.format({cmd: '', name: 'unnamed'})); 
+    $step.after($newstep);
+    $newstep.focus();
+  };
+
+  function addStepAsParent(step) {
+    var $step = $(step);
+    if ($step.hasClass('template')) {
+      return;
+    }
+    var $newstep = $(html.step.format({cmd: '', name: 'unnamed'})); 
+    $step.before($newstep).detach().appendTo($newstep.find('.steps:first'));
+    $newstep.focus();
+  };
+
+  function addStepAsChild(step) {
+    var $step = $(step), 
+        $newstep = $(html.step.format({cmd: '', name: 'unnamed'})); 
+    $step.find('.steps:first').append($newstep);
+    $newstep.focus();
+  };
+
+  function deleteStep(step) {
+    var $step = $(step);
+    // Keep the root
+    if ($step.hasClass('template')) {
+      $step.find('.steps:first').empty();
+      return;
+    }
+    // Find next focus
+    var $focusme = $step.prev();
+    if($focusme.length === 0) {
+      $focusme = $step.parent().closest('.step');
+    }
+    //TODO delete step from inner repre..?
+    $step.remove();
+    $focusme.focus();
+  };
+
+  //function addStep(step, templateName, $steps) {
+  //  //TODO instead of scenario use the "steps" container already
+  //  //var $template = $('.editor .template[name="{0}"]'.format(templateName))
+  //  loadHtml($steps, html.step, step, true);
+  //};
 
   function addTemplate(name, template, $scenario) {
     loadHtml($('.template-list', $scenario), html.templatesListItem, {value: name}, true);
@@ -101,7 +155,7 @@
     var $step = loadHtml($tmp, html.step, {cmd: step.getCmd(), name: name},  true);
 
     //TODO DELME vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-    var $steps = $step.find('.steps');
+    var $steps = $step.find('.steps:first');
     var $onto = loadHtml($steps, html.step, {cmd: 'onto-elem', name: 'first'},  true).find('.steps');
     loadHtml($onto, html.step, {cmd: 'value-of', name: 'child1'},  true);
     loadHtml($onto, html.step, {cmd: 'value-of', name: 'child2'},  true);
@@ -148,17 +202,20 @@
 
     onStepFocus: function onStepFocus(event) {
       var t = event.target,
-          $t = $(t), 
+          $t = $(t), $label = $t.children('.step-name'), 
           $editor = $t.closest('.editor'),
           opts = { view: $editor.get(0)  };
       // Focus
       $editor.find('.step').removeClass('current');
       $t.addClass('current');
+      console.log('thinking about scrolling');
       // Scrolling
-      if ($.abovethetop(t, opts)) {
+      if ($.abovethetop($label, opts)) {
+        console.log('scrolling top');
         t.scrollIntoView();
       }
-      if ($.belowthefold(t, opts)) {
+      if ($.belowthefold($label, opts)) {
+        console.log('scrolling bottom');
         t.scrollIntoView(false);
       }
     }, 
@@ -169,6 +226,26 @@
     }, 
 
     onStepKeyDown: function onStepKeyDown(event) {
+      if (event.which === 65) {
+        event.preventDefault();
+        if (!event.shiftKey) { // a
+          addStepAfter(event.target);
+          return false;
+        } else {               // A
+          addStepAsChild(event.target);
+          return false;
+        }
+      }
+      if (event.which === 73) {
+        event.preventDefault();
+        if (!event.shiftKey) { // i
+          addStepBefore(event.target);
+          return false;
+        } else {               // I
+          addStepAsParent(event.target);
+          return false;
+        }
+      }
       if (event.which === 68) { // d
         return handlers.onDeletePressed(event);
       }
@@ -285,19 +362,7 @@
      
     onDeletePressed: function onDeletePressed(event) {
       event.preventDefault();
-      var $step = $(event.target);
-      // Keep the root
-      if ($step.hasClass('template')) {
-        return;
-      }
-      // Find next focus
-      var $focusme = $step.prev();
-      if($focusme.length === 0) {
-        $focusme = $step.parent().closest('.step');
-      }
-      //TODO delete step from inner repre..?
-      $step.remove();
-      $focusme.focus();
+      deleteStep(event.target);
       return false;
     }, 
 
