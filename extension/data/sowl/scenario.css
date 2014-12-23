@@ -125,19 +125,19 @@ input[type="text"] {
 .step + .step {
     margin-top: 2px;
 }
-.step.template .step-name:before {
+.step.template > .step-name:before {
     content: "template ";
 }
-.step.create .step-name:before {
+.step.onto-elem > .step-name:before {
     content: "create ";
 }
-.step.assign .step-name:before {
+.step.value-of > .step-name:before {
     content: "assign ";
 }
-.step.narrow .step-name:before {
+.step.narrow > .step-name:before {
     content: "narrow ";
 }
-.step.call-template .step-name:before {
+.step.call-template > .step-name:before {
     content: "call template: ";
 }
 .step.current {
