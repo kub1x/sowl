@@ -202,7 +202,7 @@
 
     onStepFocus: function onStepFocus(event) {
       var t = event.target,
-          $t = $(t), $label = $t.children('.step-name'), 
+          $t = $(t), //$label = $t.children('.step-name'), 
           $editor = $t.closest('.editor'),
           opts = { view: $editor.get(0)  };
       // Focus
@@ -210,14 +210,15 @@
       $t.addClass('current');
       console.log('thinking about scrolling');
       // Scrolling
-      if ($.abovethetop($label, opts)) {
-        console.log('scrolling top');
-        t.scrollIntoView();
-      }
-      if ($.belowthefold($label, opts)) {
-        console.log('scrolling bottom');
-        t.scrollIntoView(false);
-      }
+      $t.scrollintoview();
+      //if ($.abovethetop($label, opts)) {
+      //  console.log('scrolling top');
+      //  t.scrollIntoView();
+      //}
+      //if ($.belowthefold($label, opts)) {
+      //  console.log('scrolling bottom');
+      //  t.scrollIntoView(false);
+      //}
     }, 
 
     onStepBlur: function onStepBlur(event) {
