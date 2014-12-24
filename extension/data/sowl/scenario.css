@@ -158,3 +158,18 @@ input[type="text"] {
     border-top: 1px solid #6ce26c;
 }
 
+.step {
+  -moz-user-select: -moz-none;
+}
+.step .step-properties input {
+  -moz-user-select: text;
+}
+
+/* hide step editor by default */
+.step .step-properties {
+  display: none;
+}
+
+.step.edited > .step-properties {
+  display: block;
+}

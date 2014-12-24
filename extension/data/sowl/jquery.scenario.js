@@ -68,6 +68,9 @@
   html.step = [
     '        <div class="step {cmd}" tabindex="0">', 
     '          <h4 class="step-name">{name}</h4>', 
+    '          <div class="step-properties">', 
+    '            the properties', 
+    '          </div>', 
     '          <div class="steps">', 
     '          </div>', 
     '        </div>', 
@@ -142,6 +145,23 @@
     $focusme.focus();
   };
 
+  function toggleEditor(step) {
+    var $step = $(step),
+        $editor = $step.closest('.editor');
+    if ($step.hasClass('edited')) {
+      $step.removeClass('edited');
+    } else {
+      $editor.find('.step').removeClass('edited');
+      $step.addClass('edited');
+      scrollStepIntoView(step);
+    }
+  };
+
+  function scrollStepIntoView($step) {
+    $step = $step instanceof jQuery ? $step : $($step);
+    $step.children('.step-name').scrollintoview();
+  };
+
   //function addStep(step, templateName, $steps) {
   //  //TODO instead of scenario use the "steps" container already
   //  //var $template = $('.editor .template[name="{0}"]'.format(templateName))
@@ -192,6 +212,7 @@
     var scenario = $.sowl.scenario();
     loadScenario($elem, scenario);
     $elem.find('.editor').on('keydown', '.step', handlers.onStepKeyDown)
+                         .on('dblclick', '.step', handlers.onStepDblclick)
                          .on('focus', '.step', handlers.onStepFocus)
                          .on('blur', '.step', handlers.onStepBlur)
                          .on('sowl-select', handlers.onSowlSelected);
@@ -201,29 +222,26 @@
   var handlers = {
 
     onStepFocus: function onStepFocus(event) {
-      var t = event.target,
-          $t = $(t), //$label = $t.children('.step-name'), 
-          $editor = $t.closest('.editor'),
+      var $step = $(event.target),
+          $editor = $step.closest('.editor'),
           opts = { view: $editor.get(0)  };
       // Focus
       $editor.find('.step').removeClass('current');
-      $t.addClass('current');
+      $step.addClass('current');
       console.log('thinking about scrolling');
       // Scrolling
-      $t.scrollintoview();
-      //if ($.abovethetop($label, opts)) {
-      //  console.log('scrolling top');
-      //  t.scrollIntoView();
-      //}
-      //if ($.belowthefold($label, opts)) {
-      //  console.log('scrolling bottom');
-      //  t.scrollIntoView(false);
-      //}
+      scrollStepIntoView($step);
     }, 
 
     onStepBlur: function onStepBlur(event) {
       // This was nonsense ;)
       //$(event.target).removeClass('current');
+    }, 
+
+    onStepDblclick: function onStepDblclick(event) {
+      event.preventDefault();
+      toggleEditor(event.target);
+      return false;
     }, 
 
     onStepKeyDown: function onStepKeyDown(event) {
@@ -280,9 +298,12 @@
       if (event.which === 40) {
         return handlers.onDownArrowPressed(event);
       }
-      //if (event.which === 13) {
-      //  return handlers.onEnterPressed(event);
-      //}
+      if (event.which === 13) {
+        if (event.ctrlKey) {
+          return handlers.onCtrlEnterPressed(event);
+        }
+        //return handlers.onEnterPressed(event);
+      }
       //if (event.which === 78) {
       //  return handlers.onNPressed(event);
       //}
@@ -364,6 +385,12 @@
     onDeletePressed: function onDeletePressed(event) {
       event.preventDefault();
       deleteStep(event.target);
+      return false;
+    }, 
+
+    onCtrlEnterPressed: function onCtrlEnterPressed(event) {
+      event.preventDefault();
+      toggleEditor(event.target);
       return false;
     }, 
 
