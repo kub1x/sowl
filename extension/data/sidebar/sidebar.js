@@ -265,7 +265,9 @@ sowl.handlers = {
   ontologyListItem_dragover: function ontologyListItem_dragover(event) {
     event.preventDefault(); // allows us to drop
     //this.className = 'over';
-    event.dataTransfer.dropEffect = 'sowl-drop-uri';
+    //TODO this is invalid drop effect fix!
+    //event.dataTransfer.dropEffect = 'sowl-drop-uri';
+    event.dataTransfer.dropEffect = 'link';
     return false;
   }, 
 
@@ -273,7 +275,7 @@ sowl.handlers = {
    *
    */
   ontologyListItem_drop: function ontologyListItem_drop(event) {
-    event.stopPropagation(); // stops the browser from redirecting...why???
+    event.stopPropagation(); // stops the browser from redirecting
     console.log(event.dataTransfer.getData('sowl/resource-uri'));
   }, 
 

@@ -148,6 +148,10 @@
   function toggleEditor(step) {
     var $step = $(step),
         $editor = $step.closest('.editor');
+
+    //TODO delme
+    console.log('doubleclicked on: ' + step + ' : ' + $step.html());
+
     if ($step.hasClass('edited')) {
       $step.removeClass('edited');
     } else {
@@ -215,11 +219,55 @@
                          .on('dblclick', '.step', handlers.onStepDblclick)
                          .on('focus', '.step', handlers.onStepFocus)
                          .on('blur', '.step', handlers.onStepBlur)
+                         .on('dragover', '.step', handlers.onStepDragover)
+                         .on('dragenter', '.step', handlers.onStepDragenter)
+                         .on('dragleave', '.step', handlers.onStepDragleave)
+                         .on('drop', '.step', handlers.onStepDrop)
                          .on('sowl-select', handlers.onSowlSelected);
     $elem.prop('scenario', scenario);
   }
 
   var handlers = {
+
+    onStepDrop: function onStepDrop(event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      $step = $(this); // $(event.target);
+
+      //TODO ugly.. nicer
+      $step.closest('.editor').find('.step').removeClass('dragover');
+
+      console.log('dropped data on step:' + $step.find('.step-name').first().text());
+      console.log('dropped data [sowl/resource-uri]:' + event.dataTransfer.getData('sowl/resource-uri'));
+      console.log('dropped data [sowl/target-selector]:' + event.dataTransfer.getData('sowl/target-selector'));
+
+      var data = event.dataTransfer.getData('sowl/resource-uri') || event.dataTransfer.getData('sowl/target-selector');
+      $step.find('.step-name').first().text(data);
+
+      $step.focus();
+
+      return false;
+    }, 
+
+    onStepDragenter: function onStepDragenter(event) {
+      event.stopPropagation();
+      $(event.target).addClass('dragover');
+      return false;
+    }, 
+
+    onStepDragleave: function onStepDragleave(event) {
+      event.stopPropagation();
+      $(event.target).removeClass('dragover');
+      return false;
+    }, 
+
+    onStepDragover: function onStepDragover(event) {
+      event.preventDefault();
+      /* preventDefault to allow drop */
+      //$(event.target).addClass('dragover');
+      return false;
+    }, 
 
     onStepFocus: function onStepFocus(event) {
       var $step = $(event.target),
