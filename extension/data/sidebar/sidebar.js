@@ -259,25 +259,25 @@ sowl.handlers = {
     this.style.opacity = '1';
   }, 
 
-  /**
-   *
-   */
-  ontologyListItem_dragover: function ontologyListItem_dragover(event) {
-    event.preventDefault(); // allows us to drop
-    //this.className = 'over';
-    //TODO this is invalid drop effect fix!
-    //event.dataTransfer.dropEffect = 'sowl-drop-uri';
-    event.dataTransfer.dropEffect = 'link';
-    return false;
-  }, 
+  ///**
+  // *
+  // */
+  //ontologyListItem_dragover: function ontologyListItem_dragover(event) {
+  //  event.preventDefault(); // allows us to drop
+  //  //this.className = 'over';
+  //  //TODO this is invalid drop effect fix!
+  //  //event.dataTransfer.dropEffect = 'sowl-drop-uri';
+  //  event.dataTransfer.dropEffect = 'link';
+  //  return false;
+  //}, 
 
-  /**
-   *
-   */
-  ontologyListItem_drop: function ontologyListItem_drop(event) {
-    event.stopPropagation(); // stops the browser from redirecting
-    console.log(event.dataTransfer.getData('sowl/resource-uri'));
-  }, 
+  ///**
+  // *
+  // */
+  //ontologyListItem_drop: function ontologyListItem_drop(event) {
+  //  event.stopPropagation(); // stops the browser from redirecting
+  //  //console.log(event.dataTransfer.getData('sowl/resource-uri'));
+  //}, 
 
   /**
    *

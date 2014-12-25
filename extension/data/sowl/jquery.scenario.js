@@ -66,10 +66,16 @@
   ].join('\n');
 
   html.step = [
-    '        <div class="step {cmd}" tabindex="0">', 
+    '        <div class="step {cmd}" data-sowl-cmd="{cmd}" tabindex="0">', 
     '          <h4 class="step-name">{name}</h4>', 
-    '          <div class="step-properties">', 
-    '            the properties', 
+    '          <code class="selector"></code>', 
+    '          <div class="step-params">', 
+    '            <div class="param cmd">      <label for="cmd">      cmd:</label>      <input type="text" name="cmd"      /></div><br />', 
+    //TODO options
+    '            <div class="param name">     <label for="name">     name:</label>     <input type="text" name="name"     /></div><br />', 
+    '            <div class="param typeof">   <label for="typeof">   type:</label>     <input type="text" name="typeof"   /></div><br />', 
+    '            <div class="param selector"> <label for="selector"> selector:</label> <input type="text" name="selector" /></div><br />', 
+    '            <div class="param property"> <label for="property"> property:</label> <input type="text" name="property" /></div><br />', 
     '          </div>', 
     '          <div class="steps">', 
     '          </div>', 
@@ -138,6 +144,9 @@
     // Find next focus
     var $focusme = $step.prev();
     if($focusme.length === 0) {
+      $focusme = $step.next();
+    }
+    if($focusme.length === 0) {
       $focusme = $step.parent().closest('.step');
     }
     //TODO delete step from inner repre..?
@@ -145,7 +154,7 @@
     $focusme.focus();
   };
 
-  function toggleEditor(step) {
+  function toggleStepEditor(step) {
     var $step = $(step),
         $editor = $step.closest('.editor');
 
@@ -165,6 +174,38 @@
     $step = $step instanceof jQuery ? $step : $($step);
     $step.children('.step-name').scrollintoview();
   };
+
+  function setResource($step, value) {
+    if ($step.hasClass('onto-elem')) {
+      $step.find('.step-params:first > .typeof input').val(value);
+    }
+
+    if ($step.hasClass('value-of')) {
+      $step.find('.step-params:first > .property input').val(value);
+    }
+  }
+
+  function setSelector($step, value) {
+    $step.find('.step-params:first > .selector input').val(value);
+  }
+
+  function paramChanged($input) {
+    var $step = $input.closest('.step'), 
+        param = $input.attr('name'), 
+        cmd = $input.data('sowl-cmd');
+
+    if (param === 'selector') {
+      $step.children('.selector').text($input.val());
+    }
+
+    if ((cmd === 'onto-elem' && param === 'typeof') &&
+        (cmd === 'value-of' && param === 'property')) {
+      $step.children('.step-name').text($input.val());
+    }
+
+  }
+
+  //---------------------------------------------------------------------------
 
   //function addStep(step, templateName, $steps) {
   //  //TODO instead of scenario use the "steps" container already
@@ -217,12 +258,18 @@
     loadScenario($elem, scenario);
     $elem.find('.editor').on('keydown', '.step', handlers.onStepKeyDown)
                          .on('dblclick', '.step', handlers.onStepDblclick)
+                         .on('dblclick', '.step-name', handlers.onStepDblclick)
                          .on('focus', '.step', handlers.onStepFocus)
                          .on('blur', '.step', handlers.onStepBlur)
                          .on('dragover', '.step', handlers.onStepDragover)
                          .on('dragenter', '.step', handlers.onStepDragenter)
+                         .on('dragenter', '.step-name', handlers.onStepDragenter)
                          .on('dragleave', '.step', handlers.onStepDragleave)
                          .on('drop', '.step', handlers.onStepDrop)
+                         .on('mouseover', '.step', handlers.onStepMouseOver)
+                         .on('mouseover', '.step-name', handlers.onStepMouseOver)
+                         .on('change', '.step > .step-params > .param input', handlers.onStepParamChange)
+                         .on('mouseout', handlers.onEditorMouseOut)
                          .on('sowl-select', handlers.onSowlSelected);
     $elem.prop('scenario', scenario);
   }
@@ -242,17 +289,26 @@
       console.log('dropped data [sowl/resource-uri]:' + event.dataTransfer.getData('sowl/resource-uri'));
       console.log('dropped data [sowl/target-selector]:' + event.dataTransfer.getData('sowl/target-selector'));
 
-      var data = event.dataTransfer.getData('sowl/resource-uri') || event.dataTransfer.getData('sowl/target-selector');
-      $step.find('.step-name').first().text(data);
+      if (~$.inArray('sowl/resource-uri', event.dataTransfer.types)) {
+        setResource($step, event.dataTransfer.getData('sowl/resource-uri'));
+      }
+
+      if (~$.inArray('sowl/target-selector', event.dataTransfer.types)) {
+        setSelector($step, event.dataTransfer.getData('sowl/target-selector'));
+      }
 
       $step.focus();
-
       return false;
     }, 
 
     onStepDragenter: function onStepDragenter(event) {
       event.stopPropagation();
-      $(event.target).addClass('dragover');
+      var $step = $(event.target)
+      if ($step.hasClass('step-name')) {
+        $step = $step.parent();
+      }
+      $step.closest('.editor').find('.step').removeClass('dragover');
+      $step.addClass('dragover');
       return false;
     }, 
 
@@ -263,11 +319,14 @@
     }, 
 
     onStepDragover: function onStepDragover(event) {
-      event.preventDefault();
-      /* preventDefault to allow drop */
-      //$(event.target).addClass('dragover');
-      return false;
+      if (//~$.inArray('application/x-moz-file', event.dataTransfer.types) ||
+          ~$.inArray('sowl/resource-uri', event.dataTransfer.types) ||
+          ~$.inArray('sowl/target-selector', event.dataTransfer.types)) {
+        event.preventDefault();
+        return false;
+      }
     }, 
+
 
     onStepFocus: function onStepFocus(event) {
       var $step = $(event.target),
@@ -286,10 +345,28 @@
       //$(event.target).removeClass('current');
     }, 
 
+
     onStepDblclick: function onStepDblclick(event) {
       event.preventDefault();
-      toggleEditor(event.target);
+      var $step = $(event.target);
+      if ($step.hasClass('step-name')) {
+        $step = $step.parent();
+      }
+      toggleStepEditor($step);
       return false;
+    }, 
+
+    onStepMouseOver: function onStepMouseOver(event) {
+      var $step = $(event.target);
+      if ($step.hasClass('step-name')) {
+        $step = $step.parent();
+      }
+      $step.closest('.editor').find('.step').removeClass('hover');
+      $step.addClass('hover');
+    },
+
+    onEditorMouseOut: function onEditorMouseOut(event) {
+      $(event.target).find('.step').removeClass('hover');
     }, 
 
     onStepKeyDown: function onStepKeyDown(event) {
@@ -438,7 +515,7 @@
 
     onCtrlEnterPressed: function onCtrlEnterPressed(event) {
       event.preventDefault();
-      toggleEditor(event.target);
+      toggleStepEditor(event.target);
       return false;
     }, 
 
@@ -453,6 +530,13 @@
       //TODO !!!
       //$current.addChildStep(selector, uri);
       console.log('I\'d like to add some step now');
+    }, 
+
+    onStepParamChange: function onStepParamChange(event) {
+      var $input = $(event.target), 
+          $step = $input.closest('.step');
+      
+      paramChanged($step, $input);
     }, 
 
   };

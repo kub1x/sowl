@@ -144,19 +144,30 @@ input[type="text"] {
     background: none repeat scroll 0 0 rgba(100, 50, 100, 0.2);
     border-color: gray;
 }
-/*.step:focus {
+
+/*
+.step:focus {
     background: none repeat scroll 0 0 rgba(100, 50, 100, 0.2);
     border-color: gray;
-}*/
-.step:hover {
+}
+*/
+
+.step.hover {
     background: none repeat scroll 0 0 rgba(100, 50, 100, 0.2);
     /*border-color: gray;*/
 }
+
+.step.dragover {
+    background: none repeat scroll 0 0 rgba(100, 50, 100, 0.2);
+}
+
+/*
 .step.highlighted, .step.dragover {
     border-bottom: 1px solid #6ce26c;
     border-left: 4px solid #6ce26c;
     border-top: 1px solid #6ce26c;
 }
+*/
 
 .step {
   -moz-user-select: -moz-none;
@@ -167,10 +178,28 @@ input[type="text"] {
 }
 
 /* hide step editor by default */
-.step > .step-properties {
+.step > .step-params {
   display: none;
 }
 
-.step.edited > .step-properties {
+.step.edited > .step-params {
   display: block;
 }
+
+/* show the need ones for each  */
+.step               > .step-params > *         { display: none; }
+.step               > .step-params > .name     { display: block; }
+.step.onto-elem     > .step-params > .typeof   { display: block; }
+.step.onto-elem     > .step-params > .selector { display: block; }
+.step.value-of      > .step-params > .property { display: block; }
+.step.value-of      > .step-params > .selector { display: block; }
+.step.call-template > .step-params > .name     { display: block; }
+.step.call-template > .step-params > .selector { display: block; }
+
+
+
+
+
+
+
+
