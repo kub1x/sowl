@@ -66,12 +66,18 @@
   ].join('\n');
 
   html.step = [
-    '        <div class="step {cmd}" data-sowl-cmd="{cmd}" tabindex="0">', 
+    '        <div class="step" data-sowl-cmd="{cmd}" tabindex="0">', 
     '          <h4 class="step-name">{name}</h4>', 
     '          <code class="selector"></code>', 
     '          <div class="step-params">', 
-    '            <div class="param cmd">      <label for="cmd">      cmd:</label>      <input type="text" name="cmd"      /></div><br />', 
-    //TODO options
+    '            <div class="param cmd">', 
+    '              <label for="cmd">cmd:</label>', 
+    '              <select name="cmd">', 
+    '                <option value="onto-elem">create</option>', 
+    '                <option value="value-of">assign</option>', 
+    '                <option value="call-template">call template</option>', 
+    '              </select>', 
+    '            </div><br />', 
     '            <div class="param name">     <label for="name">     name:</label>     <input type="text" name="name"     /></div><br />', 
     '            <div class="param typeof">   <label for="typeof">   type:</label>     <input type="text" name="typeof"   /></div><br />', 
     '            <div class="param selector"> <label for="selector"> selector:</label> <input type="text" name="selector" /></div><br />', 
@@ -84,7 +90,7 @@
 
   function loadHtml(elem, html, data, isAppend = false) {
     if (data) {
-      console.log('populating html:\n' + html + '\n\nwith data:\n' + JSON.stringify(data, null, 2));
+      //console.log('populating html:\n' + html + '\n\nwith data:\n' + JSON.stringify(data, null, 2));
       html = html.format(data);
     }
     var $elem = $(elem), 
@@ -99,7 +105,7 @@
 
   function addStepBefore(step) {
     var $step = $(step);
-    if ($step.hasClass('template')) {
+    if ($step.data('sowl-cmd') === 'template') {
       return;
     }
     var $newstep = $(html.step.format({cmd: '', name: 'unnamed'})); 
@@ -109,7 +115,7 @@
 
   function addStepAfter(step) {
     var $step = $(step);
-    if ($step.hasClass('template')) {
+    if ($step.data('sowl-cmd') === 'template') {
       return;
     }
     var $newstep = $(html.step.format({cmd: '', name: 'unnamed'})); 
@@ -119,7 +125,7 @@
 
   function addStepAsParent(step) {
     var $step = $(step);
-    if ($step.hasClass('template')) {
+    if ($step.data('sowl-cmd') === 'template') {
       return;
     }
     var $newstep = $(html.step.format({cmd: '', name: 'unnamed'})); 
@@ -137,7 +143,7 @@
   function deleteStep(step) {
     var $step = $(step);
     // Keep the root
-    if ($step.hasClass('template')) {
+    if ($step.data('sowl-cmd') === 'template') {
       $step.find('.steps:first').empty();
       return;
     }
@@ -158,14 +164,16 @@
     var $step = $(step),
         $editor = $step.closest('.editor');
 
-    //TODO delme
-    console.log('doubleclicked on: ' + step + ' : ' + $step.html());
-
     if ($step.hasClass('edited')) {
       $step.removeClass('edited');
     } else {
+      // Update cmd select
+      var cmd = $step.attr('data-sowl-cmd');
+      $step.children('.step-params').find('[name="cmd"]').val(cmd);
+      // Show only one editor
       $editor.find('.step').removeClass('edited');
       $step.addClass('edited');
+      // Scroll
       scrollStepIntoView(step);
     }
   };
@@ -176,11 +184,11 @@
   };
 
   function setResource($step, value) {
-    if ($step.hasClass('onto-elem')) {
+    if ($step.data('sowl-cmd') === 'onto-elem') {
       $step.find('.step-params:first > .typeof input').val(value);
     }
 
-    if ($step.hasClass('value-of')) {
+    if ($step.data('sowl-cmd') === 'value-of') {
       $step.find('.step-params:first > .property input').val(value);
     }
   }
@@ -189,21 +197,18 @@
     $step.find('.step-params:first > .selector input').val(value);
   }
 
-  function paramChanged($input) {
-    var $step = $input.closest('.step'), 
-        param = $input.attr('name'), 
-        cmd = $input.data('sowl-cmd');
-
-    if (param === 'selector') {
-      $step.children('.selector').text($input.val());
-    }
-
-    if ((cmd === 'onto-elem' && param === 'typeof') &&
-        (cmd === 'value-of' && param === 'property')) {
-      $step.children('.step-name').text($input.val());
-    }
-
-  }
+  //function paramChanged($input) {
+  //  var $step = $input.closest('.step'), 
+  //      param = $input.attr('name'), 
+  //      cmd = $input.data('sowl-cmd');
+  //  if (param === 'selector') {
+  //    $step.children('.selector').text($input.val());
+  //  }
+  //  if ((cmd === 'onto-elem' && param === 'typeof') &&
+  //      (cmd === 'value-of' && param === 'property')) {
+  //    $step.children('.step-name').text($input.val());
+  //  }
+  //}
 
   //---------------------------------------------------------------------------
 
@@ -268,7 +273,8 @@
                          .on('drop', '.step', handlers.onStepDrop)
                          .on('mouseover', '.step', handlers.onStepMouseOver)
                          .on('mouseover', '.step-name', handlers.onStepMouseOver)
-                         .on('change', '.step > .step-params > .param input', handlers.onStepParamChange)
+                         //.on('change', '.step > .step-params > .param input', handlers.onStepParamChange)
+                         .on('change', 'select[name="cmd"]', handlers.onStepParamCmdChange)
                          .on('mouseout', handlers.onEditorMouseOut)
                          .on('sowl-select', handlers.onSowlSelected);
     $elem.prop('scenario', scenario);
@@ -335,7 +341,6 @@
       // Focus
       $editor.find('.step').removeClass('current');
       $step.addClass('current');
-      console.log('thinking about scrolling');
       // Scrolling
       scrollStepIntoView($step);
     }, 
@@ -532,12 +537,18 @@
       console.log('I\'d like to add some step now');
     }, 
 
-    onStepParamChange: function onStepParamChange(event) {
-      var $input = $(event.target), 
-          $step = $input.closest('.step');
-      
-      paramChanged($step, $input);
+    onStepParamCmdChange: function onStepParamCmdChange(event) {
+      var $cmd = $(event.target);
+      console.log('cmd changed:'+$cmd.val());
+      $cmd.closest('.step').attr('data-sowl-cmd', $cmd.val());
     }, 
+
+    //onStepParamChange: function onStepParamChange(event) {
+    //  var $input = $(event.target), 
+    //      $step = $input.closest('.step');
+    //  
+    //  paramChanged($step, $input);
+    //}, 
 
   };
 

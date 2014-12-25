@@ -8,7 +8,7 @@ html, body {
 input[type="text"], select, button {
   margin: 0;
   padding: 3px;
-  height: 28px;
+  height: 24px;
   border-radius: 0;
   border: 1px solid gray;
   background: white;
@@ -125,19 +125,19 @@ input[type="text"] {
 .step + .step {
     margin-top: 2px;
 }
-.step.template > .step-name:before {
+.step[data-sowl-cmd="template"] > .step-name:before {
     content: "template ";
 }
-.step.onto-elem > .step-name:before {
+.step[data-sowl-cmd="onto-elem"] > .step-name:before {
     content: "create ";
 }
-.step.value-of > .step-name:before {
+.step[data-sowl-cmd="value-of"] > .step-name:before {
     content: "assign ";
 }
 .step.narrow > .step-name:before {
     content: "narrow ";
 }
-.step.call-template > .step-name:before {
+.step[data-sowl-cmd="call-template"] > .step-name:before {
     content: "call template: ";
 }
 .step.current {
@@ -188,13 +188,14 @@ input[type="text"] {
 
 /* show the need ones for each  */
 .step               > .step-params > *         { display: none; }
-.step               > .step-params > .name     { display: block; }
-.step.onto-elem     > .step-params > .typeof   { display: block; }
-.step.onto-elem     > .step-params > .selector { display: block; }
-.step.value-of      > .step-params > .property { display: block; }
-.step.value-of      > .step-params > .selector { display: block; }
-.step.call-template > .step-params > .name     { display: block; }
-.step.call-template > .step-params > .selector { display: block; }
+.step               > .step-params > .cmd      { display: block; }
+.step[data-sowl-cmd="template"]      > .step-params > .name     { display: block; }
+.step[data-sowl-cmd="onto-elem"]     > .step-params > .typeof   { display: block; }
+.step[data-sowl-cmd="onto-elem"]     > .step-params > .selector { display: block; }
+.step[data-sowl-cmd="value-of"]      > .step-params > .property { display: block; }
+.step[data-sowl-cmd="value-of"]      > .step-params > .selector { display: block; }
+.step[data-sowl-cmd="call-template"] > .step-params > .name     { display: block; }
+.step[data-sowl-cmd="call-template"] > .step-params > .selector { display: block; }
 
 
 
