@@ -125,6 +125,9 @@ input[type="text"] {
 .step + .step {
     margin-top: 2px;
 }
+.step[data-sowl-cmd=""] > .step-name:before {
+    content: "unknown ";
+}
 .step[data-sowl-cmd="template"] > .step-name:before {
     content: "template ";
 }

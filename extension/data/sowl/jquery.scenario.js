@@ -40,14 +40,6 @@
     '      </form>', 
   ].join('\n');
 
-  // this goes under .container .editor-container .templates INSTEAD OF .template-list
-  html.templatesListTopic = [
-    '      <div class="topic">', 
-    '        Template: <span class="name">init</span>', 
-    '      </div>', 
-  ].join('\n');
-
-  // this goes under .container .editor-container .templates INSTEAD OF .topic
   html.templatesList = [
     '      <select class="template-list">', 
     //'{values}', 
@@ -60,14 +52,9 @@
     '        <option value="{value}">{value}</option>', 
   ].join('\n');
 
-  html.templateEditor = [
-    '      <div class="template" name="{name}">', 
-    '      </div>', 
-  ].join('\n');
-
   html.step = [
-    '        <div class="step" data-sowl-cmd="{cmd}" tabindex="0">', 
-    '          <h4 class="step-name">{name}</h4>', 
+    '        <div class="step" data-sowl-cmd="" tabindex="0">', 
+    '          <h4 class="step-name">unnamed</h4>', 
     '          <code class="selector"></code>', 
     '          <div class="step-params">', 
     '            <div class="param cmd">', 
@@ -78,7 +65,7 @@
     '                <option value="call-template">call template</option>', 
     '              </select>', 
     '            </div><br />', 
-    '            <div class="param name">     <label for="name">     name:</label>     <input type="text" name="name"     /></div><br />', 
+    '            <div class="param name">     <label for="name">     name:</label>     <input type="text" name="name" value="unnamed" /></div><br />', 
     '            <div class="param typeof">   <label for="typeof">   type:</label>     <input type="text" name="typeof"   /></div><br />', 
     '            <div class="param selector"> <label for="selector"> selector:</label> <input type="text" name="selector" /></div><br />', 
     '            <div class="param property"> <label for="property"> property:</label> <input type="text" name="property" /></div><br />', 
@@ -212,22 +199,82 @@
 
   //---------------------------------------------------------------------------
 
-  function serializeScenario() {
-    //TODO XXX !!!
-    return '{ data: "this will be scenario" }';
+  function serializeSingleStep($step) {
+    console.log('serializeSingleStep('+$step+')');
+    var result = {};
+
+    result.commmand = $step.children('.step-params').find('[name="cmd"]').val();
+
+    $step.children('.step-params').children('div.param').filter(function(index, elem) {
+      console.log('filtering by: ' + this.style.display);
+      console.log('filtering jq: ' + $(elem).css('display'));
+      return $(elem).css('display') === 'block';
+    }).find('input').each(function(index, elem) {
+      console.log('each input');
+      var $input = $(elem);
+      result[$input.attr('name')] = $input.val();
+    });
+
+    var steps = [];
+    $step.children('.steps').children('.step').each(function(index, elem) {
+      steps.push(serializeSingleStep($(elem)));
+    });
+    result.steps = steps;
+
+    return result; 
   };
 
-  //function addStep(step, templateName, $steps) {
-  //  //TODO instead of scenario use the "steps" container already
-  //  //var $template = $('.editor .template[name="{0}"]'.format(templateName))
-  //  loadHtml($steps, html.step, step, true);
-  //};
+  function serializeTemplates($editor) {
+    console.log('serializeTemplates('+$editor+')');
+    var result = [];
+    $editor.find('[data-sowl-cmd="template"]', $editor).each(function(index, elem) {
+      var template = serializeSingleStep($(this));
+      delete template.commmand;
+      result.push(template);
+    });
+    return result;
+  };
 
-  function addTemplate(name, template, $scenario) {
+  function serializeScenario($editor) {
+    console.log('serializeScenario('+$editor+')');
+    var result = {};
+    //TODO put scenario stuff in here (url, name)
+
+    result.templates = serializeTemplates($editor, result);
+
+    return JSON.stringify(result, null, 2);
+  };
+
+  function renameTemplate(from, to, $editor_container) {
+    var $editor = $editor_container.children('.editor'), 
+        $tl = $editor_container.find('.template-list'), 
+        sel = 'option[value="{0}"]'; 
+
+    if($tl.find(sel.format(to)).length) {
+      alert('Template with name ' + to + ' already exists. ');
+      return;
+    }
+
+    // Rename the option in dropdown
+    var $opt = $tl.find(sel.format(from));
+    $opt.attr('value', to);
+    $opt.text(to);
+    $tl.val(to);
+
+    // Rename in place
+    var $tpl = $editor.children().has('.step-name:first:contains({from})'.format({from:from}));
+    $tpl.children('.step-name').text(to);
+    $tpl.children('.step-params').find('[name="name"]').val(to);
+  };
+
+  function addTemplate(name, $scenario) {
     loadHtml($('.template-list', $scenario), html.templatesListItem, {value: name}, true);
-    var $tmp = loadHtml($('.editor', $scenario), html.templateEditor, {name: name},  true);
-    var step = template.getRootStep();
-    var $step = loadHtml($tmp, html.step, {cmd: step.getCmd(), name: name},  true);
+    var $editor = loadHtml($('.editor', $scenario), html.step, {},  true);
+    var $step = $editor.children('.step');
+    $step.attr('data-sowl-cmd', 'template');
+    $step.children('.step-name').text(name);
+    $step.children('.step-params').find('[name="name"]').val(name);
+    $step.focus();
 
     //TODO DELME vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     var $steps = $step.find('.steps:first');
@@ -240,33 +287,21 @@
     loadHtml($onto, html.step, {cmd: 'value-of', name: 'child3'},  true);
     loadHtml($onto, html.step, {cmd: 'value-of', name: 'child4'},  true);
     // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-    //for (var i in steps) {
-    //  var step = steps[i];
-    //  addStep({name: step.getLabel(), cmd: step.getCmd() }, name, $step);
-    //}
   };
 
-  function loadAllTemplates(elem, scenario, $scenario) {
-    var templates = scenario.getTemplates();
-    for (var name in templates) {
-      addTemplate(name, templates[name], $scenario);
-    }
-  }; 
-
-  function loadScenario(elem, scenario) {
+  function loadScenario(elem) {
     console.log('loading scenario html');
-    var $scenario = loadHtml(elem, html.scenario, { name: scenario.getName() });
+    var $scenario = loadHtml(elem, html.scenario, { name: 'unnamed' });
     var $settings = loadHtml($('.settings', $scenario), html.scenarioSettings);
     var $templates = loadHtml($('.templates', $scenario), html.templatesList);
-    loadAllTemplates(elem, scenario, $scenario);
+    addTemplate('init', $scenario);
   };
 
   function initScenario($elem) {
     // Create new scenario
-    var scenario = $.sowl.scenario();
-    loadScenario($elem, scenario);
+    loadScenario($elem);
     $elem.find('.editor').on('keydown', '.step', handlers.onStepKeyDown)
+                         .on('keydown', '.step input', handlers.onStepInputKeyDown)
                          .on('dblclick', '.step', handlers.onStepDblclick)
                          .on('dblclick', '.step-name', handlers.onStepDblclick)
                          .on('focus', '.step', handlers.onStepFocus)
@@ -280,6 +315,7 @@
                          .on('mouseover', '.step-name', handlers.onStepMouseOver)
                          //.on('change', '.step > .step-params > .param input', handlers.onStepParamChange)
                          .on('change', 'select[name="cmd"]', handlers.onStepParamCmdChange)
+                         .on('change', '.step[data-sowl-cmd="template"] > .step-params input[name="name"]', handlers.onStepTemplateNameChange)
                          .on('mouseout', handlers.onEditorMouseOut)
                          .on('sowl-select', handlers.onSowlSelected);
     $elem.prop('scenario', scenario);
@@ -467,6 +503,16 @@
       }
     }, 
 
+    onStepInputKeyDown : function onStepInputKeyDown(event) {
+      event.stopPropagation();
+      //if (event.which === 13) {
+      //  event.preventDefault();
+      //  //TODO we don't know if this is the name.. the delegate should've worked =/ 
+      //  return onStepTemplateNameChange
+      //}
+      return true;
+    }, 
+
     onLeftArrowPressed: function onLeftArrowPressed(event) {
       event.preventDefault();
       var $step = $(event.target);
@@ -551,7 +597,7 @@
     //}, 
 
     onScenarioSave: function onScenarioSave(event) {
-      var scenario_data = serializeScenario();
+      var scenario_data = serializeScenario($(event.target).closest('.editor'));
       $.sowl.port.callScenarioSave( scenario_data );
       return false;
     }, 
@@ -560,6 +606,15 @@
       var $cmd = $(event.target);
       console.log('cmd changed:'+$cmd.val());
       $cmd.closest('.step').attr('data-sowl-cmd', $cmd.val());
+    }, 
+
+    onStepTemplateNameChange: function onStepTemplateNameChange(event) {
+      console.log('onStepTemplateNameChange fired');
+      var $input = $(event.target), 
+          $step = $input.closest('.step'),
+          from = $step.children('.step-name').text(),
+          to = $input.val();
+      renameTemplate(from, to, $step.closest('.editor-container'));
     }, 
 
     //onStepParamChange: function onStepParamChange(event) {
