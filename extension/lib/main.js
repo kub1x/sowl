@@ -2,6 +2,12 @@ var self    = require("sdk/self");
 var tabs    = require('sdk/tabs');
 var ui      = require("sdk/ui");
 var buttons = require('sdk/ui/button/action');
+var filepicker = require("./filepicker.js");
+
+const {Cu} = require("chrome");
+// To read & write content to file
+const {TextDecoder, TextEncoder, OS} = Cu.import("resource://gre/modules/osfile.jsm", {});
+
 
 var button = buttons.ActionButton({
   id: "mozilla-link",
@@ -75,5 +81,17 @@ function onSidebarAttach( sidebar_worker ) {
     console.log('sending message [sowl-aardvark-start] to current tab');
     tab_worker.port.emit('sowl-aardvark-start');
   });
+
+  sidebar_worker.port.on('sowl-scenario-save', function(scenario_data) {
+    console.log('got [sowl-scenario-save]');
+    filepicker.promptForScenario(function(filePath) {
+      console.log('filepicker success');
+      // For using OS.File I/O operations
+      let encoder = new TextEncoder();
+      let array = encoder.encode(scenario_data);
+      OS.File.writeAtomic(filePath, array, {tmpPath: "file.txt.tmp"});
+    });
+  });
+
 };
 

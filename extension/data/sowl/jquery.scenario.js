@@ -212,6 +212,11 @@
 
   //---------------------------------------------------------------------------
 
+  function serializeScenario() {
+    //TODO XXX !!!
+    return '{ data: "this will be scenario" }';
+  };
+
   //function addStep(step, templateName, $steps) {
   //  //TODO instead of scenario use the "steps" container already
   //  //var $template = $('.editor .template[name="{0}"]'.format(templateName))
@@ -402,13 +407,21 @@
         return handlers.onLeftArrowPressed(event);
       }
       if (event.which === 74) { // j
-        return handlers.onDownArrowPressed(event);
+        if(!event.shiftKey && !event.ctrlKey) {
+          return handlers.onDownArrowPressed(event);
+        }
       }
       if (event.which === 75) { // k
         return handlers.onUpArrowPressed(event);
       }
       if (event.which === 76) { // l
         return handlers.onRightArrowPressed(event);
+      }
+      if (event.which === 83) { // s
+        if (event.ctrlKey) {
+          event.preventDefault();
+          return handlers.onScenarioSave(event);
+        }
       }
       //if (event.which === 27) { // Esc
       //  return handlers.onEscapePressed(event);
@@ -524,17 +537,23 @@
       return false;
     }, 
 
-    onSowlSelected: function onSowlSelected(event) {
-      var selector = event.selector, 
-          uri = event.uri, 
-          $editor = $(this), 
-          $current = $editor.find('.step.current'); 
-      if ($current.length === 0) {
-        $current = $editor.find('.step.template');
-      }
-      //TODO !!!
-      //$current.addChildStep(selector, uri);
-      console.log('I\'d like to add some step now');
+    //onSowlSelected: function onSowlSelected(event) {
+    //  var selector = event.selector, 
+    //      uri = event.uri, 
+    //      $editor = $(this), 
+    //      $current = $editor.find('.step.current'); 
+    //  if ($current.length === 0) {
+    //    $current = $editor.find('.step.template');
+    //  }
+    //  //TODO !!!
+    //  //$current.addChildStep(selector, uri);
+    //  console.log('I\'d like to add some step now');
+    //}, 
+
+    onScenarioSave: function onScenarioSave(event) {
+      var scenario_data = serializeScenario();
+      $.sowl.port.callScenarioSave( scenario_data );
+      return false;
     }, 
 
     onStepParamCmdChange: function onStepParamCmdChange(event) {
