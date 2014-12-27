@@ -184,19 +184,6 @@
     $step.find('.step-params:first > .selector input').val(value).trigger('change');
   }
 
-  //function paramChanged($input) {
-  //  var $step = $input.closest('.step'), 
-  //      param = $input.attr('name'), 
-  //      cmd = $input.data('sowl-cmd');
-  //  if (param === 'selector') {
-  //    $step.children('.selector').text($input.val());
-  //  }
-  //  if ((cmd === 'onto-elem' && param === 'typeof') &&
-  //      (cmd === 'value-of' && param === 'property')) {
-  //    $step.children('.step-name').text($input.val());
-  //  }
-  //}
-
   //---------------------------------------------------------------------------
 
   function serializeSingleStep($step) {
@@ -275,18 +262,6 @@
     $step.children('.step-name').text(name);
     $step.children('.step-params').find('[name="name"]').val(name);
     $step.focus();
-
-    //TODO DELME vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-    var $steps = $step.find('.steps:first');
-    var $onto = loadHtml($steps, html.step, {cmd: 'onto-elem', name: 'first'},  true).find('.steps');
-    loadHtml($onto, html.step, {cmd: 'value-of', name: 'child1'},  true);
-    loadHtml($onto, html.step, {cmd: 'value-of', name: 'child2'},  true);
-    var $onto = loadHtml($steps, html.step, {cmd: 'onto-elem', name: 'second'},  true).find('.steps');
-    loadHtml($onto, html.step, {cmd: 'value-of', name: 'child1'},  true);
-    loadHtml($onto, html.step, {cmd: 'value-of', name: 'child2'},  true);
-    loadHtml($onto, html.step, {cmd: 'value-of', name: 'child3'},  true);
-    loadHtml($onto, html.step, {cmd: 'value-of', name: 'child4'},  true);
-    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   };
 
   function loadScenario(elem) {
@@ -462,12 +437,6 @@
           return handlers.onScenarioSave(event);
         }
       }
-      //if (event.which === 27) { // Esc
-      //  return handlers.onEscapePressed(event);
-      //}
-      //if (event.which === 9) { // Tab
-      //  return handlers.onTabPressed(event);
-      //}
       if (event.which === 37) {
         return handlers.onLeftArrowPressed(event);
       }
@@ -484,23 +453,7 @@
         if (event.ctrlKey) {
           return handlers.onCtrlEnterPressed(event);
         }
-        //return handlers.onEnterPressed(event);
       }
-      //if (event.which === 78) {
-      //  return handlers.onNPressed(event);
-      //}
-      //if (event.which === 32) {
-      //  return handlers.onSpacePressed(event);
-      //}
-      //if (event.which === 84) {
-      //  return handlers.onTPressed(event);
-      //}
-      //if (event.which === 70) {
-      //  return handlers.onFPressed(event);
-      //}
-      //if (event.which === 90) {
-      //  return handlers.onZPressed(event);
-      //}
       if ((event.which === 8 || event.which === 46) && !event.heldDown) {
         return handlers.onDeletePressed(event);
       }
@@ -508,11 +461,6 @@
 
     onStepInputKeyDown : function onStepInputKeyDown(event) {
       event.stopPropagation();
-      //if (event.which === 13) {
-      //  event.preventDefault();
-      //  //TODO we don't know if this is the name.. the delegate should've worked =/ 
-      //  return onStepTemplateNameChange
-      //}
       return true;
     }, 
 
@@ -586,26 +534,13 @@
       return false;
     }, 
 
-    //onSowlSelected: function onSowlSelected(event) {
-    //  var selector = event.selector, 
-    //      uri = event.uri, 
-    //      $editor = $(this), 
-    //      $current = $editor.find('.step.current'); 
-    //  if ($current.length === 0) {
-    //    $current = $editor.find('.step.template');
-    //  }
-    //  //TODO !!!
-    //  //$current.addChildStep(selector, uri);
-    //  console.log('I\'d like to add some step now');
-    //}, 
-
     onScenarioSave: function onScenarioSave(event) {
       var scenario_data = serializeScenario($(event.target).closest('.editor'));
       $.sowl.port.callScenarioSave( scenario_data );
       return false;
     }, 
 
-    onStepParamCmdChange: function onStepParamCmdChange(event) {
+    onstepparamcmdchange: function onstepparamcmdchange(event) {
       var $cmd = $(event.target);
       console.log('cmd changed:'+$cmd.val());
       $cmd.closest('.step').attr('data-sowl-cmd', $cmd.val());
