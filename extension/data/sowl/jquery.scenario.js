@@ -540,7 +540,7 @@
       return false;
     }, 
 
-    onstepparamcmdchange: function onstepparamcmdchange(event) {
+    onStepParamCmdChange: function onStepParamCmdChange(event) {
       var $cmd = $(event.target);
       console.log('cmd changed:'+$cmd.val());
       $cmd.closest('.step').attr('data-sowl-cmd', $cmd.val());
