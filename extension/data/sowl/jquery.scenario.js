@@ -125,6 +125,7 @@
         $newstep = $(html.step.format({cmd: '', name: 'unnamed'})); 
     $step.find('.steps:first').append($newstep);
     $newstep.focus();
+    return $newstep;
   };
 
   function deleteStep(step) {
@@ -171,8 +172,19 @@
   };
 
   function setResource($step, value) {
+    var isProperty;
+    try {
+      isProperty = sowl.ontology.resources[value].isProperty();
+    } catch (e) {}
+
     if ($step.data('sowl-cmd') === 'onto-elem') {
-      $step.find('.step-params:first input[name="typeof"]').val(value).trigger('change');
+      if ( isProperty === true ) {
+        $step = addStepAsChild($step);
+        $step.find('.step-params:first [name="cmd"]').val('value-of').trigger('change');
+        $step.find('.step-params:first input[name="property"]').val(value).trigger('change');
+      } else {
+        $step.find('.step-params:first input[name="typeof"]').val(value).trigger('change');
+      }
     }
 
     if ($step.data('sowl-cmd') === 'value-of') {
@@ -394,13 +406,19 @@
     }, 
 
     onStepKeyDown: function onStepKeyDown(event) {
-      if (event.which === 65) {
+      if (event.which === 65) { // a,A
+        // Not handling Ctrl+a, Alt+a
+        if (event.ctrlKey || event.altKey) {
+          return true;
+        }
         event.preventDefault();
         if (!event.shiftKey) { // a
-          addStepAfter(event.target);
+          var $newstep = addStepAfter(event.target);
+          $newstep.focus();
           return false;
         } else {               // A
-          addStepAsChild(event.target);
+          var $newstep = addStepAsChild(event.target);
+          $newstep.focus();
           return false;
         }
       }
