@@ -172,16 +172,16 @@
 
   function setResource($step, value) {
     if ($step.data('sowl-cmd') === 'onto-elem') {
-      $step.find('.step-params:first > .typeof input').val(value);
+      $step.find('.step-params:first input[name="typeof"]').val(value).trigger('change');
     }
 
     if ($step.data('sowl-cmd') === 'value-of') {
-      $step.find('.step-params:first > .property input').val(value);
+      $step.find('.step-params:first input[name="property"]').val(value).trigger('change');
     }
   }
 
   function setSelector($step, value) {
-    $step.find('.step-params:first > .selector input').val(value);
+    $step.find('.step-params:first > .selector input').val(value).trigger('change');
   }
 
   //function paramChanged($input) {
@@ -313,9 +313,12 @@
                          .on('drop', '.step', handlers.onStepDrop)
                          .on('mouseover', '.step', handlers.onStepMouseOver)
                          .on('mouseover', '.step-name', handlers.onStepMouseOver)
-                         //.on('change', '.step > .step-params > .param input', handlers.onStepParamChange)
                          .on('change', 'select[name="cmd"]', handlers.onStepParamCmdChange)
+                         .on('change', 'input[name="selector"]', handlers.onStepSelectorChange)
                          .on('change', '.step[data-sowl-cmd="template"] > .step-params input[name="name"]', handlers.onStepTemplateNameChange)
+                         .on('change', '.step[data-sowl-cmd="onto-elem"] > .step-params input[name="typeof"]', handlers.onStepNameChange)
+                         .on('change', '.step[data-sowl-cmd="value-of"] > .step-params input[name="property"]', handlers.onStepNameChange)
+                         .on('change', '.step[data-sowl-cmd="call-template"] > .step-params input[name="name"]', handlers.onStepNameChange)
                          .on('mouseout', handlers.onEditorMouseOut)
                          .on('sowl-select', handlers.onSowlSelected);
     $elem.prop('scenario', scenario);
@@ -617,12 +620,19 @@
       renameTemplate(from, to, $step.closest('.editor-container'));
     }, 
 
-    //onStepParamChange: function onStepParamChange(event) {
-    //  var $input = $(event.target), 
-    //      $step = $input.closest('.step');
-    //  
-    //  paramChanged($step, $input);
-    //}, 
+    onStepNameChange: function onStepCreateNameChange(event) {
+      console.log('onStepCreateNameChange');
+      var $input = $(event.target), 
+          $step = $input.closest('.step');
+      $step.children('.step-name').text($input.val());
+    }, 
+
+    onStepSelectorChange: function onStepSelectorChange(event) {
+      console.log('onStepSelectorChange');
+      var $input = $(event.target), 
+          $step = $input.closest('.step');
+      $step.children('.selector').text($input.val());
+    }, 
 
   };
 
