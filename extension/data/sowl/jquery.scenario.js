@@ -205,8 +205,6 @@
     result.command = $step.children('.step-params').find('[name="cmd"]').val();
 
     $step.children('.step-params').children('div.param').filter(function(index, elem) {
-      console.log('filtering by: ' + this.style.display);
-      console.log('filtering jq: ' + $(elem).css('display'));
       return $(elem).css('display') === 'block';
     }).find('input').each(function(index, elem) {
       console.log('each input');
@@ -227,8 +225,8 @@
     if (result.selector) {
       var arr = result.selector.split('@');
       // Will replace :eq(0) by :nth-child(1)
-      var val = arr[0].replace(/:eq\((\d+)\)/, function(match) {
-        var nth = (+match) + 1;
+      var val = arr[0].trim().replace(/:eq\((\d+)\)/, function(match, num) {
+        var nth = (+num) + 1;
         return ':nth-child('+nth+')';
       });
       var tmp = {
