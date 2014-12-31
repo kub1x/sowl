@@ -202,7 +202,7 @@
     console.log('serializeSingleStep('+$step+')');
     var result = {};
 
-    result.commmand = $step.children('.step-params').find('[name="cmd"]').val();
+    result.command = $step.children('.step-params').find('[name="cmd"]').val();
 
     $step.children('.step-params').children('div.param').filter(function(index, elem) {
       console.log('filtering by: ' + this.style.display);
@@ -218,7 +218,43 @@
     $step.children('.steps').children('.step').each(function(index, elem) {
       steps.push(serializeSingleStep($(elem)));
     });
-    result.steps = steps;
+    if(steps.length) {
+      result.steps = steps;
+    }
+
+    // Handle selector transformation
+    // Ugly as hell =/ 
+    if (result.selector) {
+      var arr = result.selector.split('@');
+      // Will replace :eq(0) by :nth-child(1)
+      var val = arr[0].replace(/:eq\((\d+)\)/, function(match) {
+        var nth = (+match) + 1;
+        return ':nth-child('+nth+')';
+      });
+      var tmp = {
+        value: val,
+        type: "css",
+      };
+      if (arr.length > 1) {
+        result.selector = {
+          value: [
+            tmp, 
+            {
+              value: '@'+arr[1], 
+              type: 'xpath', 
+            }
+          ], 
+          type: 'chainded', 
+        };
+      } else {
+        result.selector = tmp;
+      }
+    } else if (result.command === 'value-of' && result.selector === '') {
+      resutl.selector = {
+        value: '.',
+        type: 'xpath',
+      }
+    }
 
     return result; 
   };
