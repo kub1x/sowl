@@ -5,7 +5,7 @@
     '<div class="container">', 
     '  <div class="header">', 
     '    <div class="topic">', 
-    '      Scenario: <span class="name">{name}</span>', 
+    '      Scenario: <span class="name">unnamed</span>', 
     '    </div>', 
     '    <div class="settings">', 
     '{scenarioSettings}', 
@@ -26,7 +26,7 @@
     '      <form>', 
     '        <div class="setting">', 
     '          <label for="name">name</label>', 
-    '          <input name="name" type="text" class="onlyline" placeholder="scenario name" value="{name}"/><br />', 
+    '          <input name="name" type="text" class="onlyline" placeholder="scenario name" value="unnamed"/><br />', 
     '        </div>', 
     '        <div class="setting">', 
     '          <label for="url">web url</label>', 
@@ -35,22 +35,28 @@
     '        <div class="setting">', 
     '          <label for="init">init</label>', 
     '          <input name="init" type="text" class="onlyline" placeholder="initial template"', 
-    '               value="{init}" /><br />', 
+    '               value="init" /><br />', 
+    '        </div>', 
+    '        <div class="setting">', 
+    '          <label for="base">init</label>', 
+    '          <input name="base" type="text" class="onlyline" placeholder="ontology base URI"', 
+    '               value="http://kub1x.org/dip/" /><br />', 
     '        </div>', 
     '      </form>', 
   ].join('\n');
 
   html.templatesList = [
-    '      <select class="template-list">', 
+    //'      <select class="template-list">', 
     //'{values}', 
-    '      </select>', 
-    '      <button name="new-template">New</button>', 
+    //'      </select>', 
+    '      <button name="new-template">New Template</button>', 
+    '      <button name="start-selection">Start selection</button>', 
   ].join('\n');
 
   // This goes into .template-list
-  html.templatesListItem = [
-    '        <option value="{value}">{value}</option>', 
-  ].join('\n');
+  //html.templatesListItem = [
+  //  '        <option value="{value}">{value}</option>', 
+  //].join('\n');
 
   html.step = [
     '        <div class="step" data-sowl-cmd="" tabindex="0">', 
@@ -68,7 +74,9 @@
     '            <div class="param name">     <label for="name">     name:</label>     <input type="text" name="name" value="unnamed" /></div><br />', 
     '            <div class="param typeof">   <label for="typeof">   type:</label>     <input type="text" name="typeof"   /></div><br />', 
     '            <div class="param selector"> <label for="selector"> selector:</label> <input type="text" name="selector" /></div><br />', 
+    '            <div class="param rel"> <label for="rel"> rel:</label> <input type="text" name="rel" /></div><br />', 
     '            <div class="param property"> <label for="property"> property:</label> <input type="text" name="property" /></div><br />', 
+    '            <div class="param url"> <label for="url"> url:</label> <input type="text" name="url" /></div><br />', 
     '          </div>', 
     '          <div class="steps">', 
     '          </div>', 
@@ -87,7 +95,7 @@
       $elem.empty();
     }
     $elem.append($html);
-    return $elem;
+    return $html;
   };
 
   function addStepBefore(step) {
@@ -131,10 +139,10 @@
   function deleteStep(step) {
     var $step = $(step);
     // Keep the root
-    if ($step.data('sowl-cmd') === 'template') {
-      $step.find('.steps:first').empty();
-      return;
-    }
+    //if ($step.data('sowl-cmd') === 'template') {
+    //  $step.find('.steps:first').empty();
+    //  return;
+    //}
     // Find next focus
     var $focusme = $step.prev();
     if($focusme.length === 0) {
@@ -202,7 +210,9 @@
     console.log('serializeSingleStep('+$step+')');
     var result = {};
 
-    result.command = $step.children('.step-params').find('[name="cmd"]').val();
+    result.command = ($step.attr('data-sowl-cmd') === 'template'
+                       ? 'template'
+                       : $step.children('.step-params').find('[name="cmd"]').val());
 
     $step.children('.step-params').children('div.param').filter(function(index, elem) {
       return $(elem).css('display') === 'block';
@@ -273,26 +283,43 @@
     var result = {};
     //TODO put scenario stuff in here (url, name)
 
+    var $settings = $editor.parents('.container').find('.settings');
+
+    result.type = "scenario";
+    result.name = $settings.find('input[name="name"]').val(), 
+
+    result.ontology = {
+      base: $settings.find('input[name="base"]').val(), 
+    };
+
+    result["call-template"] = {
+      command: "call-template", 
+      name: $settings.find('input[name="init"]').val(), 
+      url: $settings.find('input[name="url"]').val(), 
+    };
+
     result.templates = serializeTemplates($editor, result);
 
     return JSON.stringify(result, null, 2);
   };
 
   function renameTemplate(from, to, $editor_container) {
-    var $editor = $editor_container.children('.editor'), 
-        $tl = $editor_container.find('.template-list'), 
-        sel = 'option[value="{0}"]'; 
+    var $
+      $editor_container = $step.closest('.editor-container'), 
+      $editor = $editor_container.children('.editor'); 
+        //$tl = $editor_container.find('.template-list'), 
+        //sel = 'option[value="{0}"]'; 
 
-    if($tl.find(sel.format(to)).length) {
-      alert('Template with name ' + to + ' already exists. ');
-      return;
-    }
+    //if($tl.find(sel.format(to)).length) {
+    //  alert('Template with name ' + to + ' already exists. ');
+    //  return;
+    //}
 
     // Rename the option in dropdown
-    var $opt = $tl.find(sel.format(from));
-    $opt.attr('value', to);
-    $opt.text(to);
-    $tl.val(to);
+    //var $opt = $tl.find(sel.format(from));
+    //$opt.attr('value', to);
+    //$opt.text(to);
+    //$tl.val(to);
 
     // Rename in place
     var $tpl = $editor.children().has('.step-name:first:contains({from})'.format({from:from}));
@@ -301,9 +328,9 @@
   };
 
   function addTemplate(name, $scenario) {
-    loadHtml($('.template-list', $scenario), html.templatesListItem, {value: name}, true);
-    var $editor = loadHtml($('.editor', $scenario), html.step, {},  true);
-    var $step = $editor.children('.step');
+    //loadHtml($('.template-list', $scenario), html.templatesListItem, {value: name}, true);
+    var $editor = $('.editor', $scenario);
+    var $step = loadHtml($editor, html.step, {},  true);
     $step.attr('data-sowl-cmd', 'template');
     $step.children('.step-name').text(name);
     $step.children('.step-params').find('[name="name"]').val(name);
@@ -312,7 +339,7 @@
 
   function loadScenario(elem) {
     console.log('loading scenario html');
-    var $scenario = loadHtml(elem, html.scenario, { name: 'unnamed' });
+    var $scenario = loadHtml(elem, html.scenario);
     var $settings = loadHtml($('.settings', $scenario), html.scenarioSettings);
     var $templates = loadHtml($('.templates', $scenario), html.templatesList);
     addTemplate('init', $scenario);
@@ -342,6 +369,9 @@
                          .on('change', '.step[data-sowl-cmd="call-template"] > .step-params input[name="name"]', handlers.onStepNameChange)
                          .on('mouseout', handlers.onEditorMouseOut)
                          .on('sowl-select', handlers.onSowlSelected);
+    $elem.on('click', 'button[name="new-template"]', handlers.onNewTemplateClick)
+         .on('click', 'button[name="start-selection"]', handlers.onStartSelectionClick);
+    $elem.find('.settings').on('change', '[name="name"]', handlers.onScenarioNameChange);
     $elem.prop('scenario', scenario);
   }
 
@@ -604,7 +634,14 @@
           $step = $input.closest('.step'),
           from = $step.children('.step-name').text(),
           to = $input.val();
-      renameTemplate(from, to, $step.closest('.editor-container'));
+
+      $step.children('.step-name').text(to)
+
+      // RENAME init
+      
+      // RENAME call-template
+
+      //renameTemplate(from, to, $step);
     }, 
 
     onStepNameChange: function onStepCreateNameChange(event) {
@@ -619,6 +656,21 @@
       var $input = $(event.target), 
           $step = $input.closest('.step');
       $step.children('.selector').text($input.val());
+    }, 
+
+    onNewTemplateClick: function onNewTemplateClick(event) {
+      var $scenario = $(event.target).parents('.container');
+      addTemplate('unnamed', $scenario);
+    }, 
+
+    onScenarioNameChange: function onScenarioNameChange(event) {
+      var $inp = $(event.target), 
+          name = $inp.val(), 
+          $scenario = $inp.parents('.container').children('.header').find('.topic .name').text(name);
+    }, 
+
+    onStartSelectionClick: function onStartSelectionClick(event) {
+      $.sowl.port.startSelection();
     }, 
 
   };
