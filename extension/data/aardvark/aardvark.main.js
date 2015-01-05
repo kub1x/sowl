@@ -68,22 +68,6 @@ aardvark.loadObject ({
     d.style.zIndex = "5008";
     this.doc.body.appendChild (d);
     this.keyboxElem = d;
-  
-    //ADDED by kub1x
-    //d = this.doc.createElement ("DIV");
-    //d.isAardvark = true;
-    //d.isOverlay = true;
-    //d.draggable = true; //TODO check
-    //s = d.style;
-    //s.zIndex = "5028";
-    //s.userSelect = "none";
-    //s.backgroundColor = "#cfc";
-    ////s.backgroundColor = "rgba(100, 50, 100, 0.2)";
-    //s.display = "none";
-    //s.overflow = "hidden";
-    //s.position = "absolute";
-    //this.doc.body.appendChild (d);
-    //this.overlayElem = d;
   },
 
   //-------------------------------------------------
@@ -369,7 +353,7 @@ aardvark.loadObject ({
         aardvark.hideKeybox();
       else if (elem.isLabel)
         aardvark.clearBox();
-      else if (elem.isOverlay) //TODO check
+      else if (elem.isOverlay)
         aardvark.clearBox();
       else
         aardvark.isOnAardvarkElem = true;
@@ -449,9 +433,6 @@ aardvark.loadObject ({
     var img = aardvark.doc.createElement('img');
     img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAexJREFUeNqkUz1rFUEUPWseq4UvYhOfoCIWiYKKgmIjVqZM40ehCcHWRvwP/oOIlYU+tRBEsLLQzg9URAsD8QMb9RGxCJL4ILuzM/d67sy+jYJRIQN33+zbueece+6dTFWxltWyx5Pvx3P+TDNOiWjlnYbKCVwp8IyiEFSe78sy5ErNq1LuaNDuxZOvq1YNNMW4JEBHA6CiEL4I9z7YXhE8I9h/CqreR+EFc26tqwGMvSOVoqoEJRnLZTIWIe0LY+c3qjFl3uvWoDrZlEC2H5GFBxxBnEsHXZ1gid7AuTclyCJp3x5RAQ8Ez4+lS6y7Np3F6QNP0c5HkclGnDl6DxOHr6TklSUNwADdUX6ODnaPTGH2yw18XZhDv7+Ix7Mz2DFyBGPbxwfszYoAJrUsCMJa93bOo/RLePWxyw4owQVvPz/A+95DHNt/ARvy4ZSpv7TRAMxdMyu5zLJqQ73/+5zUCkIdgmfvLmN9q42DO6eb5LFt4zEevZlB4ZZSZvYbgLUo+bCw2MPLD9dxaPQctmzeEyWb9E/fXsQy/jiJZB7iZEUQ68bzuWsxBuvq/YlV1bdSG8OwCqJhNnnRoOyf16C9UoLTLodnPtb8f8k9G+NGAW2/Sec56TjBZDcYklVk28W7y7gdvVzrdf4pwAAhwFIo9hEs7wAAAABJRU5ErkJggg==';
 
-    //TODO delme
-    console.log('drag started on: ' + sel);
-
     evt.dataTransfer.effectAllowed = 'link';
     evt.dataTransfer.setData('sowl/target-selector', sel);
     evt.dataTransfer.setDragImage(img, -5, -5);
@@ -476,8 +457,6 @@ aardvark.loadObject ({
     // prevent redirecting
     evt.stopPropagation();
     evt.preventDefault();
-    //TODO we might drop step too...
-    //     check if type contains 'sowl/resource-uri'
     var uri = evt.dataTransfer.getData('sowl/resource-uri'); 
     aardvark.notifyDrop(uri, evt.target);
     return false;

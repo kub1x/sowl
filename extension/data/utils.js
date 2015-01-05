@@ -2,8 +2,6 @@ if (!String.prototype.format) {
   (function() {
     /**
      * usage { a: { b: ['neco'] } }.resolve("a.b.0"); // returns 'neco'
-     * TODO handle ""s and ''s to allow period (the '.' char) in names. 
-     * TODO handle []s to allow internal [] notation like o.resolve('a.b[0]') maybe. 
      */
     function resolve(path) {
       var p = path.split('.'), 

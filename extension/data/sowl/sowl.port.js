@@ -1,12 +1,5 @@
-
 (function($, _s) {
-
   _s = _s || {};
-
-
-  /**
-   *
-   */
   _s.port = {
 
     startSelection: function startSelection() {
@@ -22,14 +15,10 @@
       addon.port.on('sowl-selection-dropped', handlers.onSelectionDropped);
     }, 
 
-    /**
-     *
-     */
     callScenarioSave: function callScenarioSave(scenario_data) {
       console.log('calling [sowl-scenario-save]');
       addon.port.emit('sowl-scenario-save', scenario_data);
     }, 
-
 
   };
 
@@ -48,6 +37,5 @@
     }, 
 
   };
-
 
 })(jQuery, jQuery.sowl);

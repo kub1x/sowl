@@ -55,12 +55,6 @@
     self.port.emit('sowl-aardvark-dropped', msg);
   }; 
 
-  //_a.notifyDrag = function notifyDrag(elem) {
-  //  var msg = "dragged elem: " + _a.getBestSelector(elem);
-  //  console.log('sending [sowl-aardvark-dragged]: ' + msg + ' to addon script');
-  //  self.port.emit('sowl-aardvark-dragged', msg);
-  //};
-  
   /**
    * getBestSelector algorithm. 
    * 
@@ -112,8 +106,6 @@
       }, 
   
       ///**
-      // * FIXME XXX
-      // *
       // * This method hooks on dynamically added classes (ex: tr.line-s is a class
       // * on NPU.cz that specifies currenlty hovered table row), and it creates
       // * selector according to this kind of state =/ We have to avoid the dynamic
@@ -128,11 +120,8 @@
       //  var node = elem.tagName.toLowerCase();
       //  var result = node;
       //
-      //  //TODO sort classes by uniqueness, maybe?
       //  var classes  = elem.className.split(" ");
       //  for (var i in classes) {
-      //    //TODO fix exclude to the right class!!!
-      //    //TODO selection class name -> resource (instead of hardcoded)
       //    if (classes[i] != "sowl-aardvark-selection") {
       //      result += "." + classes[i];
       //    }
@@ -161,7 +150,6 @@
   
   
     var currDoc = document;
-    //TODO obtain current context from scenario (probly as an argument..?)
     var context = currDoc.body;
   
     /**
@@ -170,7 +158,7 @@
     var selector = [];
   
     var orig = elem;
-    var parent = $(elem).parent().get(0); //(elem.parentNode && elem.parentNode.nodeType == elem.ELEMENT_NODE)  ?  elem.parentNode  :  null;
+    var parent = $(elem).parent().get(0);
   
     do {
   
@@ -183,7 +171,7 @@
   
           console.log('trying method: ' + methods[m].name + ' with result: ' + result);
   
-          // Method doesn't work, just advance to next one. 
+          // Method does not work, just advance to next one. 
           if (!result) {
             continue;
           }
@@ -191,16 +179,11 @@
           // Check if method result is unique and equal to orig in parent. 
           var $found = $(result.join(' '), parent);
   
-          console.log("found: " + $found.length);
-  
           if($found.length == 1 && $found.get(0) == orig) {
             // Good selector, advance to parent. 
             selector = result;
             break;
           } else {
-            console.log('failed with following attributes, length: ' + $found.length);
-            console.log(' equals orig: ' + $found.get(0) == orig); 
-            //console.log(' tag name: ' + $found.get(0).nodeName);
             // Bad selector, try next method.  
             result = false;
             continue;
@@ -214,16 +197,6 @@
       }
   
       console.log('==== just done with result: ' + result + ' ====');
-  
-      //
-      // defensive programming - Just a failure test
-      //if (!result) {
-      //  //TODO FIXME add this to if(DEBUG) !!!
-      //  var msg = "empty selector result! something got wrong!";
-      //  console.error(msg);
-      //  debugger; // breakpoint - if debugger is on!
-      //  throw msg;
-      //}
   
       //
       // already equivavent?
@@ -240,23 +213,16 @@
       //
       // advance to parent
       elem = parent;
-      parent = $(elem).parent().get(0); //(elem.parentNode && elem.parentNode.nodeType == elem.ELEMENT_NODE)  ?  elem.parentNode  :  null;
+      parent = $(elem).parent().get(0);
   
       //
       // check if we reached the context
-      // TODO this should be unnecessary - the result should be unique in context
       if ($(context).index(elem) != -1) {
         return selector.join(' ').trim();
       }
-      //for (var j = 0; j < context.length; j++) {
-      //    if (context[j] == elem) {
-      //      return selector.join(' ').trim();
-      //    }
-      //}
   
       console.log('==== not quite there yet, next parent: ' + parent.nodeName + ' ====');
   
-    //TODO while true sucks...
     } while (parent != null);
   
   };
