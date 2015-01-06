@@ -56,6 +56,16 @@ function onSidebarAttach( sidebar_worker ) {
       'sowl-selection-clicked', 
     ];
 
+    sidebar_worker.port.on('sowl-selection-context', function(tab_message) {
+      console.log('got message [sowl-aardvark-context]: ' + JSON.stringify(tab_message));
+      tab_worker.port.emit('sowl-aardvark-context', tab_message);
+    });
+
+    //tab_worker.port.on('sowl-aardvark-dragged', function(tab_message) {
+    //  console.log('got message [sowl-aardvark-dragged]: ' + JSON.stringify(tab_message));
+    //  sidebar_worker.port.emit('sowl-selection-dragged', tab_message);
+    //}); 
+
     // Hook it back to sidebar
     tab_worker.port.on('sowl-aardvark-selected', function(tab_message) {
       console.log('got message [sowl-aardvark-selected]: ' + JSON.stringify(tab_message));

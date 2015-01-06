@@ -15,6 +15,11 @@
       addon.port.on('sowl-selection-dropped', handlers.onSelectionDropped);
     }, 
 
+    callContext: function callContext( contextSelector ) {
+      console.log('calling [sowl-scenario-context]: ' + contextSelector);
+      addon.port.emit('sowl-selection-context', contextSelector);
+    }, 
+
     callScenarioSave: function callScenarioSave(scenario_data) {
       console.log('calling [sowl-scenario-save]');
       addon.port.emit('sowl-scenario-save', scenario_data);

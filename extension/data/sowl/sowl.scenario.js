@@ -167,6 +167,19 @@
     }
   };
 
+  function notifyAardvark($step) {
+
+    var result = "";
+    $step.parents('.step').andSelf().children('.selector').filter(function(index, elem) {
+      return $(elem).css('display') === 'block' && $(elem).text() !== '';
+    }).each(function(index, elem){
+      result = $(elem).text() + ' ' + result;
+    });
+
+    console.log('sending selector: ' + result + ' as context');
+    $.sowl.port.callContext(result);
+  }; 
+
   function scrollStepIntoView($step) {
     $step = $step instanceof jQuery ? $step : $($step);
     $step.children('.step-name').scrollintoview();
@@ -420,6 +433,7 @@
       $step.addClass('current');
       // Scrolling
       scrollStepIntoView($step);
+      notifyAardvark($step);
     }, 
 
     onStepBlur: function onStepBlur(event) {

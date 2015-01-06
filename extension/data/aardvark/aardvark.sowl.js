@@ -149,8 +149,15 @@
     ]; 
   
   
-    var currDoc = document;
-    var context = currDoc.body;
+    var currDoc = document, 
+        $context = null;
+    if (aardvark.contextSelector) {
+      $context = $(aardvark.contextSelector);
+    }
+
+    if ($context == null || $context.length < 0) {
+      $context = $('body');
+    }
   
     /**
      * Result
@@ -200,7 +207,7 @@
   
       //
       // already equivavent?
-      var $found = $(selector.join(' '), context);
+      var $found = $(selector.join(' '), $context);
       if ($found.length == 1 && $found.get(0) == orig) {
         return selector.join(' ').trim();
       } else {
@@ -216,8 +223,8 @@
       parent = $(elem).parent().get(0);
   
       //
-      // check if we reached the context
-      if ($(context).index(elem) != -1) {
+      // check if we reached the $context
+      if ($context.index(elem) != -1) {
         return selector.join(' ').trim();
       }
   

@@ -12,7 +12,7 @@ pack:
 	cfx xpi
 
 edit: 
-	vim data/sidebar/sidebar.js
+	vim data/sowl/sowl.scenario.js
 
 install: 
 	$(FIREFOX) $(XPI_NAME) -P selectowl -no-remote >/dev/null 2>&1 &
