@@ -1,4 +1,13 @@
-(function($){
+(function($, sowl){
+
+  $.sowl = $.sowl || {};
+
+  $.sowl.setCurrentUrl = function setCurrentUrl( url ) {
+    var $url = $('.container > .header > .settings [name="url"]');
+    if ($url.val() === '') {
+      $url.val(url);
+    }
+  };
 
   var html = {};
   html.scenario = [
@@ -30,7 +39,7 @@
     '        </div>', 
     '        <div class="setting">', 
     '          <label for="url">web url</label>', 
-    '          <input name="url" type="text" class="onlyline" placeholder="initial url" value="{url}"/><br />', 
+    '          <input name="url" type="text" class="onlyline" placeholder="initial url" value=""/><br />', 
     '        </div>', 
     '        <div class="setting">', 
     '          <label for="init">init</label>', 
@@ -667,4 +676,4 @@
     return this;
   };
 
-})(jQuery);
+})(jQuery, jQuery.sowl);

@@ -13,6 +13,7 @@
       addon.port.on('sowl-selection-selected', handlers.onSelectionStarted);
       addon.port.on('sowl-selection-clicked', handlers.onSelectionClicked);
       addon.port.on('sowl-selection-dropped', handlers.onSelectionDropped);
+      addon.port.on('sowl-current-url', handlers.onCurrentUrl);
     }, 
 
     callContext: function callContext( contextSelector ) {
@@ -39,6 +40,11 @@
 
     onSelectionDropped : function onSelectionDropped(message){
       logger.debug('got message [sowl-selection-dropped]:' + message);
+    }, 
+
+    onCurrentUrl: function onCurrentUrl(message) {
+      logger.debug('got message [sowl-current-url]:' + message);
+      jQuery.sowl.setCurrentUrl(message);
     }, 
 
   };

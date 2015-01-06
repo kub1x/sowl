@@ -31,8 +31,13 @@ var sidebar = ui.Sidebar({
 });
 
 function onSidebarAttach( sidebar_worker ) {
+
+  // Set on start event (will be fired when sidebar is loaded). 
   sidebar_worker.port.on('sowl-selection-start', function(sidebar_message) {
-      console.log('got message [sowl-selection-start] from sidebar with data:: ' + JSON.stringify(sidebar_message));
+    console.log('got message [sowl-selection-start] from sidebar with data:: ' + JSON.stringify(sidebar_message));
+
+    // Set current URL
+    sidebar_worker.port.emit('sowl-current-url', tabs.activeTab.url);
 
     // Inject aardvark into current page
     var tab_worker = tabs.activeTab.attach({
