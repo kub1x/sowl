@@ -213,6 +213,7 @@
      */
     ontologyListItem_dragend: function ontologyListItem_dragend(event) {
       this.style.opacity = '1';
+      $(this).parents('#ontology').removeClass('dragover');
     }, 
 
     /**
@@ -234,7 +235,11 @@
     $('#ontology-filter').keyup(handlers.ontologyFilterKeyup);
 
     // Hook drag over to accept dropping. 
-    $('#ontology').on('dragover', function(){ $(this).addClass('dragover'); });
+    $('#ontology').on('dragover', function(event){
+      if ($.inArray('application/x-moz-file', event.dataTransfer.types) != -1) {
+        $(this).addClass('dragover');
+      }
+    });
     $('#ontology').on('dragleave', function(){ $(this).removeClass('dragover'); });
 
     $('#ontology_droparea').on('dragover', handlers.onDroppableDragOver);
